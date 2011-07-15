@@ -2,7 +2,7 @@
 ;                                                                     *
 ;**********************************************************************
 ;  
-;    Filename:	    MStar.asm 
+;    Filename: MStar.asm 
 ; 
 ;    Author:  Gordon Anderson
 ;    Company: GAA Custom Electronics
