@@ -51,6 +51,10 @@ PostRef
    	ANDWF	Rreg53+1,F
    	MOVE24	Rreg53,Rreg50
    	MOVE24	Rreg53,Rreg72
+   ; Make sure the 2 LSB are zero
+   	MOVLR	HIGH CEXreg
+   	MOVLW	0xFC
+   	ANDWF	CEXreg,F
    ; Move the counter data into the regs
    	MOVFF	CEXreg,WREG
    	IORWF	Rreg50
