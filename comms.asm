@@ -612,9 +612,9 @@ SSPDnext
 		MOVFF	Areg,WREG
 		MOVFF	PLUSW1,AXreg		; AXreg has channel number
 		; Now get channel number
-		MOVLW	HIGH CHtimes	
+		MOVLW	HIGH (CHtimes+2)	
 		MOVWF	FSR1H
-		MOVLW	LOW CHtimes	
+		MOVLW	LOW (CHtimes+2)	
 		MOVWF	FSR1L
 		; Build prointer into CHtimes
 		MOVFF	AXreg,WREG

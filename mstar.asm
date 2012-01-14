@@ -323,10 +323,14 @@
 ;		1.) Fixed a bug in entering table position using the transmitter UI.
 ;		2.) Fixed a bug that caused the auto trim value to be reset when the servo
 ;		    cal menu is entered.
-;	Version 2.0sb, June 2011, in progress
+;	Version 2.0s, June 2011, in progress
 ;		1.) Added CCPM reverse options for Ail and Ele
 ;		2.) Added display monitor for auto trim position. Hold the auto trim button down
 ;		    on power up to enter the auto trim monitor mode.
+;		3.) Fixed a strange fixed mixer bug with the Rud to Ele mixer only when negative
+;		    gains are used. 12/19/2011
+;		4.) Fixed the mstar.asm file to define the config blocks using cblock
+;		5.) Fixed a bug in the send serial data mode that messed up the data and baud rate
 ;
 ;	Version 2.0x, to do list
 ;		A.) Make the display interface work in 4 bit mode. Use 2 of the freed bits for
@@ -509,6 +513,20 @@
 	errorlevel 2
 	
 ;	CONFIG   OSC = HS,BOR = ON,PWRT = OFF,WDT = OFF,MODE = MC,OSCS = ON,DEBUG = OFF
+;
+; Configuration register values
+;	300001 = 02
+;	300002 = 1F
+;	300003 = 1E
+;	300004 = F3
+;	300005 = 83
+;	300006 = 81
+;	300008 = FF
+;	300009 = C0
+;	30000A = FF
+;	30000B = E0
+;	30000C = FF
+;	30000D = 40
 
 ; '__CONFIG' directive is used to embed configuration data within .asm file.
 ; The lables following the directive are located in the respective .inc file.
@@ -527,8 +545,8 @@
 ; The display type is defined by un-commenting one of the following three
 ; lines, only one can be un-commented!
 ;
-; #define		LCD52display
- #define		SED1230display
+ #define		LCD52display
+; #define		SED1230display
 ; #define		ECMA1010display
 
 ;
@@ -1275,6 +1293,8 @@ BuzInited:
 		BTFSS	ALUSTA,C
 		GOTO	TestIO
 mainStartup
+	; Init UART2 again because the loaded configurations may have changed the defaults
+		CALL 	USART2init
 	; Clear the displayline variable
 		CLRF	WREG
 		MOVFF	WREG,DisplayLine
@@ -5099,7 +5119,7 @@ CalculateFixedMixers
 		MOVE	TposM,AXreg		; Load position data
 		MOVFF	ThtEle,BXreg		; Load mix level
 		MOVLB	HIGH BXreg
-		BTFSC	AXreg+1,7
+;		BTFSC	AXreg+1,7		; This statement is a bug! GAA 12/19/11
 		CLRF	BXreg+1
 		BTFSC	BXreg,7
 		SETF	BXreg+1			; Sign extend
@@ -6380,10 +6400,17 @@ endif
 ; This area is reserved to store the general and aircraft configuration data. 
 
 ConfigLoc	org	0x10000
-	
-CFGgeneral	RES	D'256'
 
-CFGaircraft	RES	(D'256') * 2 * NumAircraft
-	
+		cblock	0x10000
+			CFGgeneral
+		endc
+		cblock	0x10000 + D'256'
+			CFGaircraft
+		endc
+
+;CFGgeneral	res	D'256'
+
+;CFGaircraft	res	(D'256') * 2 * NumAircraft
+		
                 END     ;required directive
 

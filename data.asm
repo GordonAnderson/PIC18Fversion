@@ -5,7 +5,7 @@
 ;================================================================================
 MES0		DB	"                ",0
 MES1		DB	" MicroStar 2000 ",0
-MES2		DB	"  Version 2.0sb ",0
+MES2		DB	"  Version 2.0s  ",0
 MES3		DB	"ADC CH    = XXXX",0
 MES4		DB	"   Aircraft #   ",0
 MES5		DB	"     53.X MHz   ",0
