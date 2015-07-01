@@ -1,0 +1,1229 @@
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;
+                      00002 ; ADC.asm
+                      00003 ;
+                      00004 ; This file contains routines used for ADC data processing for the MicroStar and
+                      00005 ; MicroProStar applications. This file also contains a number of related routines 
+                      00006 ; including the processor type detection function.
+                      00007 ;
+                      00008 ; Gordon Anderson
+                      00009 ;
+                      00010 
+                      00011 ; This function displays the transmitter voltage on the first line of the LCD
+                      00012 ; display. The ADC value for the display is expected to be in Vbat. This function
+                      00013 ; also tests the voltage against an alarm limit, if the value is below the limit 
+                      00014 ; the buzzer is used to signal an alarm.
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00015 TransVoltage
+                      00016         ; Display the Battery voltage
+                      00017                 ; Set the print position
+Error[113]  : Symbol not previously defined (LINE1)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00018                 MOVLW   LINE1
+Error[113]  : Symbol not previously defined (LCDsendCMD)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00019                 CALL    LCDsendCMD
+                      00020                 ; Multiply the BattAlarm by 100 and place in CXreg
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (BattAlarm)
+                      00021                 MOVE    BattAlarm,AXreg 
+Error[113]  : Symbol not previously defined (AXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00022                 CLRF    AXreg+1
+Warning[207]: Found label after column 1. (MOVEC)
+Error[122]  : Illegal opcode (D)
+000000                00023                 MOVEC   D'100',BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00024                 CALL    Mult1616
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00025                 MOVE    CEXreg,CXreg            
+                      00026                 ; Filter the battery voltage before display
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00027                 CALL    TransFilter
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (VmonG)
+000000                00028                 MOVE    VmonG,BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000000                00029                 CALL    Mult1616
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00030                 MOVFP   CEXreg+1,WREG
+Warning[207]: Found label after column 1. (MOVPF)
+Error[122]  : Illegal opcode (WREG)
+000000                00031                 MOVPF   WREG,CEXreg
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00032                 MOVFP   CEXreg+2,WREG
+Warning[207]: Found label after column 1. (MOVPF)
+Error[122]  : Illegal opcode (WREG)
+000000                00033                 MOVPF   WREG,CEXreg+1
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00034                 CLRF    CEXreg+2
+                      00035         ; If this is a MicroProStar we need to add the diode voltage drop to the
+                      00036         ; ADC value to improve the linearity in this conversion. The voltage is 
+                      00037         ; multiplied by 100 so add 80 to represent a .8 volts diode drop.
+Warning[205]: Found directive in column 1. (ifdef)
+                      00038 ifdef           MicroProStar
+                      00039                 MOVLW   LOW D'80'
+                      00040                 ADDWF   CEXreg,F
+                      00041                 MOVLW   HIGH D'80'
+                      00042                 ADDWFC  CEXreg+1,F
+                      00043 endif
+                      00044                 ; Test the battery voltage, if its below the limit
+                      00045                 ; then beep a bunch of times
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00046                 MOVLR   HIGH LValarm
+Error[113]  : Symbol not previously defined (LValarm)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00047                 BTFSC   LValarm,0
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00048                 GOTO    NoAlarm
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+000000                00049                 MOVLR   HIGH CEXreg
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CXreg)
+000000                00050                 MOVFP   CXreg,WREG
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00051                 SUBWF   CEXreg,W
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CXreg)
+000000                00052                 MOVFP   CXreg+1,WREG
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00053                 SUBWFB  CEXreg+1,W
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00054                 ; If result is negative then beep! 
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00055                 BTFSS   WREG,7
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00056                 GOTO    NoAlarm
+                      00057                 ; Make noise!
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00058                 MOVLW   D'201'
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+000000                00059                 MOVLR   HIGH BeepCyl
+Error[113]  : Symbol not previously defined (BeepCyl)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00060                 MOVWF   BeepCyl
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00061                 MOVLW   D'5'
+Error[113]  : Symbol not previously defined (Beep)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00062                 CALL    Beep 
+                      00063                 ; Set the alarm flag so wo do not do this again!
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00064                 MOVLR   HIGH LValarm
+Error[113]  : Symbol not previously defined (LValarm)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00065                 SETF    LValarm
+                      00066         ; Display the voltage
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00067 NoAlarm         
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+000000                00068                 MOVLR   HIGH CEXreg
+Error[113]  : Symbol not previously defined (Int2Str)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00069                 CALL    Int2Str
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00070                 MOVLW   ' '
+Warning[207]: Found label after column 1. (MOVPF)
+Error[122]  : Illegal opcode (WREG)
+000000                00071                 MOVPF   WREG,Areg
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00072                 MOVLW   '0'
+Error[113]  : Symbol not previously defined (Buffer)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00073                 CPFSGT  Buffer
+Warning[207]: Found label after column 1. (MOVPF)
+Error[122]  : Illegal opcode (Areg)
+000000                00074                 MOVPF   Areg,Buffer
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00075                 MOVFP   Buffer,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00076                 CALL    LCDsendData
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00077                 MOVFP   Buffer+1,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00078                 CALL    LCDsendData
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00079                 MOVLW   '.'
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00080                 CALL    LCDsendData
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00081                 MOVFP   Buffer+2,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00082                 CALL    LCDsendData  
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00083                 RETURN
+                      00084                 
+                      00085 ; This function applies a difference filter to the transmitter ADC value used
+                      00086 ; to monitor the battery voltage. The filter function (time constant) is fixed
+                      00087 ; and define by the constant below.
+                      00088 ; The filter calculation:
+                      00089 ;       Vbat * 256 = Vbat(t-1) * (256 - FilterTC) + Vbat(t) * FilterTC
+                      00090 ; Vbat(t) = Vbat when called
+                      00091 ; Filtered Vbat is returned in AXreg as well
+  00000030            00092 FilterTC        EQU     30
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00093 TransFilter
+                      00094         ; Calculate Vbat(t-1) * FilterTC
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (AXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00095                 MOVFF   Vbat256+1,AXreg
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (AXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00096                 MOVFF   Vbat256+2,AXreg+1
+Warning[207]: Found label after column 1. (MOVEC)
+Error[122]  : Illegal opcode (FilterTC)
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000000                00097                 MOVEC   FilterTC,BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00098                 CALL    Mult1616                ; Result in CEXreg
+                      00099         ; Calculate Vbat(t-1) * (256 - FilterTC), subtract CEXreg from Vbat256
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00100                 MOVLB   HIGH Vbat256
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00101                 MOVFF   CEXreg,WREG
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00102                 SUBWF   Vbat256,F
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00103                 MOVFF   CEXreg+1,WREG
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00104                 SUBWFB  Vbat256+1,F
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00105                 MOVFF   CEXreg+2,WREG
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00106                 SUBWFB  Vbat256+2,F
+                      00107         ; Calculate Vbat(t) * FilterTC
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (Vbat)
+                      00108                 MOVE    Vbat,AXreg
+Warning[207]: Found label after column 1. (MOVEC)
+Error[122]  : Illegal opcode (FilterTC)
+                      00109                 MOVEC   FilterTC,BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00110                 CALL    Mult1616
+                      00111         ; Sum into Vbat256
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00112                 MOVLB   HIGH Vbat256
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00113                 MOVFF   CEXreg,WREG
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00114                 ADDWF   Vbat256,F
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00115                 MOVFF   CEXreg+1,WREG
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00116                 ADDWFC  Vbat256+1,F
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00117                 MOVFF   CEXreg+2,WREG
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00118                 ADDWFC  Vbat256+2,F
+                      00119         ; Load filtered value into AXreg and return
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (AXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00120                 MOVFF   Vbat256+1,AXreg
+Error[113]  : Symbol not previously defined (Vbat256)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (AXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00121                 MOVFF   Vbat256+2,AXreg+1
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00122                 RETURN
+                      00123                 
+                      00124 ; This function will read ADC channel 13, this is the receiver
+                      00125 ; voltage monitor channel. If the value is greater than a few 
+                      00126 ; counts then the data is displayed on the second line of the 
+                      00127 ; display. If the receiver value is displayed then this function
+                      00128 ; returns with the carry flag set.
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00129 RecVoltage    
+                      00130         ; Read ADC positive reference channel 
+Error[113]  : Symbol not previously defined (ADCrec)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00131                 MOVLW   ADCrec
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00132                 CALL    ADCread         ; Results are in Pos
+Error[113]  : Symbol not previously defined (ADCrec)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00133                 MOVLW   ADCrec
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00134                 CALL    ADCread         ; Results are in Pos
+                      00135         ; Convert the ACD counts into the voltage
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (Pos)
+                      00136                 MOVE    Pos,AXreg
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (VRmonG)
+                      00137                 MOVE    VRmonG,BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00138                 CALL    Mult1616
+                      00139         ; Divide the value in CEXreg by 256
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00140                 MOVLR   HIGH CEXreg
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CEXreg)
+                      00141                 MOVFP   CEXreg+1,WREG
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00142                 MOVWF   CEXreg
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00143                 MOVFP   CEXreg+2,WREG
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00144                 MOVWF   CEXreg+1
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00145                 MOVFP   CEXreg+3,WREG
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00146                 MOVWF   CEXreg+2
+Error[113]  : Symbol not previously defined (CEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00147                 CLRF    CEXreg+3
+                      00148         ; Now convert to a string...
+Error[113]  : Symbol not previously defined (Int2Str)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00149                 CALL    Int2Str                                  
+                      00150                 ; The string is in Buffer, in millivolts
+                      00151         ; If the voltage is greater that 1 volt, then display it!
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00152                 MOVLR   HIGH Buffer
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+                      00153                 MOVFP   Buffer,WREG
+Error[113]  : Symbol not previously defined (Buffer)
+Error[152]  : Executable code and data must be defined in an appropriate section
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000000                00154                 IORWF   Buffer+1,W
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00155                 ANDLW   0F
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00156                 BCF     ALUSTA,C
+Error[113]  : Symbol not previously defined (Z)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00157                 BTFSC   ALUSTA,Z
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00158                 RETURN
+                      00159         ; Here to display the value!
+Error[113]  : Symbol not previously defined (LINE2)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00160                 MOVLW   LINE2
+Error[113]  : Symbol not previously defined (LCDsendCMD)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00161                 CALL    LCDsendCMD
+Warning[207]: Found label after column 1. (PrintMess)
+Error[122]  : Illegal opcode (MES23)
+000000                00162                 PrintMess MES23
+Error[113]  : Symbol not previously defined (LINE2)
+Error[113]  : Symbol not previously defined (RECVPOS)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00163                 MOVLW   LINE2 + RECVPOS
+Error[113]  : Symbol not previously defined (LCDsendCMD)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00164                 CALL    LCDsendCMD
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+000000                00165                 MOVLR   HIGH Buffer
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00166                 MOVFP   Buffer,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00167                 CALL    LCDsendData
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00168                 MOVFP   Buffer+1,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00169                 CALL    LCDsendData    
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00170                 MOVLW   '.'
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00171                 CALL    LCDsendData
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00172                 MOVFP   Buffer+2,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00173                 CALL    LCDsendData    
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (Buffer)
+000000                00174                 MOVFP   Buffer+3,WREG
+Error[113]  : Symbol not previously defined (LCDsendData)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00175                 CALL    LCDsendData
+                      00176         ; Set carry flag and exit
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00177                 BSF     ALUSTA,C
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00178                 RETURN
+                      00179 
+                      00180 ; This function reads the PIC type and set the PIC18F8723 flag if the processor is detected.
+                      00181 ; This is used to determine if a 12 or 10 bit ADC is present. The 8723 has a 12 bit ADC.
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00182 ProcessorType
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00183                 CLRF    WREG
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (PIC18F8723)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00184                 MOVFF   WREG,PIC18F8723         ; Clear the flag
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00185                 MOVLW   UPPER 3FFFFF            ; Load the dievide ID address
+Error[113]  : Symbol not previously defined (TBLPTRU)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00186                 MOVWF   TBLPTRU,A
+Message[311]: Operand of HIGH operator was larger than H'FFFF'.
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00187                 MOVLW   HIGH 3FFFFF
+Error[113]  : Symbol not previously defined (TBLPTRH)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00188                 MOVWF   TBLPTRH,A
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00189                 MOVLW   LOW 3FFFFF
+Error[113]  : Symbol not previously defined (TBLPTRL)
+Error[113]  : Symbol not previously defined (A)
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00190                 MOVWF   TBLPTRL,A
+                      00191                 ; Read the device type and set the memory flag
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00192                 TBLRD*
+Error[113]  : Symbol not previously defined (TABLAT)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00193                 MOVF    TABLAT,W,A
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00194                 XORLW   4A                      ; If 4A then its an 8723
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00195                 MOVLW   0FF
+Error[113]  : Symbol not previously defined (Z)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00196                 BTFSC   ALUSTA,Z
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (PIC18F8723)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00197                 MOVFF   WREG,PIC18F8723
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00198                 RETURN
+                      00199 
+                      00200 ; This function will read the ADC channel defined in WREG 256 times and
+                      00201 ; sum the results in ADCsum.
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00202 ReadADC256
+                      00203         ; First clear ADCsum
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00204                 MOVLR   HIGH ADCsum
+Error[113]  : Symbol not previously defined (ADCsum)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00205                 CLRF    ADCsum
+Error[113]  : Symbol not previously defined (ADCsum)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00206                 CLRF    ADCsum+1
+Error[113]  : Symbol not previously defined (ADCsum)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00207                 CLRF    ADCsum+2
+                      00208         ; Save Channel to Areg
+Error[113]  : Symbol not previously defined (Areg)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00209                 MOVWF   Areg,A
+                      00210         ; Setup Breg as a loop counter
+Error[113]  : Symbol not previously defined (Breg)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00211                 CLRF    Breg,A
+                      00212         ; Read the ADC
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00213 RD256a
+Error[113]  : Symbol not previously defined (Areg)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00214                 MOVF    Areg,W,A
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00215                 CALL    ADCread
+                      00216         ; Sum the result
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00217                 MOVLR   HIGH ADCsum
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (ADRESL)
+                      00218                 MOVFP   ADRESL,W,A
+Error[113]  : Symbol not previously defined (ADCsum)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00219                 ADDWF   ADCsum
+Warning[207]: Found label after column 1. (MOVFP)
+Error[122]  : Illegal opcode (ADRESH)
+000000                00220                 MOVFP   ADRESH,W,A
+Error[113]  : Symbol not previously defined (ADCsum)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00221                 ADDWFC  ADCsum+1
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00222                 BTFSC   ALUSTA,C,A
+Error[113]  : Symbol not previously defined (ADCsum)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00223                 INCF    ADCsum+2
+                      00224         ; Do the loop counter test
+Error[113]  : Symbol not previously defined (Breg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00225                 DECFSZ  Breg
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00226                 GOTO    RD256a
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00227                 RETURN
+                      00228 ;
+                      00229 ; This function reads data from the ADC channel defined in WREG.
+                      00230 ; The results are in the ADC registers when this function returns.
+                      00231 ; The results are also written to Pos.
+                      00232 ; Areg will contain the channel number when this function returns
+                      00233 ; as will WREG.
+                      00234 ; The function ADClookup is called to translate the ADC channel number 
+                      00235 ; into the value that will be used to select the ADC channel and the
+                      00236 ; ADC reference. The bit use is defined below:
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00237 ;
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00238 ADCread
+                      00239         ; Save the ADC requested channel
+Error[113]  : Symbol not previously defined (Areg)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00240                 MOVWF   Areg,A
+                      00241         ; Lookup the ADC parameters, mux channel and reference data
+Error[113]  : Symbol not previously defined (ADClookup)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00242                 CALL    ADClookup
+                      00243         ; Test bit 4, if set this is the MPS fixed mode
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00244                 BTFSS   WREG,4
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00245                 GOTO    ADCread00
+                      00246         ; Here for MPS fixed mode
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00247                 CALL    ADCfixed
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00248                 BTFSC   ALUSTA,C
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00249                 CALL    ADCfixed
+Error[113]  : Symbol not previously defined (Areg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00250                 MOVFF   Areg,WREG
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00251                 RETURN          
+                      00252         ; Here for normal mode, Perform the conversion
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00253 ADCread00
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00254                 CALL    ADCreadChan
+                      00255         ; Restore the requested channel
+Error[113]  : Symbol not previously defined (Areg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000000                00256                 MOVFF   Areg,WREG
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00257                 RETURN
+                      00258 ;
+                      00259 ; This function reads the ADC channel defined in the WREG reg and applies
+                      00260 ; the reference voltages as defined via the flag bits.
+                      00261 ; The results are in the ADC registers when this function returns.
+                      00262 ; The results are also written to Pos.
+                      00263 ;       WREG bit definition
+                      00264 ;               0       \
+                      00265 ;               1        | ADC mux channel
+                      00266 ;               2        |
+                      00267 ;               3       /
+                      00268 ;               4       Set for the MSP glitch detection mode, this also requires the 5 Volt ref flag to
+                             be set
+                      00269 ;               5       for MicroProStar this is mux select
+                      00270 ;               6       - ref 0=gnd, 1=ext, MicroProStar only
+                      00271 ;               7       + ref 0=ext, 1=5 volts
+                      00272 ;
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00273 ADCreadChan
+                      00274         ; Set default reference values
+Error[113]  : Symbol not previously defined (ADCON1)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00275                 CLRF    ADCON1,A        ; Use VDD and VSS as reference
+                      00276         ; If MSB is clear then use ext ref      
+Error[113]  : Symbol not previously defined (WREG)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00277                 BTFSS   WREG,7,A
+Error[113]  : Symbol not previously defined (VCFG0)
+Error[113]  : Symbol not previously defined (ADCON1)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00278                 BSF     ADCON1,VCFG0,A  ; Use external reference for positive supply
+Error[113]  : Symbol not previously defined (WREG)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00279                 BCF     WREG,7,A
+                      00280 #ifdef MicroProStar
+                      00281         ; Select the ADC MUX
+                      00282                 BTFSC   WREG,6,A
+                      00283                 BSF     ADCON1,VCFG1,A  ; Use external reference for negative supply
+                      00284                 BTFSS   WREG,6,A
+                      00285                 BCF     ADCON1,VCFG1,A  ; Use ground reference for negative supply
+                      00286         ; Select the negative reference
+                      00287                 BTFSC   WREG,5,A
+                      00288                 BSF     MP8K_LCD,MP8K_LCD_RS,A
+                      00289                 BTFSS   WREG,5,A        
+                      00290                 BCF     MP8K_LCD,MP8K_LCD_RS,A
+                      00291         ; Clear upper bits to maintain compatability
+                      00292                 ANDLW   0x0F
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00293 #endif
+                      00294         ; Select the channel
+Error[113]  : Symbol not previously defined (WREG)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00295                 RLNCF   WREG,W,A
+Error[113]  : Symbol not previously defined (WREG)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00296                 RLNCF   WREG,W,A
+Error[113]  : Symbol not previously defined (ADCON0)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00297                 MOVWF   ADCON0,A
+                      00298         ; Setup ADC
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00299                 MOVLW   0A1             ; Right justify and 1MHz conversion clock
+Error[113]  : Symbol not previously defined (ADCON2)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00300                 MOVWF   ADCON2,A
+                      00301         ; Setup the loop counter
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00302                 MOVLW   4
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (Creg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00303                 MOVFF   WREG,Creg
+Warning[207]: Found label after column 1. (MOVEC)
+Error[108]  : Illegal character (0)
+000000                00304                 MOVEC   0,Pos
+                      00305         ; Start the conversion
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00306 ADCread1
+Error[113]  : Symbol not previously defined (ADON)
+Error[113]  : Symbol not previously defined (ADCON0)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00307                 BSF     ADCON0,ADON,A
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00308                 NOP                     ; delay to let the Mux settle
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00309                 NOP
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00310                 NOP
+Error[113]  : Symbol not previously defined (GO)
+Error[113]  : Symbol not previously defined (ADCON0)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00311                 BSF     ADCON0,GO,A
+                      00312         ; Wait for the ADC to finish
+Error[150]  : Labels must be defined in a code or data section when making an object file
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000000                00313 ADCread0
+Error[113]  : Symbol not previously defined (DONE)
+Error[113]  : Symbol not previously defined (ADCON0)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00314                 BTFSC   ADCON0,DONE,A
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00315                 GOTO    ADCread0
+                      00316         ; Sum results in Pos
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00317                 MOVLR   HIGH Pos
+Error[113]  : Symbol not previously defined (ADRESL)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00318                 MOVF    ADRESL,W,A
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00319                 ADDWF   Pos,F
+Error[113]  : Symbol not previously defined (ADRESH)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00320                 MOVF    ADRESH,W,A
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00321                 ADDWFC  Pos+1,F
+                      00322         ; Loop till done
+Warning[207]: Found label after column 1. (MOVLR)
+Error[122]  : Illegal opcode (HIGH)
+                      00323                 MOVLR   HIGH Creg
+Error[113]  : Symbol not previously defined (Creg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00324                 DECF    Creg,F
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00325                 BNZ     ADCread1
+                      00326         ; Here when done, test for 8723
+Error[113]  : Symbol not previously defined (PIC18F8723)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00327                 MOVFF   PIC18F8723,WREG
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00328                 COMF    WREG
+Error[113]  : Symbol not previously defined (WREG)
+Error[113]  : Symbol not previously defined (A)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00329                 TSTFSZ  WREG,A
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00330                 GOTO    ADCread2
+                      00331                 ; divide by 4   
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00332                 BCF     ALUSTA,C
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00333                 RRCF    Pos+1
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00334                 RRCF    Pos
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00335                 BCF     ALUSTA,C
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00336                 RRCF    Pos+1
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00337                 RRCF    Pos
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00338 ADCread2        
+                      00339         ; Make the ADC regs match Pos
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (ADRESL)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00340                 MOVFF   Pos,ADRESL
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (ADRESH)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00341                 MOVFF   Pos+1,ADRESH
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00342                 RETURN
+                      00343 ;
+                      00344 ; This ADC read function supports the MPS where the 5 volt reference is used to read
+                      00345 ; the joystick pots. The pots are powered from the battery so the battery voltage is
+                      00346 ; used to normalize the value read. The battery voltage is read before and after the
+                      00347 ; channel is read and if the values are not close then carry flag is set on return.
+                      00348 ;
+                      00349 ; Procedure:
+                      00350 ;       1.) Read the battery voltage and save
+                      00351 ;       2.) Read the requested channel
+                      00352 ;       3.) Read the battery voltage and save
+                      00353 ;       4.) If values from 1 and 3 are not close in value then there is a read error
+                      00354 ;           and we need to exit with an error flag set, carry flag set on error
+                      00355 ;       5.) If no error then the value = requested channel * nominal bat voltage / battery voltage
+                      00356 ;
+                      00357 ; Areg contains the ADC channel request
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00358 ;
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00359 ADCfixed
+                      00360         ; Save AXreg and BXreg, in use in some places
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (AXreg)
+                      00361                 MOVE    AXreg,AXregSave
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (BXreg)
+                      00362                 MOVE    BXreg,BXregSave
+Warning[207]: Found label after column 1. (MOVE32)
+Error[122]  : Illegal opcode (CEXreg)
+                      00363                 MOVE32  CEXreg,CEXregSave
+                      00364         ; Read the reference
+Error[113]  : Symbol not previously defined (ADCref)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00365                 MOVLW   ADCref
+Error[113]  : Symbol not previously defined (ADClookup)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00366                 CALL    ADClookup
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00367                 CALL    ADCreadChan
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (Pos)
+000000                00368                 MOVE    Pos,DEXreg
+                      00369         ; Read the requested channnel
+Error[113]  : Symbol not previously defined (Areg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00370                 MOVFF   Areg,WREG
+Error[113]  : Symbol not previously defined (ADClookup)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00371                 CALL    ADClookup
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00372                 BCF     WREG,4          ; Clear the MPS fixed flag bit
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00373                 CALL    ADCreadChan
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (Pos)
+000000                00374                 MOVE    Pos,AXreg
+                      00375         ; Read the reference again
+Error[113]  : Symbol not previously defined (ADCref)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00376                 MOVLW   ADCref
+Error[113]  : Symbol not previously defined (ADClookup)
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00377                 CALL    ADClookup
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00378                 CALL    ADCreadChan
+                      00379         ; Now calculate the difference between the two ref values
+                      00380         ; pos = pos - DEXref
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00381                 MOVLB   HIGH Pos
+Error[113]  : Symbol not previously defined (DEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00382                 MOVFF   DEXreg,WREG
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00383                 SUBWF   Pos,F
+Error[113]  : Symbol not previously defined (DEXreg)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (WREG)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00384                 MOVFF   DEXreg+1,WREG
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00385                 SUBWFB  Pos+1,F
+                      00386         ; Get the absolute value of the difference
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00387                 BTFSS   Pos+1,7
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00388                 GOTO    ADCfixed1
+                      00389                 ; Here if negative so take 2s complement
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00390                 COMF    Pos
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00391                 COMF    Pos+1
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00392                 INCF    Pos
+Error[113]  : Symbol not previously defined (Z)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00393                 BTFSC   ALUSTA,Z
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00394                 INCF    Pos+1
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00395         ; Now check the difference
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00396 ADCfixed1
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00397                 MOVF    Pos+1,W
+Error[113]  : Symbol not previously defined (Z)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00398                 BTFSS   ALUSTA,Z
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00399                 GOTO    ADCfixed2       ; If the MS byte is non zero then the change is too big
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00400                 MOVF    Pos,W
+Error[113]  : Symbol not previously defined (ADCfixThres)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00401                 MOVLB   HIGH ADCfixThres
+Error[113]  : Symbol not previously defined (ADCfixThres)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00402                 SUBWF   ADCfixThres,W
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00403                 BTFSS   ALUSTA,C
+Error[151]  : Operand contains unresolvable labels or is too complex
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00404                 GOTO    ADCfixed2
+                      00405         ; Here if the bat values are close and we have valid data
+Warning[207]: Found label after column 1. (MOVEC)
+Error[122]  : Illegal opcode (NOMINALBAT)
+                      00406                 MOVEC   NOMINALBAT,BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00407                 CALL    Mult1616
+Error[113]  : Symbol not previously defined (Divide2416)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00408                 CALL    Divide2416
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00409                 MOVE    CEXreg,Pos
+                      00410         ; Make the ADC regs match Pos
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (ADRESL)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00411                 MOVFF   Pos,ADRESL
+Error[113]  : Symbol not previously defined (Pos)
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (ADRESH)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00412                 MOVFF   Pos+1,ADRESH
+                      00413         ; Restore AXreg and BXreg
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (AXregSave)
+                      00414                 MOVE    AXregSave,AXreg
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (BXregSave)
+                      00415                 MOVE    BXregSave,BXreg
+Warning[207]: Found label after column 1. (MOVE32)
+Error[122]  : Illegal opcode (CEXregSave)
+                      00416                 MOVE32  CEXregSave,CEXreg
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00417                 BCF     ALUSTA,C
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00418                 RETURN
+                      00419         ; Here with a big bat value error and we have invalid data, calculate the result anyway
+Error[150]  : Labels must be defined in a code or data section when making an object file
+000000                00420 ADCfixed2
+Warning[207]: Found label after column 1. (MOVEC)
+Error[122]  : Illegal opcode (NOMINALBAT)
+000000                00421                 MOVEC   NOMINALBAT,BXreg
+Error[113]  : Symbol not previously defined (Mult1616)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00422                 CALL    Mult1616
+Error[113]  : Symbol not previously defined (Divide2416)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00423                 CALL    Divide2416
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (CEXreg)
+000000                00424                 MOVE    CEXreg,Pos
+                      00425         ; Make the ADC regs match Pos
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (ADRESL)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00426                 MOVFF   Pos,ADRESL
+Error[113]  : Symbol not previously defined (Pos)
+Error[152]  : Executable code and data must be defined in an appropriate section
+Error[113]  : Symbol not previously defined (ADRESH)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00427                 MOVFF   Pos+1,ADRESH
+                      00428         ; Restore AXreg and BXreg
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (AXregSave)
+                      00429                 MOVE    AXregSave,AXreg
+Warning[207]: Found label after column 1. (MOVE)
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[122]  : Illegal opcode (BXregSave)
+                      00430                 MOVE    BXregSave,BXreg 
+Warning[207]: Found label after column 1. (MOVE32)
+Error[122]  : Illegal opcode (CEXregSave)
+                      00431                 MOVE32  CEXregSave,CEXreg
+Error[113]  : Symbol not previously defined (C)
+Error[113]  : Symbol not previously defined (ALUSTA)
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00432                 BSF     ALUSTA,C
+Error[152]  : Executable code and data must be defined in an appropriate section
+000000                00433                 RETURN
+                      00434         
+Error[129]  : Expected (END)
+MPASM  5.52                        ../ADC.ASM   10-12-2013  5:43:01         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ADCfixed                          00000000
+ADCfixed1                         00000000
+ADCfixed2                         00000000
+ADCread                           00000000
+ADCread0                          00000000
+ADCread00                         00000000
+ADCread1                          00000000
+ADCread2                          00000000
+ADCreadChan                       00000000
+FilterTC                          00000030
+NoAlarm                           00000000
+ProcessorType                     00000000
+RD256a                            00000000
+ReadADC256                        00000000
+RecVoltage                        00000000
+TransFilter                       00000000
+TransVoltage                      00000000
+__18F8722                         00000001
+
+Errors   :   577
+Warnings :    60 reported,     0 suppressed
+Messages :     1 reported,     0 suppressed
+
+

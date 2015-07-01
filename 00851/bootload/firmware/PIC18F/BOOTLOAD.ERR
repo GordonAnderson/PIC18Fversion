@@ -1,0 +1,6 @@
+Message[314] D:\HDMD\PIC18FXXXBOOT\FIRMWARE\P2V005T\BOOTLOAD.ASM 261 : LFSR instruction is not supported on some versions of the 18Cxx2 devices.
+Message[315] D:\HDMD\PIC18FXXXBOOT\FIRMWARE\P2V005T\BOOTLOAD.ASM 261 : Please refer to Microchip document DS80058A for more details.
+Message[314] D:\HDMD\PIC18FXXXBOOT\FIRMWARE\P2V005T\BOOTLOAD.ASM 308 : LFSR instruction is not supported on some versions of the 18Cxx2 devices.
+Message[315] D:\HDMD\PIC18FXXXBOOT\FIRMWARE\P2V005T\BOOTLOAD.ASM 308 : Please refer to Microchip document DS80058A for more details.
+Message[314] D:\HDMD\PIC18FXXXBOOT\FIRMWARE\P2V005T\BOOTLOAD.ASM 519 : LFSR instruction is not supported on some versions of the 18Cxx2 devices.
+Message[315] D:\HDMD\PIC18FXXXBOOT\FIRMWARE\P2V005T\BOOTLOAD.ASM 519 : Please refer to Microchip document DS80058A for more details.

@@ -1,0 +1,1667 @@
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; *****************************************************************************
+                      00002 ;        Software License Agreement                                 
+                      00003 ;                                                                   
+                      00004 ; The software supplied herewith by Microchip Technology            
+                      00005 ; Incorporated (the “Company”) for its PICmicro® Microcontroller is 
+                      00006 ; intended and supplied to you, the Company’s customer, for use     
+                      00007 ; solely and exclusively on Microchip PICmicro Microcontroller      
+                      00008 ; products. The software is owned by the Company and/or its         
+                      00009 ; supplier, and is protected under applicable copyright laws. All   
+                      00010 ; rights are reserved. Any use in violation of the foregoing         
+                      00011 ; restrictions may subject the user to criminal sanctions under     
+                      00012 ; applicable laws, as well as to civil liability for the breach of  
+                      00013 ; the terms and conditions of this license.                         
+                      00014 ;                                                                   
+                      00015 ; THIS SOFTWARE IS PROVIDED IN AN “AS IS” CONDITION. NO WARRANTIES, 
+                      00016 ; WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+                      00017 ; TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A       
+                      00018 ; PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. THE COMPANY SHALL NOT, 
+                      00019 ; IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL OR        
+                      00020 ; CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.                 
+                      00021 ;                                                                   
+                      00022 ;                                                                   
+                      00023 ; Bootloader for PIC18F by Ross Fosler 
+                      00024 ; 03/01/2002    ... First full implementation
+                      00025 ; 03/07/2002    Changed entry method to use last byte of EEDATA.
+                      00026 ;               Also removed all possible infinite loops w/ clrwdt.
+                      00027 ; 03/07/2002    Added code for direct boot entry. I.E. boot vector.
+                      00028 ; 03/09/2002    Changed the general packet format, removed the LEN field.
+                      00029 ; 03/09/2002    Modified the erase command to do multiple row erase.
+                      00030 ; 03/12/2002    Fixed write problem to CONFIG area. Write was offset by a byte.
+                      00031 ; 03/15/2002    Added work around for 18F8720 tblwt*+ problem.
+                      00032 ; 03/20/2002    Modified receive & parse engine to vector to autobaud on a checksum 
+                      00033 ;               error since a chechsum error could likely be a communications problem.
+                      00034 ; 03/22/2002    Removed clrwdt from the startup. This instruction affects the TO and 
+                      00035 ;               PD flags. Removing this instruction should have no affect on code 
+                      00036 ;               operation since the wdt is cleared on a reset and boot entry is always
+                      00037 ;               on a reset.
+                      00038 ; 03/22/2002    Modified the protocol to incorporate the autobaud as part of the 
+                      00039 ;               first received <STX>. Doing this improves robustness by allowing
+                      00040 ;               re-sync under any condition. Previously it was possible to enter a 
+                      00041 ;               state where only a hard reset would allow re-syncing.
+                      00042 ; 03/27/2002    Removed the boot vector and related code. This could lead to customer
+                      00043 ;               issues. There is a very minute probability that errent code execution
+                      00044 ;               could jump into the boot area and cause artificial boot entry.
+                      00045 ;
+                      00046 ; Memory Map
+                      00047 ;       -----------------
+                      00048 ;       |    0x0000     |
+                      00049 ;       |    0x0002     |       Boot vector
+                      00050 ;       |    0x0004     |       Unlock & write vector
+                      00051 ;       |               |       
+                      00052 ;       |               |
+                      00053 ;       |  Boot Block   |       (this program)
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00054 ;       |               |
+                      00055 ;       |    0x0200     |       Re-mapped Reset Vector
+                      00056 ;       |    0x0208     |       Re-mapped High Priority Interrupt Vector
+                      00057 ;       |    0x0218     |       Re-mapped Low Priority Interrupt Vector
+                      00058 ;       |               |
+                      00059 ;       |       |       |
+                      00060 ;       |               |
+                      00061 ;       |  Code Space   |       User program space
+                      00062 ;       |               |
+                      00063 ;       |       |       |
+                      00064 ;       |               |
+                      00065 ;       |   0xXXXXXX    |
+                      00066 ;       -----------------
+                      00067 ;
+                      00068 ;
+                      00069 ; Incomming data format:
+                      00070 ;
+                      00071 ;       <STX><STX><DATA><CHKSUM><ETX>
+                      00072 ;                 /    \
+                      00073 ;        ________/      \____________________________
+                      00074 ;       /                                            \
+                      00075 ;       <COMMAND><DLEN><ADDRL><ADDRH><ADDRU><DATA>...
+                      00076 ;
+                      00077 ; Definitions:
+                      00078 ;
+                      00079 ;       STX     -       Start of packet indicator
+                      00080 ;       ETX     -       End of packet indicator
+                      00081 ;       LEN     -       Length of incomming packet
+                      00082 ;       DATA    -       General data up to 255 bytes
+                      00083 ;       CHKSUM  -       The 8-bit two's compliment sum of LEN & DATA
+                      00084 ;       COMMAND -       Base command
+                      00085 ;       DLEN    -       Length of data associated to the command
+                      00086 ;       ADDR    -       Address up to 24 bits
+                      00087 ;       DATA    -       Data (if any)
+                      00088 ;
+                      00089 ;
+                      00090 ; Commands:
+                      00091 ;
+                      00092 ;       RD_VER          0x00    Read Version Information
+                      00093 ;       RD_MEM          0x01    Read Program Memory
+                      00094 ;       WR_MEM          0x02    Write Program Memory
+                      00095 ;       ER_MEM          0x03    Erase Program Memory
+                      00096 ;       RD_EE           0x04    Read EEDATA Memory 
+                      00097 ;       WR_EE           0x05    Write EEDATA Memory 
+                      00098 ;       RD_CONFIG       0x06    Read Config Memory 
+                      00099 ;       WT_CONFIG       0x07    Write Config Memory 
+                      00100 ;
+                      00101 ; *****************************************************************************
+                      00102 
+                      00103  
+                      00104 
+                      00105 ; *****************************************************************************
+                      00106 ;       #include P18F452.INC            ; Standard include
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00107         #include P18F8720.inc
+                      00001         LIST
+                      00002 ; P18F8720.INC  Standard Header File, Version .1   Microchip Technology, Inc.
+                      01106         LIST
+                      00108 ; *****************************************************************************
+                      00109 
+                      00110 
+                      00111 
+                      00112 ; *****************************************************************************
+                      00113 #define MINOR_VERSION   0x0A            ; Version
+                      00114 #define MAJOR_VERSION   0x00
+                      00115 
+                      00116 #define RC_DLE          0x01
+                      00117 #define RC_STX          0x02
+                      00118 
+                      00119 #define STX             0x0F
+                      00120 #define ETX             0x04
+                      00121 #define DLE             0x05
+                      00122 
+                      00123 ;#define        TBLWT_BUG                       ; Timing bug found in some PIC18Fxx20s
+                      00124 ; *****************************************************************************
+                      00125 
+                      00126 
+                      00127 
+                      00128 ; *****************************************************************************
+  00000000            00129 CHKSUM          equ     0x00            ; Checksum accumulator
+  00000001            00130 COUNTER         equ     0x01            ; General counter
+  00000002            00131 ABTIME_H        equ     0x02
+  00000003            00132 ABTIME_L        equ     0x03
+  00000004            00133 RXDATA          equ     0x04
+  00000005            00134 TXDATA          equ     0x05
+                      00135 
+                      00136 ; Frame Format
+                      00137 ;
+                      00138 ;  <STX><STX>[<COMMAND><DATALEN><ADDRL><ADDRH><ADDRU><...DATA...>]<CHKSUM><ETX>
+                      00139 
+  00000008            00140 DATA_BUFF       equ     0x08            ; Start of receive buffer
+                      00141         
+  00000008            00142 COMMAND         equ     0x08            ; Data mapped in receive buffer
+  00000009            00143 DATA_COUNT      equ     0x09    
+  0000000A            00144 ADDRESS_L       equ     0x0A
+  0000000B            00145 ADDRESS_H       equ     0x0B
+  0000000C            00146 ADDRESS_U       equ     0x0C
+  0000000D            00147 PACKET_DATA     equ     0x0D    
+                      00148 ; *****************************************************************************
+                      00149 
+                      00150 
+                      00151 
+                      00152 
+                      00153 ; *****************************************************************************
+                      00154 pmwtpi macro                            ; tblwt*+ macro for PIC18Fxx20 bug
+                      00155  IFDEF TBLWT_BUG
+                      00156         tblwt   *
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00157         tblrd   *+
+                      00158  ELSE
+                      00159         tblwt   *+
+                      00160  ENDIF
+                      00161         endm
+                      00162 ; *****************************************************************************
+                      00163 
+                      00164 
+                      00165  
+                      00166 ; *****************************************************************************
+000000                00167         ORG     0x0000                  ; Re-map Reset vector
+000000 D00C           00168         bra     Setup   
+000002 D0D6           00169         bra     StartWrite
+                      00170         
+                      00171 
+000008                00172         ORG     0x0008
+000008                00173 VIntH
+000008 D0FF           00174         bra     RVIntH                  ; Re-map Interrupt vector
+                      00175 
+000018                00176         ORG     0x0018
+000018                00177 VIntL
+000018 D0FF           00178         bra     RVIntL                  ; Re-map Interrupt vector
+                      00179 ; *****************************************************************************
+                      00180 
+                      00181  
+                      00182 
+                      00183 ; *****************************************************************************
+                      00184 ; Setup the appropriate registers.
+00001A 6AA6           00185 Setup   clrf    EECON1
+00001C 68A9           00186         setf    EEADR                   ; Point to last location
+00001E 68AA           00187         setf    EEADRH                  
+000020 80A6           00188         bsf     EECON1, RD              ; Read the control code
+000022 3CA8           00189         incfsz  EEDATA, W
+000024 D0ED           00190         bra     RVReset                 ; If not 0xFF then normal reset
+                      00191 
+000026 9C94           00192         bcf     TRISC, 6                ; Setup tx pin
+                      00193 ;       bsf     TRISC, 7                ; Setup rx pin
+                      00194 
+000028 0E90           00195         movlw   b'10010000'             ; Setup rx and tx
+00002A 6EAB           00196         movwf   RCSTA1
+00002C 0E26           00197         movlw   b'00100110'             
+00002E 6EAC           00198         movwf   TXSTA1
+                      00199 
+                      00200 ; *****************************************************************************
+                      00201 
+                      00202 
+                      00203 
+                      00204 
+                      00205 ; *****************************************************************************
+000030                00206 Autobaud
+                      00207 ;
+                      00208 ; ___    __________            ________
+                      00209 ;    \__/          \__________/
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00210 ;       |                     |
+                      00211 ;       |-------- p ----------|
+                      00212 ;
+                      00213 ;       p = The number of instructions between the first and last
+                      00214 ;           rising edge of the RS232 control sequence 0x0F. Other 
+                      00215 ;           possible control sequences are 0x01, 0x03, 0x07, 0x1F, 
+                      00216 ;           0x3F, 0x7F.
+                      00217 ;
+                      00218 ;       SPBRG = (p / 32) - 1    BRGH = 1
+                      00219 
+000030 98AB           00220         bcf     RCSTA1, CREN            ; Stop receiving
+                      00221 
+000032 0E03           00222         movlw   b'00000011'             ; x16 Prescale
+000034 6ED5           00223         movwf   T0CON
+000036 6AD7           00224         clrf    TMR0H                   ; Reset timer
+000038 6AD6           00225         clrf    TMR0L
+                      00226         
+00003A DFE7           00227         rcall   WaitForRise
+                      00228  
+00003C 8ED5           00229         bsf     T0CON, TMR0ON           ; Start counting
+                      00230 
+00003E DFE5           00231         rcall   WaitForRise
+                      00232 
+000040 9ED5           00233         bcf     T0CON, TMR0ON           ; Stop counting
+                      00234 
+000042 CFD6 F003      00235         movff   TMR0L, ABTIME_L         ; Read the timer
+                      00236         
+000046 32D7           00237 DivB32  rrcf    TMR0H, F                ; divide by 2
+000048 3203           00238         rrcf    ABTIME_L, F
+00004A A0D8           00239         btfss   STATUS, C               ; Rounding
+00004C 0603           00240         decf    ABTIME_L, F
+                      00241 
+00004E C003 FFAF      00242         movff   ABTIME_L, SPBRG1        ; Sync
+                      00243 
+000052 88AB           00244         bsf     RCSTA1, CREN            ; Start receiving
+                      00245 
+000054 50AE           00246         movf    RCREG1, W               ; Empty the buffer
+000056 50AE           00247         movf    RCREG1, W
+                      00248                 
+                      00249 ; *****************************************************************************
+                      00250 
+                      00251 
+                      00252 
+                      00253 ; *****************************************************************************
+                      00254 ; Read and parse the data.
+000058                00255 StartOfLine
+                      00256 
+000058 D8A3           00257         rcall   RdRS232                 ; Get second <STX>
+00005A 0A0F           00258         xorlw   STX
+00005C E1E9           00259         bnz     Autobaud                ; Otherwise go back for another character
+                      00260 
+Message[314]: LFSR instruction is not supported on some versions of the 18Cxx2 devices.
+Message[315]: Please refer to Microchip document DS80058A for more details.
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00005E EE00 F008      00261         lfsr    0, DATA_BUFF            ; Point to the buffer
+                      00262 
+000062 6A00           00263         clrf    CHKSUM                  ; Reset checksum                
+000064 6A01           00264         clrf    COUNTER                 ; Reset buffer count
+                      00265                 
+000066                00266 GetNextDat                              
+000066 D89C           00267         rcall   RdRS232                 ; Get the data
+000068 0A0F           00268         xorlw   STX                     ; Check for a STX
+00006A E0F6           00269         bz      StartOfLine             ; Yes, start over       
+                      00270 
+00006C 5004           00271 NoSTX   movf    RXDATA, W
+00006E 0A04           00272         xorlw   ETX                     ; Check for a ETX
+000070 E00A           00273         bz      CheckSum                ; Yes, examine checksum         
+                      00274 
+000072 5004           00275 NoETX   movf    RXDATA, W
+000074 0A05           00276         xorlw   DLE                     ; Check for a DLE
+000076 E101           00277         bnz     NoDLE
+                      00278 
+000078 D893           00279         rcall   RdRS232                 ; Yes, Get the next byte
+                      00280         
+00007A 5004           00281 NoDLE   movf    RXDATA, W
+                      00282 
+00007C 2600           00283         addwf   CHKSUM, F               ; Get sum
+00007E 6EEE           00284         movwf   POSTINC0                ; Store the data
+                      00285 
+000080 4E01           00286         dcfsnz  COUNTER, F              ; Limit buffer to 256 bytes
+000082 D7D6           00287         bra     Autobaud
+                      00288 
+000084 D7F0           00289         bra     GetNextDat
+                      00290 
+000086                00291 CheckSum        
+000086 5200           00292         movf    CHKSUM                  ; Checksum test
+000088 E1D3           00293         bnz     Autobaud
+                      00294 ; ***********************************************
+                      00295 
+                      00296 
+                      00297 
+                      00298 ; ***********************************************
+                      00299 ; Pre-setup, common to all commands.
+00008A 500A           00300         movf    ADDRESS_L, W            ; Set all possible pointers
+00008C 6EF6           00301         movwf   TBLPTRL
+00008E 6EA9           00302         movwf   EEADR
+000090 500B           00303         movf    ADDRESS_H, W
+000092 6EF7           00304         movwf   TBLPTRH
+000094 6EAA           00305         movwf   EEADRH
+000096 C00C FFF8      00306         movff   ADDRESS_U, TBLPTRU
+                      00307 
+Message[314]: LFSR instruction is not supported on some versions of the 18Cxx2 devices.
+Message[315]: Please refer to Microchip document DS80058A for more details.
+00009A EE00 F00D      00308         lfsr    FSR0, PACKET_DATA
+                      00309 
+00009E 5009           00310         movf    DATA_COUNT, W           ; Setup counter
+0000A0 6E01           00311         movwf   COUNTER
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000A2 B4D8           00312         btfsc   STATUS, Z
+0000A4 00FF           00313         reset                           ; Non valid count (Special Command)
+                      00314 ; ***********************************************
+                      00315 
+                      00316  
+                      00317 
+                      00318 ; ***********************************************
+                      00319 ; Test the command field and sub-command.
+0000A6                00320 CheckCommand
+0000A6 5008           00321         movf    COMMAND, W              ; Test for a valid command                      
+0000A8 0807           00322         sublw   d'7'
+0000AA E3C2           00323         bnc     Autobaud
+                      00324 
+0000AC 6AFA           00325         clrf    PCLATH                  ; Setup for a calculated jump
+0000AE 6AFB           00326         clrf    PCLATU
+                      00327                 
+0000B0 4408           00328         rlncf   COMMAND, W              ; Jump
+0000B2 26F9           00329         addwf   PCL, F
+                      00330         
+0000B4 D007           00331         bra     ReadVersion
+0000B6 D00C           00332         bra     ReadProgMem
+0000B8 D013           00333         bra     WriteProgMem
+0000BA D022           00334         bra     EraseProgMem
+0000BC D02C           00335         bra     ReadEE
+0000BE D036           00336         bra     WriteEE
+0000C0 D007           00337         bra     ReadProgMem     ;ReadConfig
+0000C2 D040           00338         bra     WriteConfig
+                      00339 ; ***********************************************
+                      00340 
+                      00341 
+                      00342 
+                      00343 ; ***********************************************
+                      00344 ; Commands
+                      00345 ; 
+                      00346 ; In:   <STX><STX>[<0x00><0x02>]<0xFF><ETX>
+                      00347 ; OUT:  <STX><STX>[<0x00><VERL><VERH>]<CHKSUM><ETX>
+0000C4                00348 ReadVersion
+0000C4 0E0A           00349         movlw   MINOR_VERSION
+0000C6 6E0A           00350         movwf   DATA_BUFF + 2
+0000C8 0E00           00351         movlw   MAJOR_VERSION
+0000CA 6E0B           00352         movwf   DATA_BUFF + 3
+                      00353 
+0000CC 0E04           00354         movlw   0x04
+0000CE D045           00355         bra     WritePacket
+                      00356 
+                      00357 
+                      00358 ; In:   <STX><STX>[<0x01><DLEN><ADDRL><ADDRH><ADDRU>]<CHKSUM><ETX>
+                      00359 ; OUT:  <STX><STX>[<0x01><DLEN><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+0000D0                00360 ReadProgMem
+0000D0 0009           00361         tblrd   *+                      ; Fill buffer
+0000D2 CFF5 FFEE      00362         movff   TABLAT, POSTINC0
+                      00363 
+0000D6 2E01           00364         decfsz  COUNTER, F              
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000D8 D7FB           00365         bra     ReadProgMem             ; Not finished then repeat
+                      00366 
+0000DA 5009           00367         movf    DATA_COUNT, W           ; Setup packet length
+0000DC 0F05           00368         addlw   0x05
+                      00369                                 
+0000DE D03D           00370         bra     WritePacket
+                      00371 
+                      00372 
+                      00373 ; In:   <STX><STX>[<0x02><DLENBLOCK><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+                      00374 ; OUT:  <STX><STX>[<0x02>]<CHKSUM><ETX>
+0000E0                00375 WriteProgMem
+0000E0 0EF8           00376         movlw   b'11111000'             ; Force a boundry
+0000E2 16F6           00377         andwf   TBLPTRL, F
+                      00378  
+0000E4 0E08           00379         movlw   0x08
+                      00380 
+0000E6 CFEE FFF5      00381 Lp1     movff   POSTINC0, TABLAT        ; Load the holding registers
+                      00382 
+                      00383         pmwtpi                          ; Same as tblwt *+
+                          M  IFDEF TBLWT_BUG
+                          M         tblwt   *
+                          M         tblrd   *+
+                          M  ELSE
+0000EA 000D               M         tblwt   *+
+                          M  ENDIF
+                      00384 
+0000EC 2EE8           00385         decfsz  WREG, F
+0000EE D7FB           00386         bra     Lp1
+                      00387  
+0000F0 000A           00388         tblrd   *-                      ; Point back into the block
+                      00389 
+0000F2 0E84           00390         movlw   b'10000100'             ; Setup writes
+0000F4 6EA6           00391         movwf   EECON1
+0000F6 D85C           00392         rcall   StartWrite              ; Write the data
+                      00393 
+0000F8 0009           00394         tblrd   *+                      ; Point to the beginning of the next block
+                      00395 
+0000FA 2E01           00396         decfsz  COUNTER, F              
+0000FC D7F1           00397         bra     WriteProgMem            ; Not finished then repeat
+                      00398 
+0000FE D02C           00399         bra     SendAcknowledge         ; Send acknowledge
+                      00400 
+                      00401 
+                      00402 ; In:   <STX><STX>[<0x03><DLENROW><ADDRL><ADDRH><ADDRL>]<CHKSUM><ETX>
+                      00403 ; OUT:  <STX><STX>[<0x03>]<CHKSUM><ETX>
+000100                00404 EraseProgMem
+000100 0E94           00405         movlw   b'10010100'             ; Setup writes
+000102 6EA6           00406         movwf   EECON1
+                      00407 
+000104 D855           00408         rcall   StartWrite              ; Erase the row
+                      00409 
+000106 0E40           00410         movlw   0x40                    ; Point to next row
+000108 26F6           00411         addwf   TBLPTRL, F
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00010A 6AE8           00412         clrf    WREG
+00010C 22F7           00413         addwfc  TBLPTRH, F
+00010E 22F8           00414         addwfc  TBLPTRU, F
+                      00415 
+000110 2E01           00416         decfsz  COUNTER, F
+000112 D7F6           00417         bra     EraseProgMem    
+                      00418 
+000114 D021           00419         bra     SendAcknowledge         ; Send acknowledge
+                      00420 
+                      00421 
+                      00422 ; In:   <STX><STX>[<0x04><DLEN><ADDRL><ADDRH><0x00>]<CHKSUM><ETX>
+                      00423 ; OUT:  <STX><STX>[<0x04><DLEN><ADDRL><ADDRH><0x00><DATA>...]<CHKSUM><ETX>
+000116                00424 ReadEE
+000116 6AA6           00425         clrf    EECON1 
+                      00426 
+000118 80A6           00427         bsf     EECON1, RD              ; Read the data
+00011A CFA8 FFEE      00428         movff   EEDATA, POSTINC0
+                      00429         
+00011E 4AA9           00430         infsnz  EEADR, F                ; Adjust EEDATA pointer
+000120 2AAA           00431         incf    EEADRH, F
+                      00432 
+000122 2E01           00433         decfsz  COUNTER, F
+000124 D7F8           00434         bra     ReadEE                  ; Not finished then repeat
+                      00435 
+000126 5009           00436         movf    DATA_COUNT, W           ; Setup packet length
+000128 0F05           00437         addlw   0x05
+                      00438                                 
+00012A D017           00439         bra     WritePacket
+                      00440 
+                      00441 
+                      00442 ; In:   <STX><STX>[<0x05><DLEN><ADDRL><ADDRH><0x00><DATA>...]<CHKSUM><ETX>
+                      00443 ; OUT:  <STX><STX>[<0x05>]<CHKSUM><ETX>
+00012C                00444 WriteEE 
+                      00445 
+00012C CFEE FFA8      00446         movff   POSTINC0, EEDATA
+                      00447 
+000130 0E04           00448         movlw   b'00000100'             ; Setup for EEData
+000132 6EA6           00449         movwf   EECON1
+000134 D83D           00450         rcall   StartWrite              
+000136 B2A6           00451         btfsc   EECON1, WR              ; Write and wait
+000138 D7FE           00452         bra     $ - 2
+                      00453 
+00013A 4AA9           00454         infsnz  EEADR, F                ; Adjust EEDATA pointer
+00013C 2AAA           00455         incf    EEADRH, F
+                      00456 
+00013E 2E01           00457         decfsz  COUNTER, F              
+000140 D7F5           00458         bra     WriteEE                 ; Not finished then repeat
+                      00459 
+000142 D00A           00460         bra     SendAcknowledge         ; Send acknowledge
+                      00461  
+                      00462 
+                      00463 ; In:   <STX><STX>[<0x06><DLEN><ADDRL><ADDRH><ADDRU>]<CHKSUM><ETX>
+                      00464 ; OUT:  <STX><STX>[<0x06><DLEN><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00465 ;ReadConfig
+                      00466 ;       movlw   b'11000000'
+                      00467 ;       movwf   EECON1
+                      00468 ;
+                      00469 ;Lp5    tblrd   *+
+                      00470 ;       movff   TABLAT, POSTINC0
+                      00471 ;
+                      00472 ;       decfsz  COUNTER, F
+                      00473 ;       bra     Lp5                     ; Not finished then repeat
+                      00474 ;
+                      00475 ;       movf    DATA_COUNT, W           ; Setup packet length
+                      00476 ;       addlw   0x05
+                      00477 ;
+                      00478 ;       bra     WritePacket
+                      00479 
+                      00480 
+                      00481 ; In:   <STX><STX>[<0x07><DLEN><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+                      00482 ; OUT:  <STX><STX>[<0x07>]<CHKSUM><ETX>
+000144                00483 WriteConfig
+000144 0EC4           00484         movlw   b'11000100'
+000146 6EA6           00485         movwf   EECON1
+                      00486 
+000148 CFEE FFF5      00487         movff   POSTINC0, TABLAT        ; Write to config area
+00014C 000C           00488         tblwt   *
+                      00489 
+00014E D830           00490         rcall   StartWrite
+                      00491 
+000150 0009           00492         tblrd   *+
+                      00493 
+000152 2E01           00494         decfsz  COUNTER, F
+000154 D7F7           00495         bra     WriteConfig             ; Not finished then repeat
+                      00496                 
+000156 D000           00497         bra     SendAcknowledge         ; Send acknowledge
+                      00498 ; ***********************************************
+                      00499 
+                      00500 
+                      00501 
+                      00502 ; ***********************************************
+                      00503 ; Send the data buffer back.
+                      00504 ;
+                      00505 ; <STX><STX>[<DATA>...]<CHKSUM><ETX>
+                      00506 
+000158                00507 SendAcknowledge
+000158 0E01           00508         movlw   0x01                    ; Send acknowledge
+                      00509 
+00015A                00510 WritePacket
+00015A 6E01           00511         movwf   COUNTER
+                      00512 
+00015C 0E0F           00513         movlw   STX                     ; Send start condition
+00015E D81B           00514         rcall   WrRS232
+000160 D81A           00515         rcall   WrRS232
+                      00516 
+000162 6A00           00517         clrf    CHKSUM                  ; Reset checksum
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00518 
+Message[314]: LFSR instruction is not supported on some versions of the 18Cxx2 devices.
+Message[315]: Please refer to Microchip document DS80058A for more details.
+000164 EE00 F008      00519         lfsr    FSR0, DATA_BUFF         ; Setup pointer to buffer area  
+                      00520         
+000168                00521 SendNext                                ; Send DATA
+000168 50EE           00522         movf    POSTINC0, W
+00016A 2600           00523         addwf   CHKSUM
+00016C D808           00524         rcall   WrData
+00016E 2E01           00525         decfsz  COUNTER, F
+000170 D7FB           00526         bra     SendNext
+                      00527 
+000172 6C00           00528         negf    CHKSUM                  ; Send checksum
+000174 5000           00529         movf    CHKSUM, W
+000176 D803           00530         rcall   WrData
+                      00531 
+000178 0E04           00532         movlw   ETX                     ; Send stop condition
+00017A D80D           00533         rcall   WrRS232
+                      00534 
+00017C D759           00535         bra     Autobaud
+                      00536 ; *****************************************************************************
+                      00537 
+                      00538 
+                      00539 
+                      00540 
+                      00541 ; *****************************************************************************
+                      00542 ; Write a byte to the serial port.
+                      00543 
+00017E                00544 WrData
+00017E 6E05           00545         movwf   TXDATA                  ; Save the data
+                      00546  
+000180 0A0F           00547         xorlw   STX                     ; Check for a STX
+000182 E006           00548         bz      WrDLE                   ; No, continue WrNext
+                      00549 
+000184 5005           00550         movf    TXDATA, W               
+000186 0A04           00551         xorlw   ETX                     ; Check for a ETX
+000188 E003           00552         bz      WrDLE                   ; No, continue WrNext
+                      00553 
+00018A 5005           00554         movf    TXDATA, W               
+00018C 0A05           00555         xorlw   DLE                     ; Check for a DLE
+00018E E102           00556         bnz     WrNext                  ; No, continue WrNext
+                      00557 
+000190                00558 WrDLE
+000190 0E05           00559         movlw   DLE                     ; Yes, send DLE first
+000192 D801           00560         rcall   WrRS232
+                      00561 
+000194                00562 WrNext
+000194 5005           00563         movf    TXDATA, W               ; Then send STX
+                      00564 
+000196                00565 WrRS232
+000196 0004           00566         clrwdt
+000198 A89E           00567         btfss   PIR1, TXIF              ; Write only if TXREG is ready
+00019A D7FE           00568         bra     $ - 2
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00569         
+00019C 6EAD           00570         movwf   TXREG1                  ; Start sending
+                      00571 
+00019E 0012           00572         return
+                      00573 ; *****************************************************************************
+                      00574 
+                      00575 
+                      00576 
+                      00577 
+                      00578 ; *****************************************************************************
+0001A0                00579 RdRS232
+0001A0 0004           00580         clrwdt
+                      00581 
+0001A2 B2AB           00582         btfsc   RCSTA1, OERR            ; Reset on overun
+0001A4 00FF           00583         reset
+                      00584 
+0001A6 AA9E           00585         btfss   PIR1, RCIF              ; Wait for data from RS232
+0001A8 D7FE           00586         bra     $ - 2   
+                      00587 
+0001AA 50AE           00588         movf    RCREG1, W               ; Save the data
+0001AC 6E04           00589         movwf   RXDATA
+                      00590  
+0001AE 0012           00591         return
+                      00592 ; *****************************************************************************
+                      00593 
+                      00594 
+                      00595 
+                      00596 
+                      00597 
+                      00598 ; *****************************************************************************
+                      00599 ; Unlock and start the write or erase sequence.
+                      00600 
+0001B0                00601 StartWrite
+0001B0 0004           00602         clrwdt
+                      00603 
+0001B2 0E55           00604         movlw   0x55                    ; Unlock
+0001B4 6EA7           00605         movwf   EECON2
+0001B6 0EAA           00606         movlw   0xAA
+0001B8 6EA7           00607         movwf   EECON2
+0001BA 82A6           00608         bsf     EECON1, WR              ; Start the write
+0001BC 0000           00609         nop
+                      00610 
+0001BE 0012           00611         return
+                      00612 ; *****************************************************************************
+                      00613 
+                      00614 
+                      00615 
+                      00616 
+                      00617 ; *****************************************************************************
+00000A                00618         ORG     0x000A
+                      00619 
+00000A                00620 WaitForRise
+00000A BE82           00621         btfsc   PORTC, 7                ; Wait for a falling edge
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00000C D7FE           00622         bra     WaitForRise
+00000E 0004           00623         clrwdt
+000010 AE82           00624 WtSR    btfss   PORTC, 7                ; Wait for starting edge
+000012 D7FE           00625         bra     WtSR
+000014 0012           00626         return
+                      00627 ; *****************************************************************************
+                      00628 
+                      00629 
+                      00630 
+                      00631 
+                      00632 ; *****************************************************************************
+000200                00633         ORG     0x200
+000200                00634 RVReset                                 
+                      00635 
+000208                00636         ORG     0x208
+000208                00637 RVIntH
+                      00638 
+000218                00639         ORG     0x218
+000218                00640 RVIntL
+                      00641 ; *****************************************************************************
+                      00642 
+                      00643 
+                      00644         END
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+A                                 00000000
+ABTIME_H                          00000002
+ABTIME_L                          00000003
+ACCESS                            00000000
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+AD00                              00000000
+AD01                              00000001
+AD02                              00000002
+AD03                              00000003
+AD04                              00000004
+AD05                              00000005
+AD06                              00000006
+AD07                              00000007
+AD08                              00000000
+AD09                              00000001
+AD10                              00000002
+AD11                              00000003
+AD12                              00000004
+AD13                              00000005
+AD14                              00000006
+AD15                              00000007
+AD16                              00000000
+AD17                              00000001
+AD18                              00000002
+AD19                              00000003
+ADCON0                            00000FC2
+ADCON1                            00000FC1
+ADCON2                            00000FC0
+ADDEN                             00000003
+ADDRESS_H                         0000000B
+ADDRESS_L                         0000000A
+ADDRESS_U                         0000000C
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADIP                              00000006
+ADON                              00000000
+ADRESH                            00000FC4
+ADRESL                            00000FC3
+ADSC0                             00000000
+ADSC1                             00000001
+ADSC2                             00000002
+ALE                               00000000
+AN0                               00000000
+AN1                               00000001
+AN10                              00000005
+AN11                              00000006
+AN2                               00000002
+AN3                               00000003
+AN4                               00000005
+AN5                               00000000
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+AN6                               00000001
+AN7                               00000002
+AN8                               00000003
+AN9                               00000004
+Autobaud                          00000030
+BA0                               00000004
+BANKED                            00000001
+BCLIE                             00000003
+BCLIF                             00000003
+BCLIP                             00000003
+BF                                00000000
+BOR                               00000000
+BRGH                              00000002
+BSR                               00000FE0
+C                                 00000000
+C1INV                             00000004
+C1OUT                             00000002
+C1OUT_CMCON                       00000006
+C2INV                             00000005
+C2OUT                             00000001
+C2OUT_CMCON                       00000007
+CCP1                              00000002
+CCP1CON                           00000FBD
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1IP                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCP2                              00000001
+CCP2A                             00000003
+CCP2C                             00000007
+CCP2CON                           00000FBA
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2IP                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCP3                              00000000
+CCP3CON                           00000FB7
+CCP3IE                            00000000
+CCP3IF                            00000000
+CCP3IP                            00000000
+CCP3M0                            00000000
+CCP3M1                            00000001
+CCP3M2                            00000002
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CCP3M3                            00000003
+CCP4                              00000003
+CCP4CON                           00000F73
+CCP4IE                            00000001
+CCP4IF                            00000001
+CCP4IP                            00000001
+CCP4M0                            00000000
+CCP4M1                            00000001
+CCP4M2                            00000002
+CCP4M3                            00000003
+CCP5                              00000004
+CCP5CON                           00000F70
+CCP5IE                            00000002
+CCP5IF                            00000002
+CCP5IP                            00000002
+CCP5M0                            00000000
+CCP5M1                            00000001
+CCP5M2                            00000002
+CCP5M3                            00000003
+CCPR1H                            00000FBF
+CCPR1L                            00000FBE
+CCPR2H                            00000FBC
+CCPR2L                            00000FBB
+CCPR3H                            00000FB9
+CCPR3L                            00000FB8
+CCPR4H                            00000F75
+CCPR4L                            00000F74
+CCPR5H                            00000F72
+CCPR5L                            00000F71
+CFGS                              00000006
+CHKSUM                            00000000
+CHS0                              00000002
+CHS1                              00000003
+CHS2                              00000004
+CHS3                              00000005
+CIS                               00000003
+CK                                00000006
+CK2                               00000001
+CKE                               00000006
+CKP                               00000004
+CLKO                              00000006
+CLRW                              CLRF WREG
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             00000FB4
+CMIE                              00000006
+CMIF                              00000006
+CMIP                              00000006
+COMMAND                           00000008
+COUNTER                           00000001
+CREN                              00000004
+CS                                00000002
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CSRC                              00000007
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            00000FB5
+CVREF_PORTF                       00000005
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+CVRSS                             00000004
+CheckCommand                      000000A6
+CheckSum                          00000086
+D                                 00000005
+DATA_ADDRESS                      00000005
+DATA_BUFF                         00000008
+DATA_COUNT                        00000009
+DC                                00000001
+DCCP1X                            00000005
+DCCP1Y                            00000004
+DCCP2X                            00000005
+DCCP2Y                            00000004
+DCCP3X                            00000005
+DCCP3Y                            00000004
+DCCP4X                            00000005
+DCCP4Y                            00000004
+DCCP5X                            00000005
+DCCP5Y                            00000004
+DDRA                              TRISA
+DDRB                              TRISB
+DDRC                              TRISC
+DDRD                              TRISD
+DDRE                              TRISE
+DDRF                              TRISF
+DDRG                              TRISG
+DDRH                              TRISH
+DDRJ                              TRISJ
+DLE                               0x05
+DONE                              00000001
+DT2                               00000002
+D_A                               00000005
+DivB32                            00000046
+EBDIS                             00000007
+EEADR                             00000FA9
+EEADRH                            00000FAA
+EECON1                            00000FA6
+EECON2                            00000FA7
+EEDATA                            00000FA8
+EEIE                              00000004
+EEIF                              00000004
+EEIP                              00000004
+EEPGD                             00000007
+ETX                               0x04
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+EraseProgMem                      00000100
+FAST                              00000001
+FERR                              00000002
+FREE                              00000004
+FSR0                              00000000
+FSR0H                             00000FEA
+FSR0L                             00000FE9
+FSR1                              00000001
+FSR1H                             00000FE2
+FSR1L                             00000FE1
+FSR2                              00000002
+FSR2H                             00000FDA
+FSR2L                             00000FD9
+GCEN                              00000007
+GIE                               00000007
+GIEH                              00000007
+GIEL                              00000006
+GO                                00000001
+GO_DONE                           00000001
+GetNextDat                        00000066
+I2C_DAT                           00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+INDF0                             00000FEF
+INDF1                             00000FE7
+INDF2                             00000FDF
+INT0                              00000000
+INT0E                             00000004
+INT0F                             00000001
+INT0IE                            00000004
+INT0IF                            00000001
+INT1                              00000001
+INT1IE                            00000003
+INT1IF                            00000000
+INT1IP                            00000006
+INT2                              00000002
+INT2IE                            00000004
+INT2IF                            00000001
+INT2IP                            00000007
+INT3                              00000003
+INT3IE                            00000005
+INT3IF                            00000002
+INT3P                             00000001
+INTCON                            00000FF2
+INTCON1                           00000FF2
+INTCON2                           00000FF1
+INTCON3                           00000FF0
+INTEDG0                           00000006
+INTEDG1                           00000005
+INTEDG2                           00000004
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INTEDG3                           00000003
+IPEN                              00000007
+IPR1                              00000F9F
+IPR2                              00000FA2
+IPR3                              00000FA5
+IRVST                             00000005
+KBI0                              00000004
+KBI1                              00000005
+KBI2                              00000006
+KBI3                              00000007
+LATA                              00000F89
+LATB                              00000F8A
+LATC                              00000F8B
+LATD                              00000F8C
+LATE                              00000F8D
+LATF                              00000F8E
+LATG                              00000F8F
+LATH                              00000F90
+LATJ                              00000F91
+LB                                00000006
+LCALL                             CALL
+LGOTO                             GOTO
+LVDCON                            00000FD2
+LVDEN                             00000004
+LVDIE                             00000002
+LVDIF                             00000002
+LVDIN                             00000005
+LVDIP                             00000002
+LVDL0                             00000000
+LVDL1                             00000001
+LVDL2                             00000002
+LVDL3                             00000003
+Lp1                               000000E6
+MAJOR_VERSION                     0x00
+MEMCON                            00000F9C
+MINOR_VERSION                     0x0A
+MOVFP                             MOVFF
+MOVPF                             MOVFF
+N                                 00000004
+NEGW                              NEGF WREG
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BOR                           00000000
+NOT_DONE                          00000001
+NOT_PD                            00000002
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_RI                            00000004
+NOT_T1SYNC                        00000002
+NOT_T3SYNC                        00000002
+NOT_TO                            00000003
+NOT_TX8                           00000006
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_W                             00000002
+NOT_WRITE                         00000002
+NoDLE                             0000007A
+NoETX                             00000072
+NoSTX                             0000006C
+OBF                               00000006
+OE                                00000001
+OERR                              00000001
+OSC2                              00000006
+OSCCON                            00000FD3
+OV                                00000003
+P                                 00000004
+PACKET_DATA                       0000000D
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000FF9
+PCLATH                            00000FFA
+PCLATU                            00000FFB
+PD                                00000002
+PEIE                              00000006
+PEN                               00000002
+PGC                               00000006
+PGD                               00000007
+PGM                               00000005
+PIE1                              00000F9D
+PIE2                              00000FA0
+PIE3                              00000FA3
+PIR1                              00000F9E
+PIR2                              00000FA1
+PIR3                              00000FA4
+PLUSW0                            00000FEB
+PLUSW1                            00000FE3
+PLUSW2                            00000FDB
+POR                               00000001
+PORTA                             00000F80
+PORTB                             00000F81
+PORTC                             00000F82
+PORTD                             00000F83
+PORTE                             00000F84
+PORTF                             00000F85
+PORTG                             00000F86
+PORTH                             00000F87
+PORTJ                             00000F88
+POSTDEC0                          00000FED
+POSTDEC1                          00000FE5
+POSTDEC2                          00000FDD
+POSTINC0                          00000FEE
+POSTINC1                          00000FE6
+POSTINC2                          00000FDE
+PR2                               00000FCB
+PR4                               00000F77
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PREINC0                           00000FEC
+PREINC1                           00000FE4
+PREINC2                           00000FDC
+PRODH                             00000FF4
+PRODL                             00000FF3
+PSA                               00000003
+PSP0                              00000000
+PSP1                              00000001
+PSP2                              00000002
+PSP3                              00000003
+PSP4                              00000004
+PSP5                              00000005
+PSP6                              00000006
+PSP7                              00000007
+PSPCON                            00000FB0
+PSPIE                             00000007
+PSPIF                             00000007
+PSPIP                             00000007
+PSPMODE                           00000004
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RA6                               00000006
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RBIP                              00000000
+RBPU                              00000007
+RC0                               00000000
+RC1                               00000001
+RC2                               00000002
+RC2IE                             00000005
+RC2IF                             00000005
+RC2IP                             00000005
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RCEN                              00000003
+RCIE                              00000005
+RCIF                              00000005
+RCIP                              00000005
+RCON                              00000FD0
+RCREG1                            00000FAE
+RCREG2                            00000F6E
+RCSTA1                            00000FAB
+RCSTA2                            00000F6B
+RC_DLE                            0x01
+RC_STX                            0x02
+RD                                00000000
+RD0                               00000000
+RD1                               00000001
+RD16                              00000007
+RD2                               00000002
+RD3                               00000003
+RD4                               00000004
+RD5                               00000005
+RD6                               00000006
+RD7                               00000007
+RE0                               00000000
+RE1                               00000001
+RE2                               00000002
+RE3                               00000003
+RE4                               00000004
+RE5                               00000005
+RE6                               00000006
+RE7                               00000007
+READ_WRITE                        00000002
+RF0                               00000000
+RF1                               00000001
+RF2                               00000002
+RF3                               00000003
+RF4                               00000004
+RF5                               00000005
+RF6                               00000006
+RF7                               00000007
+RG0                               00000000
+RG1                               00000001
+RG2                               00000002
+RG3                               00000003
+RG4                               00000004
+RH0                               00000000
+RH1                               00000001
+RH2                               00000002
+RH3                               00000003
+RH4                               00000004
+RH5                               00000005
+RH6                               00000006
+RH7                               00000007
+RI                                00000004
+RJ0                               00000000
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 23
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RJ1                               00000001
+RJ2                               00000002
+RJ3                               00000003
+RJ4                               00000004
+RJ5                               00000005
+RJ6                               00000006
+RJ7                               00000007
+RSEN                              00000001
+RVIntH                            00000208
+RVIntL                            00000218
+RVReset                           00000200
+RX                                00000007
+RX2                               00000002
+RX9                               00000006
+RX9D                              00000000
+RXDATA                            00000004
+R_W                               00000002
+RdRS232                           000001A0
+ReadEE                            00000116
+ReadProgMem                       000000D0
+ReadVersion                       000000C4
+S                                 00000003
+SCK                               00000003
+SCL                               00000003
+SCS                               00000000
+SDA                               00000004
+SDI                               00000004
+SDO                               00000005
+SEN                               00000000
+SMP                               00000007
+SPBRG1                            00000FAF
+SPBRG2                            00000F6F
+SPEN                              00000007
+SREN                              00000005
+SS                                00000007
+SSPADD                            00000FC8
+SSPBUF                            00000FC9
+SSPCON1                           00000FC6
+SSPCON2                           00000FC5
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPIP                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000FC7
+STATUS                            00000FD8
+STKOVF                            00000007
+STKPTR                            00000FFC
+STKUNF                            00000006
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 24
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+STX                               0x0F
+SWDTE                             00000000
+SYNC                              00000004
+SendAcknowledge                   00000158
+SendNext                          00000168
+Setup                             0000001A
+StartOfLine                       00000058
+StartWrite                        000001B0
+T08BIT                            00000006
+T0CKI                             00000004
+T0CON                             00000FD5
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0IP                              00000002
+T0PS0                             00000000
+T0PS1                             00000001
+T0PS2                             00000002
+T0SE                              00000004
+T13CKI                            00000000
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000FCD
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1OSI                             00000001
+T1OSO                             00000000
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000FCA
+T2OUTPS0                          00000003
+T2OUTPS1                          00000004
+T2OUTPS2                          00000005
+T2OUTPS3                          00000006
+T3CCP1                            00000003
+T3CCP2                            00000006
+T3CKPS0                           00000004
+T3CKPS1                           00000005
+T3CON                             00000FB1
+T3INSYNC                          00000002
+T3SYNC                            00000002
+T4CKPS0                           00000000
+T4CKPS1                           00000001
+T4CON                             00000F76
+T4OUTPS0                          00000003
+T4OUTPS1                          00000004
+T4OUTPS2                          00000005
+T4OUTPS3                          00000006
+TABLAT                            00000FF5
+TBLPTRH                           00000FF7
+TBLPTRL                           00000FF6
+TBLPTRU                           00000FF8
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 25
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR0H                             00000FD7
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0IP                            00000002
+TMR0L                             00000FD6
+TMR0ON                            00000007
+TMR1CS                            00000001
+TMR1H                             00000FCF
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1IP                            00000000
+TMR1L                             00000FCE
+TMR1ON                            00000000
+TMR2                              00000FCC
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2IP                            00000001
+TMR2ON                            00000002
+TMR3CS                            00000001
+TMR3H                             00000FB3
+TMR3IE                            00000001
+TMR3IF                            00000001
+TMR3IP                            00000001
+TMR3L                             00000FB2
+TMR3ON                            00000000
+TMR4                              00000F78
+TMR4IE                            00000003
+TMR4IF                            00000003
+TMR4IP                            00000003
+TMR4ON                            00000002
+TO                                00000003
+TOSH                              00000FFE
+TOSL                              00000FFD
+TOSU                              00000FFF
+TRISA                             00000F92
+TRISB                             00000F93
+TRISC                             00000F94
+TRISD                             00000F95
+TRISE                             00000F96
+TRISF                             00000F97
+TRISG                             00000F98
+TRISH                             00000F99
+TRISJ                             00000F9A
+TRMT                              00000001
+TX                                00000006
+TX2                               00000001
+TX2IE                             00000004
+TX2IF                             00000004
+TX2IP                             00000004
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 26
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TXDATA                            00000005
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXIP                              00000004
+TXREG1                            00000FAD
+TXREG2                            00000F6D
+TXSTA1                            00000FAC
+TXSTA2                            00000F6C
+UA                                00000001
+UB                                00000007
+VCFG0                             00000004
+VCFG1                             00000005
+VIntH                             00000008
+VIntL                             00000018
+VREFM                             00000002
+VREFP                             00000003
+W                                 00000000
+WAIT0                             00000004
+WAIT1                             00000005
+WCOL                              00000007
+WDTCON                            00000FD1
+WM0                               00000000
+WM1                               00000001
+WR                                00000001
+WREG                              00000FE8
+WREN                              00000002
+WRERR                             00000003
+WRH                               00000003
+WRL                               00000002
+WaitForRise                       0000000A
+WrDLE                             00000190
+WrData                            0000017E
+WrNext                            00000194
+WrRS232                           00000196
+WriteConfig                       00000144
+WriteEE                           0000012C
+WritePacket                       0000015A
+WriteProgMem                      000000E0
+WtSR                              00000010
+Z                                 00000002
+_BORV_20_2L                       000000FF
+_BORV_27_2L                       000000FB
+_BORV_42_2L                       000000F7
+_BORV_45_2L                       000000F3
+_BOR_OFF_2L                       000000FD
+_BOR_ON_2L                        000000FF
+_CCP2MX_OFF_3H                    000000FE
+_CCP2MX_ON_3H                     000000FF
+_CONFIG1H                         00300001
+_CONFIG1L                         00300000
+_CONFIG2H                         00300003
+_CONFIG2L                         00300002
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 27
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_CONFIG3H                         00300005
+_CONFIG3L                         00300004
+_CONFIG4H                         00300007
+_CONFIG4L                         00300006
+_CONFIG5H                         00300009
+_CONFIG5L                         00300008
+_CONFIG6H                         0030000B
+_CONFIG6L                         0030000A
+_CONFIG7H                         0030000D
+_CONFIG7L                         0030000C
+_CP0_OFF_5L                       000000FF
+_CP0_ON_5L                        000000FE
+_CP1_OFF_5L                       000000FF
+_CP1_ON_5L                        000000FD
+_CP2_OFF_5L                       000000FF
+_CP2_ON_5L                        000000FB
+_CP3_OFF_5L                       000000FF
+_CP3_ON_5L                        000000F7
+_CP4_OFF_5L                       000000FF
+_CP4_ON_5L                        000000EF
+_CP5_OFF_5L                       000000FF
+_CP5_ON_5L                        000000DF
+_CP6_OFF_5L                       000000FF
+_CP6_ON_5L                        000000BF
+_CP7_OFF_5L                       000000FF
+_CP7_ON_5L                        0000007F
+_CPB_OFF_5H                       000000FF
+_CPB_ON_5H                        000000BF
+_CPD_OFF_5H                       000000FF
+_CPD_ON_5H                        0000007F
+_DEBUG_OFF_4L                     000000FF
+_DEBUG_ON_4L                      0000007F
+_DEVID1                           003FFFFE
+_DEVID2                           003FFFFF
+_EBTR0_OFF_7L                     000000FF
+_EBTR0_ON_7L                      000000FE
+_EBTR1_OFF_7L                     000000FF
+_EBTR1_ON_7L                      000000FD
+_EBTR2_OFF_7L                     000000FF
+_EBTR2_ON_7L                      000000FB
+_EBTR3_OFF_7L                     000000FF
+_EBTR3_ON_7L                      000000F7
+_EBTR4_OFF_7L                     000000FF
+_EBTR4_ON_7L                      000000EF
+_EBTR5_OFF_7L                     000000FF
+_EBTR5_ON_7L                      000000DF
+_EBTR6_OFF_7L                     000000FF
+_EBTR6_ON_7L                      000000BF
+_EBTR7_OFF_7L                     000000FF
+_EBTR7_ON_7L                      0000007F
+_EBTRB_OFF_7H                     000000FF
+_EBTRB_ON_7H                      000000BF
+_ECIO_OSC_1H                      000000FD
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 28
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_EC_OSC_1H                        000000FC
+_HSPLL_OSC_1H                     000000FE
+_HS_OSC_1H                        000000FA
+_IDLOC0                           00200000
+_IDLOC1                           00200001
+_IDLOC2                           00200002
+_IDLOC3                           00200003
+_IDLOC4                           00200004
+_IDLOC5                           00200005
+_IDLOC6                           00200006
+_IDLOC7                           00200007
+_LP_OSC_1H                        000000F8
+_LVP_OFF_4L                       000000FB
+_LVP_ON_4L                        000000FF
+_MC_MODE_3L                       000000FF
+_MPB_MODE_3L                      000000FD
+_MP_MODE_3L                       000000FE
+_OSCS_OFF_1H                      000000FF
+_OSCS_ON_1H                       000000DF
+_PWRT_OFF_2L                      000000FF
+_PWRT_ON_2L                       000000FE
+_RCIO_OSC_1H                      000000FF
+_RC_OSC_1H                        000000FB
+_STVR_OFF_4L                      000000FE
+_STVR_ON_4L                       000000FF
+_WAIT_OFF_3L                      000000FF
+_WAIT_ON_3L                       0000007F
+_WDTPS_128_2H                     000000FF
+_WDTPS_16_2H                      000000F9
+_WDTPS_1_2H                       000000F1
+_WDTPS_2_2H                       000000F3
+_WDTPS_32_2H                      000000FB
+_WDTPS_4_2H                       000000F5
+_WDTPS_64_2H                      000000FD
+_WDTPS_8_2H                       000000F7
+_WDT_OFF_2H                       000000FE
+_WDT_ON_2H                        000000FF
+_WRT0_OFF_6L                      000000FF
+_WRT0_ON_6L                       000000FE
+_WRT1_OFF_6L                      000000FF
+_WRT1_ON_6L                       000000FD
+_WRT2_OFF_6L                      000000FF
+_WRT2_ON_6L                       000000FB
+_WRT3_OFF_6L                      000000FF
+_WRT3_ON_6L                       000000F7
+_WRT4_OFF_6L                      000000FF
+_WRT4_ON_6L                       000000EF
+_WRT5_OFF_6L                      000000FF
+_WRT5_ON_6L                       000000DF
+_WRT6_OFF_6L                      000000FF
+_WRT6_ON_6L                       000000BF
+_WRT7_OFF_6L                      000000FF
+_WRT7_ON_6L                       0000007F
+MPASM 03.00.02 Intermediate  BOOTLOAD.ASM   6-6-2002  14:24:29         PAGE 29
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WRTB_OFF_6H                      000000FF
+_WRTB_ON_6H                       000000BF
+_WRTC_OFF_6H                      000000FF
+_WRTC_ON_6H                       000000DF
+_WRTD_OFF_6H                      000000FF
+_WRTD_ON_6H                       0000007F
+_XMC_MODE_3L                      000000FC
+_XT_OSC_1H                        000000F9
+__18F8720                         00000001
+clrw                              clrf WREG
+lcall                             call
+lgoto                             goto
+movfp                             movff
+movpf                             movff
+negw                              negf WREG
+pmwtpi                            
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXX----XXXXXXXX XXXXXX--XXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+00C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0100 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0140 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0180 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+
+All other memory blocks unused.
+
+Program Memory Bytes Used:   442
+Program Memory Bytes Free: 130630
+
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     6 reported,     0 suppressed
+
+

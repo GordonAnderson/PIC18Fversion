@@ -1,0 +1,567 @@
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 15 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 18 : Symbol not previously defined (LINE1)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 18 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 19 : Symbol not previously defined (LCDsendCMD)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 19 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 19 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 21 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 21 : Illegal opcode (BattAlarm)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 22 : Symbol not previously defined (AXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 22 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 23 : Found label after column 1. (MOVEC)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 23 : Illegal opcode (D)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 24 : Symbol not previously defined (Mult1616)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 24 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 24 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 25 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 25 : Illegal opcode (CEXreg)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 27 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 27 : Illegal opcode (Vbat)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 28 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 28 : Illegal opcode (VmonG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 29 : Symbol not previously defined (Mult1616)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 29 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 29 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 30 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 30 : Illegal opcode (CEXreg)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 31 : Found label after column 1. (MOVPF)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 31 : Illegal opcode (WREG)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 32 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 32 : Illegal opcode (CEXreg)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 33 : Found label after column 1. (MOVPF)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 33 : Illegal opcode (WREG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 34 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 34 : Executable code and data must be defined in an appropriate section
+Warning[205] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 38 : Found directive in column 1. (ifdef)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 46 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 46 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 47 : Symbol not previously defined (LValarm)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 47 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 48 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 48 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 48 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 49 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 49 : Illegal opcode (HIGH)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 50 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 50 : Illegal opcode (CXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 51 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 51 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 52 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 52 : Illegal opcode (CXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 53 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 53 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 55 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 55 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 56 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 56 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 56 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 58 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 59 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 59 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 60 : Symbol not previously defined (BeepCyl)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 60 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 61 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 62 : Symbol not previously defined (Beep)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 62 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 62 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 64 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 64 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 65 : Symbol not previously defined (LValarm)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 65 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 67 : Labels must be defined in a code or data section when making an object file
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 68 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 68 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 69 : Symbol not previously defined (Int2Str)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 69 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 69 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 70 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 71 : Found label after column 1. (MOVPF)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 71 : Illegal opcode (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 72 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 73 : Symbol not previously defined (Buffer)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 73 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 74 : Found label after column 1. (MOVPF)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 74 : Illegal opcode (Areg)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 75 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 75 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 76 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 76 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 76 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 77 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 77 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 78 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 78 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 78 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 79 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 80 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 80 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 80 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 81 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 81 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 82 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 82 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 82 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 83 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 90 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 92 : Symbol not previously defined (ADCrec)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 92 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 93 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 93 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 93 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 94 : Symbol not previously defined (ADCrec)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 94 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 95 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 95 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 95 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 97 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 97 : Illegal opcode (Pos)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 98 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 98 : Illegal opcode (VRmonG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 99 : Symbol not previously defined (Mult1616)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 99 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 99 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 101 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 101 : Illegal opcode (HIGH)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 102 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 102 : Illegal opcode (CEXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 103 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 103 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 104 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 104 : Illegal opcode (CEXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 105 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 105 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 106 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 106 : Illegal opcode (CEXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 107 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 107 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 108 : Symbol not previously defined (CEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 108 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 110 : Symbol not previously defined (Int2Str)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 110 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 110 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 113 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 113 : Illegal opcode (HIGH)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 114 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 114 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 115 : Symbol not previously defined (Buffer)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 115 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 116 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 117 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 117 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 117 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 118 : Symbol not previously defined (Z)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 118 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 118 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 119 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 121 : Symbol not previously defined (LINE2)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 121 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 122 : Symbol not previously defined (LCDsendCMD)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 122 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 122 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 123 : Found label after column 1. (PrintMess)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 123 : Illegal opcode (MES23)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 124 : Symbol not previously defined (LINE2)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 124 : Symbol not previously defined (RECVPOS)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 124 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 125 : Symbol not previously defined (LCDsendCMD)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 125 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 125 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 126 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 126 : Illegal opcode (HIGH)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 127 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 127 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 128 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 128 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 128 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 129 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 129 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 130 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 130 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 130 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 131 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 132 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 132 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 132 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 133 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 133 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 134 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 134 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 134 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 135 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 135 : Illegal opcode (Buffer)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 136 : Symbol not previously defined (LCDsendData)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 136 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 136 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 138 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 138 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 138 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 139 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 143 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 144 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 144 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 145 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 145 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 145 : Symbol not previously defined (PIC18F8723)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 145 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 146 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 147 : Symbol not previously defined (TBLPTRU)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 147 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 147 : Executable code and data must be defined in an appropriate section
+Message[311] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 148 : Operand of HIGH operator was larger than H'FFFF'.
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 148 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 149 : Symbol not previously defined (TBLPTRH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 149 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 149 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 150 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 151 : Symbol not previously defined (TBLPTRL)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 151 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 151 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 153 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 154 : Symbol not previously defined (TABLAT)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 154 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 154 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 155 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 156 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 157 : Symbol not previously defined (Z)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 157 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 157 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 158 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 158 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 158 : Symbol not previously defined (PIC18F8723)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 158 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 159 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 163 : Labels must be defined in a code or data section when making an object file
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 165 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 165 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 166 : Symbol not previously defined (ADCsum)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 166 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 167 : Symbol not previously defined (ADCsum)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 167 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 168 : Symbol not previously defined (ADCsum)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 168 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 170 : Symbol not previously defined (Areg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 170 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 170 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 172 : Symbol not previously defined (Breg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 172 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 172 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 174 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 175 : Symbol not previously defined (Areg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 175 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 175 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 176 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 176 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 176 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 178 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 178 : Illegal opcode (HIGH)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 179 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 179 : Illegal opcode (ADRESL)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 180 : Symbol not previously defined (ADCsum)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 180 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 181 : Found label after column 1. (MOVFP)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 181 : Illegal opcode (ADRESH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 182 : Symbol not previously defined (ADCsum)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 182 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 183 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 183 : Symbol not previously defined (ALUSTA)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 183 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 183 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 184 : Symbol not previously defined (ADCsum)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 184 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 186 : Symbol not previously defined (Breg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 186 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 187 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 187 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 187 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 188 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 199 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 201 : Symbol not previously defined (Areg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 201 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 201 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 203 : Symbol not previously defined (ADClookup)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 203 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 203 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 205 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 205 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 206 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 206 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 206 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 208 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 208 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 208 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 209 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 209 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 209 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 210 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 210 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 210 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 211 : Symbol not previously defined (Areg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 211 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 211 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 211 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 212 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 214 : Labels must be defined in a code or data section when making an object file
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 215 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 215 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 215 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 217 : Symbol not previously defined (Areg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 217 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 217 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 217 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 218 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 234 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 236 : Symbol not previously defined (ADCON1)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 236 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 236 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 238 : Symbol not previously defined (WREG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 238 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 238 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 239 : Symbol not previously defined (VCFG0)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 239 : Symbol not previously defined (ADCON1)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 239 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 239 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 240 : Symbol not previously defined (WREG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 240 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 240 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 256 : Symbol not previously defined (WREG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 256 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 256 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 257 : Symbol not previously defined (WREG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 257 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 257 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 258 : Symbol not previously defined (ADCON0)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 258 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 258 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 260 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 261 : Symbol not previously defined (ADCON2)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 261 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 261 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 263 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 264 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 264 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 264 : Symbol not previously defined (Creg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 264 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 265 : Found label after column 1. (MOVEC)
+Error[108]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 265 : Illegal character (0)
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 267 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 268 : Symbol not previously defined (ADON)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 268 : Symbol not previously defined (ADCON0)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 268 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 268 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 269 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 270 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 271 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 272 : Symbol not previously defined (GO)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 272 : Symbol not previously defined (ADCON0)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 272 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 272 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 274 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 275 : Symbol not previously defined (DONE)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 275 : Symbol not previously defined (ADCON0)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 275 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 275 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 276 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 276 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 276 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 278 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 278 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 279 : Symbol not previously defined (ADRESL)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 279 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 279 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 280 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 280 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 281 : Symbol not previously defined (ADRESH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 281 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 281 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 282 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 282 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 284 : Found label after column 1. (MOVLR)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 284 : Illegal opcode (HIGH)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 285 : Symbol not previously defined (Creg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 285 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 286 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 286 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 288 : Symbol not previously defined (PIC18F8723)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 288 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 288 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 288 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 289 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 289 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 290 : Symbol not previously defined (WREG)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 290 : Symbol not previously defined (A)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 290 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 291 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 291 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 291 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 293 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 293 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 293 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 294 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 294 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 295 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 295 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 296 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 296 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 296 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 297 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 297 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 298 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 298 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 299 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 301 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 301 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 301 : Symbol not previously defined (ADRESL)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 301 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 302 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 302 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 302 : Symbol not previously defined (ADRESH)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 302 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 303 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 320 : Labels must be defined in a code or data section when making an object file
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 322 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 322 : Illegal opcode (AXreg)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 323 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 323 : Illegal opcode (BXreg)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 324 : Found label after column 1. (MOVE32)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 324 : Illegal opcode (CEXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 326 : Symbol not previously defined (ADCref)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 326 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 327 : Symbol not previously defined (ADClookup)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 327 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 327 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 328 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 328 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 328 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 329 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 329 : Illegal opcode (Pos)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 331 : Symbol not previously defined (Areg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 331 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 331 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 331 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 332 : Symbol not previously defined (ADClookup)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 332 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 332 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 333 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 333 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 334 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 334 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 334 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 335 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 335 : Illegal opcode (Pos)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 337 : Symbol not previously defined (ADCref)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 337 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 338 : Symbol not previously defined (ADClookup)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 338 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 338 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 339 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 339 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 339 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 342 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 342 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 343 : Symbol not previously defined (DEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 343 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 343 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 343 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 344 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 344 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 345 : Symbol not previously defined (DEXreg)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 345 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 345 : Symbol not previously defined (WREG)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 345 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 346 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 346 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 348 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 348 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 349 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 349 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 349 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 351 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 351 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 352 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 352 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 353 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 353 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 354 : Symbol not previously defined (Z)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 354 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 354 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 355 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 355 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 357 : Labels must be defined in a code or data section when making an object file
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 358 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 358 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 359 : Symbol not previously defined (Z)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 359 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 359 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 360 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 360 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 360 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 361 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 361 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 362 : Symbol not previously defined (ADCfixThres)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 362 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 363 : Symbol not previously defined (ADCfixThres)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 363 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 364 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 364 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 364 : Executable code and data must be defined in an appropriate section
+Error[151]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 365 : Operand contains unresolvable labels or is too complex
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 365 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 365 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 367 : Found label after column 1. (MOVEC)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 367 : Illegal opcode (NOMINALBAT)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 368 : Symbol not previously defined (Mult1616)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 368 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 368 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 369 : Symbol not previously defined (Divide2416)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 369 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 369 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 370 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 370 : Illegal opcode (CEXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 372 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 372 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 372 : Symbol not previously defined (ADRESL)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 372 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 373 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 373 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 373 : Symbol not previously defined (ADRESH)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 373 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 375 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 375 : Illegal opcode (AXregSave)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 376 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 376 : Illegal opcode (BXregSave)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 377 : Found label after column 1. (MOVE32)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 377 : Illegal opcode (CEXregSave)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 378 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 378 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 378 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 379 : Executable code and data must be defined in an appropriate section
+Error[150]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 381 : Labels must be defined in a code or data section when making an object file
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 382 : Found label after column 1. (MOVEC)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 382 : Illegal opcode (NOMINALBAT)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 383 : Symbol not previously defined (Mult1616)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 383 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 383 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 384 : Symbol not previously defined (Divide2416)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 384 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 384 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 385 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 385 : Illegal opcode (CEXreg)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 387 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 387 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 387 : Symbol not previously defined (ADRESL)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 387 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 388 : Symbol not previously defined (Pos)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 388 : Executable code and data must be defined in an appropriate section
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 388 : Symbol not previously defined (ADRESH)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 388 : Executable code and data must be defined in an appropriate section
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 390 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 390 : Illegal opcode (AXregSave)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 391 : Found label after column 1. (MOVE)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 391 : Illegal opcode (BXregSave)
+Warning[207] Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 392 : Found label after column 1. (MOVE32)
+Error[122]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 392 : Illegal opcode (CEXregSave)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 393 : Symbol not previously defined (C)
+Error[113]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 393 : Symbol not previously defined (ALUSTA)
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 393 : Executable code and data must be defined in an appropriate section
+Error[152]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 394 : Executable code and data must be defined in an appropriate section
+Error[129]   Y:\MSTAR\MICROSTAR\PIC18FVERSION\ADC.ASM 396 : Expected (END)

@@ -330,7 +330,6 @@
 ;		3.) Fixed a strange fixed mixer bug with the Rud to Ele mixer only when negative
 ;		    gains are used. 12/19/2011
 ;		4.) Fixed the mstar.asm file to define the config blocks using cblock
-;		5.) Fixed a bug in the send serial data mode that messed up the data and baud rate
 ;
 ;	Version 2.0x, to do list
 ;		A.) Make the display interface work in 4 bit mode. Use 2 of the freed bits for
@@ -1293,8 +1292,6 @@ BuzInited:
 		BTFSS	ALUSTA,C
 		GOTO	TestIO
 mainStartup
-	; Init UART2 again because the loaded configurations may have changed the defaults
-		CALL 	USART2init
 	; Clear the displayline variable
 		CLRF	WREG
 		MOVFF	WREG,DisplayLine
@@ -2499,8 +2496,10 @@ PLLCalNreg
                 MOVF	PRODL,W
                 MOVLB   HIGH CEXreg
                 ADDWF   CEXreg,F
-                BTFSC   ALUSTA,C
-                INCF    CEXreg+1
+                MOVFF	PRODH,WREG
+                ADDWFC	CEXreg+1,F
+;                BTFSC   ALUSTA,C
+;                INCF    CEXreg+1
                 BTFSC   ALUSTA,C
                 INCF    CEXreg+2
          ; Now move the result to Nreg and add the control bits...
@@ -2667,7 +2666,7 @@ PLLinit0
 	 	CLRF	FCN
 	 	MOVLW	D'8'
 	 	MOVWF	NUMFREQ 
-	 	MOVLW	5
+	 	MOVLW	D'5'
 	 	MOVWF	PMUL
 	        RETURN
 PLLinit1       
@@ -2684,7 +2683,7 @@ PLLinit1
 	 	MOVWF	FCN
 	 	MOVLW	D'50'
 	 	MOVWF	NUMFREQ
-	 	MOVLW	2
+	 	MOVLW	D'2'
 	 	MOVWF	PMUL
 	        RETURN         
 PLLinit2

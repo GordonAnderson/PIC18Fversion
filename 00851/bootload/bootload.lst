@@ -1,0 +1,2145 @@
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; *****************************************************************************
+                      00002 ;        Software License Agreement                                 
+                      00003 ;                                                                   
+                      00004 ; The software supplied herewith by Microchip Technology            
+                      00005 ; Incorporated (the “Company”) for its PICmicro® Microcontroller is 
+                      00006 ; intended and supplied to you, the Company’s customer, for use     
+                      00007 ; solely and exclusively on Microchip PICmicro Microcontroller      
+                      00008 ; products. The software is owned by the Company and/or its         
+                      00009 ; supplier, and is protected under applicable copyright laws. All   
+                      00010 ; rights are reserved. Any use in violation of the foregoing         
+                      00011 ; restrictions may subject the user to criminal sanctions under     
+                      00012 ; applicable laws, as well as to civil liability for the breach of  
+                      00013 ; the terms and conditions of this license.                         
+                      00014 ;                                                                   
+                      00015 ; THIS SOFTWARE IS PROVIDED IN AN “AS IS” CONDITION. NO WARRANTIES, 
+                      00016 ; WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+                      00017 ; TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A       
+                      00018 ; PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. THE COMPANY SHALL NOT, 
+                      00019 ; IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL OR        
+                      00020 ; CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.                 
+                      00021 ;                                                                   
+                      00022 ;                                                                   
+                      00023 ; Bootloader for PIC18F by Ross Fosler
+                      00024 ; 03/01/2002    ... First full implementation
+                      00025 ; 03/07/2002    Changed entry method to use last byte of EEDATA.
+                      00026 ;               Also removed all possible infinite loops w/ clrwdt.
+                      00027 ; 03/07/2002    Added code for direct boot entry. I.E. boot vector.
+                      00028 ; 03/09/2002    Changed the general packet format, removed the LEN field.
+                      00029 ;
+                      00030 ; Revisions by GA Anderson
+                      00031 ; 2007 or so is the first use and no notes on updates.
+                      00032 ; 01/10/2010    Added the startup switch tests for the MicroProStar. Added
+                      00033 ;               conditional assembly switch.
+                      00034 ;
+                      00035 ; Memory Map
+                      00036 ;       -----------------
+                      00037 ;       |    0x0000     |
+                      00038 ;       |    0x0002     |       Boot vector
+                      00039 ;       |    0x0004     |       Unlock & write vector
+                      00040 ;       |               |       
+                      00041 ;       |               |
+                      00042 ;       |  Boot Block   |       (this program)
+                      00043 ;       |               |
+                      00044 ;       |    0x0200     |       Re-mapped Reset Vector
+                      00045 ;       |    0x0208     |       Re-mapped High Priority Interrupt Vector
+                      00046 ;       |    0x0218     |       Re-mapped Low Priority Interrupt Vector
+                      00047 ;       |               |
+                      00048 ;       |       |       |
+                      00049 ;       |               |
+                      00050 ;       |  Code Space   |
+                      00051 ;       |               |
+                      00052 ;       |       |       |
+                      00053 ;       |               |
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00054 ;       |    0x7FFE     |
+                      00055 ;       -----------------
+                      00056 ;
+                      00057 ;
+                      00058 ; Incomming data format:
+                      00059 ;
+                      00060 ;       <STX><STX><DATA><CHKSUM><ETX>
+                      00061 ;                 /    \
+                      00062 ;        ________/      \____________________________
+                      00063 ;       /                                            \
+                      00064 ;       <COMMAND><DLEN><ADDRL><ADDRH><ADDRU><DATA>...
+                      00065 ;
+                      00066 ; Definitions:
+                      00067 ;
+                      00068 ;       STX     -       Start of packet indicator
+                      00069 ;       ETX     -       End of packet indicator
+                      00070 ;       LEN     -       Length of incomming packet
+                      00071 ;       DATA    -       General data up to 255 bytes
+                      00072 ;       CHKSUM  -       The 8-bit two's compliment sum of LEN & DATA
+                      00073 ;       COMMAND -       Base command
+                      00074 ;       DLEN    -       Length of data associated to the command
+                      00075 ;       ADDR    -       Address up to 24 bits
+                      00076 ;       DATA    -       Data (if any)
+                      00077 ;
+                      00078 ;
+                      00079 ; Commands:
+                      00080 ;
+                      00081 ;       RD_VER          0x00    Read Version Information
+                      00082 ;       RD_MEM          0x01    Read Program Memory
+                      00083 ;       WR_MEM          0x02    Write Program Memory
+                      00084 ;       ER_MEM          0x03    Erase Program Memory
+                      00085 ;       RD_EE           0x04    Read EEDATA Memory 
+                      00086 ;       WR_EE           0x05    Write EEDATA Memory 
+                      00087 ;       RD_CONFIG       0x06    Read Config Memory 
+                      00088 ;       WT_CONFIG       0x07    Write Config Memory 
+                      00089 ;
+                      00090 ; *****************************************************************************
+                      00091 
+                      00092  
+                      00093 
+                      00094 ; *****************************************************************************
+                      00095 ;       #include P18F452.INC            ; Standard include
+                      00096         list      p=18F8722            ; list directive to define processor
+                      00097         #include <P18F8722.INC>         ; processor specific variable definitions
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  $Id: P18F8722.INC,v 1.4.2.3 2005/10/18 21:44:56 curtiss Exp $
+                      00005 ;  MPASM PIC18F8722 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2005 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      02263         LIST
+                      00098         errorlevel 2
+                      00099 ; *****************************************************************************
+                      00100 
+                      00101 
+                      00102 
+                      00103 ; *****************************************************************************
+                      00104 #define MINOR_VERSION   0x04            ; Version
+                      00105 #define MAJOR_VERSION   0x01
+                      00106 
+                      00107 #define RC_DLE          0x01
+                      00108 #define RC_STX          0x02
+                      00109 
+                      00110 #define STX             0x0F
+                      00111 #define ETX             0x04
+                      00112 #define DLE             0x05
+                      00113 
+                      00114 ;#define        MicroProStar                    ; Uncomment this def to build MicroProStar
+                      00115                                         ; version.
+                      00116 ; *****************************************************************************
+                      00117 
+                      00118 
+                      00119 
+                      00120 ; *****************************************************************************
+  00000000            00121 CHKSUM          equ     0x00            ; Checksum accumulator
+  00000001            00122 COUNTER         equ     0x01            ; General counter
+  00000002            00123 ABTIME_H        equ     0x02
+  00000003            00124 ABTIME_L        equ     0x03
+  00000004            00125 RXDATA          equ     0x04
+  00000005            00126 TXDATA          equ     0x05
+                      00127 
+                      00128 ; Frame Format
+                      00129 ;
+                      00130 ;  <STX><STX>[<COMMAND><DATALEN><ADDRL><ADDRH><ADDRU><...DATA...>]<CHKSUM><ETX>
+                      00131 
+  00000008            00132 DATA_BUFF       equ     0x08            ; Start of receive buffer
+                      00133         
+  00000008            00134 COMMAND         equ     0x08            ; Data mapped in receive buffer
+  00000009            00135 DATA_COUNT      equ     0x09    
+  0000000A            00136 ADDRESS_L       equ     0x0A
+  0000000B            00137 ADDRESS_H       equ     0x0B
+  0000000C            00138 ADDRESS_U       equ     0x0C
+  0000000D            00139 PACKET_DATA     equ     0x0D    
+                      00140 ; *****************************************************************************
+                      00141 
+                      00142 
+                      00143  
+                      00144 ; *****************************************************************************
+000000                00145         ORG     0x0000                  ; Re-map Reset vector
+000000 D00C           00146         bra     Setup   
+000002 D0D9           00147         bra     BootMode
+000004 D0E3           00148         bra     StartWrite
+000006 D001           00149         bra     WriteWaitEEData         
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00150 
+000008                00151         ORG     0x0008
+000008                00152 VIntH
+000008 D0FF           00153         bra     RVIntH                  ; Re-map Interrupt vector
+                      00154 
+000018                00155         ORG     0x0018
+000018                00156 VIntL
+000018 D0FF           00157         bra     RVIntL                  ; Re-map Interrupt vector
+                      00158 ; *****************************************************************************
+                      00159 
+                      00160 
+                      00161 
+                      00162 ; *****************************************************************************
+                      00163 ; Setup the appropriate registers.
+00001A 0004           00164 Setup   clrwdt
+                      00165    ; If port E bits 0, 1, and 2 are low (Run/Cal, Auto Trim, and Option) then do
+                      00166    ; not start, stay in bootloader. This is the port and bit numbers for the 
+                      00167    ; rev 4.0 and later MicroStar.
+                      00168    ; For the MicroProStar its Port J bits 1,3, and 7. The AND mask is 8A (hex).
+                      00169 ifdef   MicroProStar
+                      00170         MOVF    PORTJ,W,A
+                      00171         ANDLW   8A
+                      00172 else
+00001C 5084           00173         MOVF    PORTE,W,A
+00001E 0B03           00174         ANDLW   03
+                      00175 endif
+000020 E006           00176         BZ      Setup1
+000022 6AA6           00177         clrf    EECON1
+000024 68A9           00178         setf    EEADR                   ; Point to last location
+000026 68AA           00179         setf    EEADRH                  
+000028 80A6           00180         bsf     EECON1, RD              ; Read the control code
+00002A 3CA8           00181         incfsz  EEDATA, W
+00002C D0E9           00182         bra     RVReset                 ; If not 0xFF then normal reset
+00002E                00183 Setup1
+00002E 9C94           00184         bcf     TRISC, 6                ; Setup tx pin
+                      00185 ;       bsf     TRISC, 7                ; Setup rx pin
+                      00186 
+000030 0E90           00187         movlw   b'10010000'             ; Setup rx and tx
+000032 6EAB           00188         movwf   RCSTA1
+000034 0E26           00189         movlw   b'00100110'             
+000036 6EAC           00190         movwf   TXSTA1
+                      00191 
+                      00192 ;       clrf    TRISB
+                      00193 ;       btg     LATB, 0
+                      00194 ; *****************************************************************************
+                      00195 
+                      00196 
+                      00197 
+                      00198 
+                      00199 ; *****************************************************************************
+000038                00200 Autobaud
+                      00201 ;
+                      00202 ; ___    __________            ________
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00203 ;    \__/          \__________/
+                      00204 ;       |                     |
+                      00205 ;       |-------- p ----------|
+                      00206 ;
+                      00207 ;       p = The number of instructions between the first and last
+                      00208 ;           rising edge of the RS232 control sequence 0x0F. Other 
+                      00209 ;           possible control sequences are 0x01, 0x03, 0x07, 0x1F, 
+                      00210 ;           0x3F, 0x7F.
+                      00211 ;
+                      00212 ;       SPBRG = (p / 32) - 1    BRGH = 1
+                      00213 
+000038 0E0F           00214         movlw   b'00001111'
+00003A 6ED5           00215         movwf   T0CON
+00003C 6AD7           00216         clrf    TMR0H
+00003E 6AD6           00217         clrf    TMR0L
+                      00218 
+000040 D8BF           00219         rcall   WaitForRise
+                      00220  
+000042 8ED5           00221         bsf     T0CON, TMR0ON           ; Start counting
+                      00222 
+000044 D8BD           00223         rcall   WaitForRise
+                      00224 
+000046 9ED5           00225         bcf     T0CON, TMR0ON           ; Stop counting
+                      00226 
+000048 CFD6 F003      00227         movff   TMR0L, ABTIME_L         ; Read the timer
+00004C CFD7 F002      00228         movff   TMR0H, ABTIME_H
+                      00229 
+000050 0E05           00230         movlw   0x05                    ; divide by 32
+000052 3202           00231 DivB32  rrcf    ABTIME_H, F
+000054 3203           00232         rrcf    ABTIME_L, F
+000056 2EE8           00233         decfsz  WREG, F
+000058 D7FC           00234         bra     DivB32
+00005A A0D8           00235         btfss   STATUS, C               ; Rounding
+00005C 0603           00236         decf    ABTIME_L, F
+                      00237         
+00005E C003 FFAF      00238         movff   ABTIME_L, SPBRG1        ; Sync
+                      00239 ; *****************************************************************************
+                      00240 
+                      00241 
+                      00242 
+                      00243 ; *****************************************************************************
+                      00244 ; Read and parse the data.
+000062                00245 StartOfLine
+000062 D8A1           00246         rcall   RdRS232                 ; Look for a start of line
+000064 0A0F           00247         xorlw   STX                     ; <STX><STX>
+000066 E1FD           00248         bnz     StartOfLine             
+                      00249 
+000068                00250 HalfStart
+000068 D89E           00251         rcall   RdRS232                 
+00006A 0A0F           00252         xorlw   STX
+00006C E1FA           00253         bnz     StartOfLine             ; Otherwise go back for another character
+                      00254 
+00006E EE00 F008      00255         lfsr    0, DATA_BUFF            ; Point to the buffer
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00256 
+000072 6A00           00257         clrf    CHKSUM                  ; Reset checksum                
+000074 6A01           00258         clrf    COUNTER                 ; Reset buffer count
+                      00259                 
+000076                00260 GetNextDat                              
+000076 D897           00261         rcall   RdRS232                 ; Get the data
+000078 0A0F           00262         xorlw   STX                     ; Check for a STX
+00007A E0F6           00263         bz      HalfStart               ; Yes, start over       
+                      00264 
+00007C 5004           00265 NoSTX   movf    RXDATA, W
+00007E 0A04           00266         xorlw   ETX                     ; Check for a ETX
+000080 E00A           00267         bz      CheckSum                ; Yes, examine checksum         
+                      00268 
+000082 5004           00269 NoETX   movf    RXDATA, W
+000084 0A05           00270         xorlw   DLE                     ; Check for a DLE
+000086 E101           00271         bnz     NoDLE
+                      00272 
+000088 D88E           00273         rcall   RdRS232                 ; Yes, Get the next byte
+                      00274         
+00008A 5004           00275 NoDLE   movf    RXDATA, W
+                      00276 
+00008C 2600           00277         addwf   CHKSUM, F               ; Get sum
+00008E 6EEE           00278         movwf   POSTINC0                ; Store the data
+                      00279 
+000090 4E01           00280         dcfsnz  COUNTER, F              ; Limit buffer to 256 bytes
+000092 D7E7           00281         bra     StartOfLine
+                      00282 
+000094 D7F0           00283         bra     GetNextDat
+                      00284 
+000096                00285 CheckSum        
+000096 5200           00286         movf    CHKSUM                  ; Checksum test
+000098 E1E4           00287         bnz     StartOfLine
+                      00288 ; ***********************************************
+                      00289 
+                      00290 
+                      00291 
+                      00292 ; ***********************************************
+                      00293 ; Pre-setup, common to all commands.
+00009A 500A           00294         movf    ADDRESS_L, W            ; Set all possible pointers
+00009C 6EF6           00295         movwf   TBLPTRL
+00009E 6EA9           00296         movwf   EEADR
+0000A0 500B           00297         movf    ADDRESS_H, W
+0000A2 6EF7           00298         movwf   TBLPTRH
+0000A4 6EAA           00299         movwf   EEADRH
+0000A6 C00C FFF8      00300         movff   ADDRESS_U, TBLPTRU
+                      00301 
+0000AA EE00 F00D      00302         lfsr    FSR0, PACKET_DATA
+                      00303 
+0000AE 5009           00304         movf    DATA_COUNT, W           ; Setup counter
+0000B0 6E01           00305         movwf   COUNTER
+0000B2 B4D8           00306         btfsc   STATUS, Z
+0000B4 00FF           00307         reset                           ; Non valid count (Special Command)
+                      00308 ; ***********************************************
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00309 
+                      00310  
+                      00311 
+                      00312 ; ***********************************************
+                      00313 ; Test the command field and sub-command.
+0000B6                00314 CheckCommand
+0000B6 5008           00315         movf    COMMAND, W              ; Test for a valid command                      
+0000B8 0807           00316         sublw   d'7'
+0000BA E3D3           00317         bnc     StartOfLine
+                      00318 
+0000BC 6AFA           00319         clrf    PCLATH                  ; Setup for a calculated jump
+0000BE 6AFB           00320         clrf    PCLATU
+                      00321                 
+0000C0 4408           00322         rlncf   COMMAND, W              ; Jump
+0000C2 26F9           00323         addwf   PCL, F
+                      00324         
+0000C4 D007           00325         bra     ReadVersion
+0000C6 D00C           00326         bra     ReadProgMem
+0000C8 D013           00327         bra     WriteProgMem
+0000CA D022           00328         bra     EraseProgMem
+0000CC D02C           00329         bra     ReadEE
+0000CE D036           00330         bra     WriteEE
+0000D0 D007           00331         bra     ReadProgMem     ;ReadConfig
+0000D2 D03C           00332         bra     WriteConfig
+                      00333 ; ***********************************************
+                      00334 
+                      00335 
+                      00336 
+                      00337 ; ***********************************************
+                      00338 ; Commands
+                      00339 ; 
+                      00340 ; In:   <STX><STX>[<0x00><0x02>]<0xFF><ETX>
+                      00341 ; OUT:  <STX><STX>[<0x00><VERL><VERH>]<CHKSUM><ETX>
+0000D4                00342 ReadVersion
+0000D4 0E04           00343         movlw   MINOR_VERSION
+0000D6 6E0A           00344         movwf   DATA_BUFF + 2
+0000D8 0E01           00345         movlw   MAJOR_VERSION
+0000DA 6E0B           00346         movwf   DATA_BUFF + 3
+                      00347 
+0000DC 0E03           00348         movlw   0x03
+0000DE D040           00349         bra     WritePacket
+                      00350 
+                      00351 
+                      00352 ; In:   <STX><STX>[<0x01><DLEN><ADDRL><ADDRH><ADDRU>]<CHKSUM><ETX>
+                      00353 ; OUT:  <STX><STX>[<0x01><DLEN><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+0000E0                00354 ReadProgMem
+0000E0 0009           00355         tblrd   *+                      ; Fill buffer
+0000E2 CFF5 FFEE      00356         movff   TABLAT, POSTINC0
+                      00357 
+0000E6 2E01           00358         decfsz  COUNTER, F              
+0000E8 D7FB           00359         bra     ReadProgMem             ; Not finished then repeat
+                      00360 
+0000EA 5009           00361         movf    DATA_COUNT, W           ; Setup packet length
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000EC 0F05           00362         addlw   0x05
+                      00363                                 
+0000EE D038           00364         bra     WritePacket
+                      00365 
+                      00366 
+                      00367 ; In:   <STX><STX>[<0x02><DLENBLOCK><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+                      00368 ; OUT:  <STX><STX>[<0x02>]<CHKSUM><ETX>
+0000F0                00369 WriteProgMem
+0000F0 0EF8           00370         movlw   b'11111000'             ; Force a boundry
+0000F2 16F6           00371         andwf   TBLPTRL, F
+                      00372  
+0000F4 0E08           00373         movlw   0x08
+                      00374 
+0000F6 CFEE FFF5      00375 Lp1     movff   POSTINC0, TABLAT        ; Load the holding registers
+0000FA 000D           00376         tblwt   *+
+0000FC 2EE8           00377         decfsz  WREG, F
+0000FE D7FB           00378         bra     Lp1
+                      00379  
+000100 000A           00380         tblrd   *-                      ; Point back into the block
+                      00381 
+000102 0E84           00382         movlw   b'10000100'             ; Setup writes
+000104 6EA6           00383         movwf   EECON1
+000106 D862           00384         rcall   StartWrite              ; Write the data
+                      00385 
+000108 0009           00386         tblrd   *+                      ; Point to the beginning of the next block
+                      00387 
+00010A 2E01           00388         decfsz  COUNTER, F              
+00010C D7F1           00389         bra     WriteProgMem            ; Not finished then repeat
+                      00390 
+00010E D027           00391         bra     SendAcknowledge         ; Send acknowledge
+                      00392 
+                      00393 
+                      00394 ; In:   <STX><STX>[<0x03><DLENROW><ADDRL><ADDRH><ADDRL>]<CHKSUM><ETX>
+                      00395 ; OUT:  <STX><STX>[<0x03>]<CHKSUM><ETX>
+000110                00396 EraseProgMem
+000110 0E94           00397         movlw   b'10010100'             ; Setup writes
+000112 6EA6           00398         movwf   EECON1
+                      00399 
+000114 D85B           00400         rcall   StartWrite              ; Erase the row
+                      00401 
+000116 0E40           00402         movlw   0x40                    ; Point to next row
+000118 26F6           00403         addwf   TBLPTRL, F
+00011A 6AE8           00404         clrf    WREG
+00011C 22F7           00405         addwfc  TBLPTRH, F
+00011E 22F8           00406         addwfc  TBLPTRU, F
+                      00407 
+000120 2E01           00408         decfsz  COUNTER, F
+000122 D7F6           00409         bra     EraseProgMem    
+                      00410 
+000124 D01C           00411         bra     SendAcknowledge         ; Send acknowledge
+                      00412 
+                      00413 
+                      00414 ; In:   <STX><STX>[<0x04><DLEN><ADDRL><ADDRH><0x00>]<CHKSUM><ETX>
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00415 ; OUT:  <STX><STX>[<0x04><DLEN><ADDRL><ADDRH><0x00><DATA>...]<CHKSUM><ETX>
+000126                00416 ReadEE
+000126 6AA6           00417         clrf    EECON1 
+                      00418 
+000128 80A6           00419         bsf     EECON1, RD              ; Read the data
+00012A CFA8 FFEE      00420         movff   EEDATA, POSTINC0
+                      00421         
+00012E 4AA9           00422         infsnz  EEADR, F                ; Adjust EEDATA pointer
+000130 2AAA           00423         incf    EEADRH, F
+                      00424 
+000132 2E01           00425         decfsz  COUNTER, F
+000134 D7F8           00426         bra     ReadEE                  ; Not finished then repeat
+                      00427 
+000136 5009           00428         movf    DATA_COUNT, W           ; Setup packet length
+000138 0F05           00429         addlw   0x05
+                      00430                                 
+00013A D012           00431         bra     WritePacket
+                      00432 
+                      00433 
+                      00434 ; In:   <STX><STX>[<0x05><DLEN><ADDRL><ADDRH><0x00><DATA>...]<CHKSUM><ETX>
+                      00435 ; OUT:  <STX><STX>[<0x05>]<CHKSUM><ETX>
+00013C                00436 WriteEE 
+                      00437 
+00013C CFEE FFA8      00438         movff   POSTINC0, EEDATA
+000140 DF64           00439         rcall   WriteWaitEEData         ; Write data
+                      00440 
+000142 4AA9           00441         infsnz  EEADR, F                ; Adjust EEDATA pointer
+000144 2AAA           00442         incf    EEADRH, F
+                      00443 
+000146 2E01           00444         decfsz  COUNTER, F              
+000148 D7F9           00445         bra     WriteEE                 ; Not finished then repeat
+                      00446 
+00014A D009           00447         bra     SendAcknowledge         ; Send acknowledge
+                      00448  
+                      00449 
+                      00450 ; In:   <STX><STX>[<0x06><DLEN><ADDRL><ADDRH><ADDRU>]<CHKSUM><ETX>
+                      00451 ; OUT:  <STX><STX>[<0x06><DLEN><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+                      00452 ;ReadConfig
+                      00453 ;       movlw   b'11000000'
+                      00454 ;       movwf   EECON1
+                      00455 ;
+                      00456 ;Lp5    tblrd   *+
+                      00457 ;       movff   TABLAT, POSTINC0
+                      00458 ;
+                      00459 ;       decfsz  COUNTER, F
+                      00460 ;       bra     Lp5                     ; Not finished then repeat
+                      00461 ;
+                      00462 ;       movf    DATA_COUNT, W           ; Setup packet length
+                      00463 ;       addlw   0x05
+                      00464 ;
+                      00465 ;       bra     WritePacket
+                      00466 
+                      00467 
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00468 ; In:   <STX><STX>[<0x07><DLEN><ADDRL><ADDRH><ADDRU><DATA>...]<CHKSUM><ETX>
+                      00469 ; OUT:  <STX><STX>[<0x07>]<CHKSUM><ETX>
+00014C                00470 WriteConfig
+00014C 0EC4           00471         movlw   b'11000100'
+00014E 6EA6           00472         movwf   EECON1
+                      00473 
+000150 CFEE FFF5      00474         movff   POSTINC0, TABLAT        ; Write to config area
+000154 000D           00475         tblwt   *+
+                      00476 
+000156 D83A           00477         rcall   StartWrite
+                      00478 
+000158 2E01           00479         decfsz  COUNTER, F
+00015A D7F8           00480         bra     WriteConfig             ; Not finished then repeat
+                      00481                 
+00015C D000           00482         bra     SendAcknowledge         ; Send acknowledge
+                      00483 ; ***********************************************
+                      00484 
+                      00485 
+                      00486 
+                      00487 ; ***********************************************
+                      00488 ; Send the data buffer back.
+                      00489 ;
+                      00490 ; <STX><STX>[<DATA>...]<CHKSUM><ETX>
+                      00491 
+00015E                00492 SendAcknowledge
+00015E 0E01           00493         movlw   0x01                    ; Send acknowledge
+                      00494 
+000160                00495 WritePacket
+000160 6E01           00496         movwf   COUNTER
+                      00497 
+000162 0E0F           00498         movlw   STX                     ; Send start condition
+000164 D81B           00499         rcall   WrRS232
+000166 D81A           00500         rcall   WrRS232
+                      00501 
+000168 6A00           00502         clrf    CHKSUM                  ; Reset checksum
+                      00503 
+00016A EE00 F008      00504         lfsr    FSR0, DATA_BUFF         ; Setup pointer to buffer area  
+                      00505         
+00016E                00506 SendNext                                ; Send DATA
+00016E 50EE           00507         movf    POSTINC0, W
+000170 2600           00508         addwf   CHKSUM
+000172 D808           00509         rcall   WrData
+000174 2E01           00510         decfsz  COUNTER, F
+000176 D7FB           00511         bra     SendNext
+                      00512 
+000178 6C00           00513         negf    CHKSUM                  ; Send checksum
+00017A 5000           00514         movf    CHKSUM, W
+00017C D803           00515         rcall   WrData
+                      00516 
+00017E 0E04           00517         movlw   ETX                     ; Send stop condition
+000180 D80D           00518         rcall   WrRS232
+                      00519 
+000182 D76F           00520         bra     StartOfLine
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00521 ; *****************************************************************************
+                      00522 
+                      00523 
+                      00524 
+                      00525 
+                      00526 ; *****************************************************************************
+                      00527 ; Write a byte to the serial port.
+                      00528 
+000184                00529 WrData
+000184 6E05           00530         movwf   TXDATA                  ; Save the data
+                      00531  
+000186 0A0F           00532         xorlw   STX                     ; Check for a STX
+000188 E006           00533         bz      WrDLE                   ; No, continue WrNext
+                      00534 
+00018A 5005           00535         movf    TXDATA, W               
+00018C 0A04           00536         xorlw   ETX                     ; Check for a ETX
+00018E E003           00537         bz      WrDLE                   ; No, continue WrNext
+                      00538 
+000190 5005           00539         movf    TXDATA, W               
+000192 0A05           00540         xorlw   DLE                     ; Check for a DLE
+000194 E102           00541         bnz     WrNext                  ; No, continue WrNext
+                      00542 
+000196                00543 WrDLE
+000196 0E05           00544         movlw   DLE                     ; Yes, send DLE first
+000198 D801           00545         rcall   WrRS232
+                      00546 
+00019A                00547 WrNext
+00019A 5005           00548         movf    TXDATA, W               ; Then send STX
+                      00549 
+00019C                00550 WrRS232
+00019C 0004           00551         clrwdt
+00019E A89E           00552         btfss   PIR1, TXIF              ; Write only if TXREG is ready
+0001A0 D7FE           00553         bra     $ - 2
+                      00554         
+0001A2 6EAD           00555         movwf   TXREG1                  ; Start sending
+                      00556 
+0001A4 0012           00557         return
+                      00558 ; *****************************************************************************
+                      00559 
+                      00560 
+                      00561 
+                      00562 
+                      00563 ; *****************************************************************************
+0001A6                00564 RdRS232
+0001A6 0004           00565         clrwdt
+                      00566 
+0001A8 B2AB           00567         btfsc   RCSTA1, OERR            ; Reset on overun
+0001AA 00FF           00568         reset
+                      00569 
+0001AC AA9E           00570         btfss   PIR1, RCIF              ; Wait for data from RS232
+0001AE D7FE           00571         bra     $ - 2                   
+                      00572 
+0001B0 50AE           00573         movf    RCREG1, W               ; Save the data
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0001B2 6E04           00574         movwf   RXDATA
+                      00575  
+0001B4 0012           00576         return
+                      00577 ; *****************************************************************************
+                      00578 
+                      00579 
+                      00580 
+                      00581 
+                      00582 ; *****************************************************************************
+0001B6                00583 BootMode
+0001B6 68A9           00584         setf    EEADR                   ; Point to the last byte
+0001B8 68AA           00585         setf    EEADRH
+0001BA 68A8           00586         setf    EEDATA                  ; Bootmode control byte
+0001BC DF26           00587         rcall   WriteWaitEEData
+0001BE 00FF           00588         reset
+                      00589 ; *****************************************************************************
+                      00590 
+                      00591 
+                      00592 
+                      00593 
+                      00594 ; *****************************************************************************
+0001C0                00595 WaitForRise
+0001C0 BE82           00596         btfsc   PORTC, 7                ; Wait for a falling edge
+0001C2 D7FE           00597         bra     WaitForRise
+0001C4 0004           00598         clrwdt
+0001C6 AE82           00599 WtSR    btfss   PORTC, 7                ; Wait for starting edge
+0001C8 D7FE           00600         bra     WtSR
+0001CA 0012           00601         return
+                      00602 ; *****************************************************************************
+                      00603 
+                      00604 
+                      00605 
+                      00606 
+                      00607 ; *****************************************************************************
+                      00608 ; Unlock and start the write or erase sequence.
+                      00609 
+0001CC                00610 StartWrite
+0001CC 0004           00611         clrwdt
+                      00612 
+0001CE 0E55           00613         movlw   0x55                    ; Unlock
+0001D0 6EA7           00614         movwf   EECON2
+0001D2 0EAA           00615         movlw   0xAA
+0001D4 6EA7           00616         movwf   EECON2
+0001D6 82A6           00617         bsf     EECON1, WR              ; Start the write
+0001D8 0000           00618         nop
+                      00619 
+0001DA 0012           00620         return
+                      00621 ; *****************************************************************************
+                      00622 
+                      00623 
+                      00624 
+                      00625 
+                      00626 ; *****************************************************************************
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00000A                00627         ORG     0x000A
+                      00628 
+00000A                00629 WriteWaitEEData
+00000A 0E04           00630         movlw   b'00000100'             ; Setup for EEData
+00000C 6EA6           00631         movwf   EECON1
+00000E D8DE           00632         rcall   StartWrite              
+000010 B2A6           00633         btfsc   EECON1, WR              ; Write and wait
+000012 D7FE           00634         bra     $ - 2           
+000014 0012           00635         return
+                      00636 ; *****************************************************************************
+                      00637 
+                      00638 
+                      00639 
+                      00640 
+                      00641 
+                      00642 
+                      00643 
+                      00644 
+                      00645 ; *****************************************************************************
+000200                00646         ORG     0x200
+000200                00647 RVReset                                 
+                      00648 ;       clrf    TRISB
+                      00649 ;       btg     LATB, 0
+                      00650         
+                      00651 
+                      00652 
+000208                00653         ORG     0x208
+000208                00654 RVIntH
+                      00655 
+000218                00656         ORG     0x218
+000218                00657 RVIntL
+                      00658 ; *****************************************************************************
+                      00659 
+                      00660 
+                      00661         END
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+A                                 00000000
+A16                               00000000
+A17                               00000001
+A18                               00000002
+A19                               00000003
+ABDEN                             00000000
+ABDOVF                            00000007
+ABTIME_H                          00000002
+ABTIME_L                          00000003
+ACCESS                            00000000
+ACKDT                             00000005
+ACKEN                             00000004
+ACKSTAT                           00000006
+ACQT0                             00000003
+ACQT1                             00000004
+ACQT2                             00000005
+AD0                               00000000
+AD1                               00000001
+AD10                              00000002
+AD11                              00000003
+AD12                              00000004
+AD13                              00000005
+AD14                              00000006
+AD15                              00000007
+AD2                               00000002
+AD3                               00000003
+AD4                               00000004
+AD5                               00000005
+AD6                               00000006
+AD7                               00000007
+AD8                               00000000
+AD9                               00000001
+ADCON0                            00000FC2
+ADCON1                            00000FC1
+ADCON2                            00000FC0
+ADCS0                             00000000
+ADCS1                             00000001
+ADCS2                             00000002
+ADDEN                             00000003
+ADDRESS_H                         0000000B
+ADDRESS_L                         0000000A
+ADDRESS_U                         0000000C
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADIP                              00000006
+ADON                              00000000
+ADRES                             00000FC3
+ADRESH                            00000FC4
+ADRESL                            00000FC3
+ALE                               00000000
+AN0                               00000000
+AN1                               00000001
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+AN10                              00000005
+AN11                              00000006
+AN12                              00000004
+AN13                              00000005
+AN14                              00000006
+AN15                              00000007
+AN2                               00000002
+AN3                               00000003
+AN4                               00000005
+AN5                               00000000
+AN6                               00000001
+AN7                               00000002
+AN8                               00000003
+AN9                               00000004
+Autobaud                          00000038
+BA0                               00000004
+BANKED                            00000001
+BAUDCON                           00000F7E
+BAUDCON1                          00000F7E
+BAUDCON2                          00000F7C
+BCL1IE                            00000003
+BCL1IF                            00000003
+BCL1IP                            00000003
+BCL2IE                            00000006
+BCL2IF                            00000006
+BCL2IP                            00000006
+BCLIE                             00000003
+BCLIF                             00000003
+BCLIP                             00000003
+BF                                00000000
+BGST                              00000005
+BOR                               00000000
+BRG16                             00000003
+BRGH                              00000002
+BSR                               00000FE0
+BootMode                          000001B6
+C                                 00000000
+C1INV                             00000004
+C1OUT_CMCON                       00000006
+C1OUT_PORTF                       00000002
+C2INV                             00000005
+C2OUT_CMCON                       00000007
+C2OUT_PORTF                       00000001
+CCP1                              00000002
+CCP1CON                           00000FBD
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1IP                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CCP1Y                             00000004
+CCP2CON                           00000FBA
+CCP2IE                            00000000
+CCP2IF                            00000000
+CCP2IP                            00000000
+CCP2M0                            00000000
+CCP2M1                            00000001
+CCP2M2                            00000002
+CCP2M3                            00000003
+CCP2X                             00000005
+CCP2Y                             00000004
+CCP2_PORTB                        00000003
+CCP2_PORTC                        00000001
+CCP2_PORTE                        00000007
+CCP3                              00000000
+CCP3CON                           00000FB7
+CCP3IE                            00000000
+CCP3IF                            00000000
+CCP3IP                            00000000
+CCP3M0                            00000000
+CCP3M1                            00000001
+CCP3M2                            00000002
+CCP3M3                            00000003
+CCP3X                             00000005
+CCP3Y                             00000004
+CCP4                              00000003
+CCP4CON                           00000F73
+CCP4IE                            00000001
+CCP4IF                            00000001
+CCP4IP                            00000001
+CCP4M0                            00000000
+CCP4M1                            00000001
+CCP4M2                            00000002
+CCP4M3                            00000003
+CCP5                              00000004
+CCP5CON                           00000F70
+CCP5IE                            00000002
+CCP5IF                            00000002
+CCP5IP                            00000002
+CCP5M0                            00000000
+CCP5M1                            00000001
+CCP5M2                            00000002
+CCP5M3                            00000003
+CCPR1                             00000FBE
+CCPR1H                            00000FBF
+CCPR1L                            00000FBE
+CCPR2                             00000FBB
+CCPR2H                            00000FBC
+CCPR2L                            00000FBB
+CCPR3                             00000FB8
+CCPR3H                            00000FB9
+CCPR3L                            00000FB8
+CCPR4                             00000F74
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CCPR4H                            00000F75
+CCPR4L                            00000F74
+CCPR5                             00000F71
+CCPR5H                            00000F72
+CCPR5L                            00000F71
+CE                                00000005
+CFGS                              00000006
+CHKSUM                            00000000
+CHS0                              00000002
+CHS1                              00000003
+CHS2                              00000004
+CHS3                              00000005
+CIS                               00000003
+CK                                00000006
+CK1                               00000006
+CK2                               00000001
+CKE                               00000006
+CKP                               00000004
+CM0                               00000000
+CM1                               00000001
+CM2                               00000002
+CMCON                             00000FB4
+CMIE                              00000006
+CMIF                              00000006
+CMIP                              00000006
+COMMAND                           00000008
+COUNTER                           00000001
+CREN                              00000004
+CS                                00000002
+CSRC                              00000007
+CVR0                              00000000
+CVR1                              00000001
+CVR2                              00000002
+CVR3                              00000003
+CVRCON                            00000FB5
+CVREF                             00000005
+CVREN                             00000007
+CVROE                             00000006
+CVRR                              00000005
+CVRSS                             00000004
+CheckCommand                      000000B6
+CheckSum                          00000096
+D                                 00000005
+DATA_ADDRESS                      00000005
+DATA_BUFF                         00000008
+DATA_COUNT                        00000009
+DC                                00000001
+DC1B0                             00000004
+DC1B1                             00000005
+DC2B0                             00000004
+DC2B1                             00000005
+DC3B0                             00000004
+DC3B1                             00000005
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DC4B0                             00000004
+DC4B1                             00000005
+DC5B0                             00000004
+DC5B1                             00000005
+DCCP4X                            00000005
+DCCP4Y                            00000004
+DCCP5X                            00000005
+DCCP5Y                            00000004
+DDRA                              TRISA
+DDRB                              TRISB
+DDRC                              TRISC
+DDRD                              TRISD
+DDRE                              TRISE
+DDRF                              00000F97
+DDRG                              00000F98
+DDRH                              00000F99
+DDRJ                              00000F9A
+DLE                               0x05
+DONE                              00000001
+DT1                               00000007
+DT2                               00000002
+D_A                               00000005
+DivB32                            00000052
+EBDIS                             00000007
+ECCP1                             00000002
+ECCP1AS                           00000FB6
+ECCP1AS0                          00000004
+ECCP1AS1                          00000005
+ECCP1AS2                          00000006
+ECCP1ASE                          00000007
+ECCP1CON                          00000FBD
+ECCP1DEL                          00000F79
+ECCP2AS                           00000F68
+ECCP2AS0                          00000004
+ECCP2AS1                          00000005
+ECCP2AS2                          00000006
+ECCP2ASE                          00000007
+ECCP2CON                          00000FBA
+ECCP2DEL                          00000F67
+ECCP2_PORTB                       00000003
+ECCP2_PORTC                       00000001
+ECCP2_PORTE                       00000007
+ECCP3                             00000000
+ECCP3AS                           00000F6A
+ECCP3AS0                          00000004
+ECCP3AS1                          00000005
+ECCP3AS2                          00000006
+ECCP3ASE                          00000007
+ECCP3CON                          00000FB7
+ECCP3DEL                          00000F69
+ECCPAS0                           00000004
+ECCPAS1                           00000005
+ECCPAS2                           00000006
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ECCPASE                           00000007
+EEADR                             00000FA9
+EEADRH                            00000FAA
+EECON1                            00000FA6
+EECON2                            00000FA7
+EEDATA                            00000FA8
+EEIE                              00000004
+EEIF                              00000004
+EEIP                              00000004
+EEPGD                             00000007
+ETX                               0x04
+EraseProgMem                      00000110
+FAST                              00000001
+FERR                              00000002
+FLT0                              00000000
+FLTS                              00000002
+FREE                              00000004
+FSR0                              00000000
+FSR0H                             00000FEA
+FSR0L                             00000FE9
+FSR1                              00000001
+FSR1H                             00000FE2
+FSR1L                             00000FE1
+FSR2                              00000002
+FSR2H                             00000FDA
+FSR2L                             00000FD9
+GCEN                              00000007
+GIE                               00000007
+GIEH                              00000007
+GIEL                              00000006
+GO                                00000001
+GO_DONE                           00000001
+GetNextDat                        00000076
+HLVDCON                           00000FD2
+HLVDEN                            00000004
+HLVDIE                            00000002
+HLVDIF                            00000002
+HLVDIN                            00000005
+HLVDIP                            00000002
+HLVDL0                            00000000
+HLVDL1                            00000001
+HLVDL2                            00000002
+HLVDL3                            00000003
+HalfStart                         00000068
+I2C_DAT                           00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+IBF                               00000007
+IBOV                              00000005
+IDLEN                             00000007
+INDF0                             00000FEF
+INDF1                             00000FE7
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INDF2                             00000FDF
+INT0                              00000000
+INT0E                             00000004
+INT0F                             00000001
+INT0IE                            00000004
+INT0IF                            00000001
+INT1                              00000001
+INT1E                             00000003
+INT1F                             00000000
+INT1IE                            00000003
+INT1IF                            00000000
+INT1IP                            00000006
+INT1P                             00000006
+INT2                              00000002
+INT2E                             00000004
+INT2F                             00000001
+INT2IE                            00000004
+INT2IF                            00000001
+INT2IP                            00000007
+INT2P                             00000007
+INT3                              00000003
+INT3E                             00000005
+INT3F                             00000002
+INT3IE                            00000005
+INT3IF                            00000002
+INT3IP                            00000001
+INT3P                             00000001
+INTCON                            00000FF2
+INTCON2                           00000FF1
+INTCON3                           00000FF0
+INTEDG0                           00000006
+INTEDG1                           00000005
+INTEDG2                           00000004
+INTEDG3                           00000003
+INTSRC                            00000007
+IOFS                              00000002
+IPEN                              00000007
+IPR1                              00000F9F
+IPR2                              00000FA2
+IPR3                              00000FA5
+IRCF0                             00000004
+IRCF1                             00000005
+IRCF2                             00000006
+IRVST                             00000005
+IVRST                             00000005
+KBI0                              00000004
+KBI1                              00000005
+KBI2                              00000006
+KBI3                              00000007
+LATA                              00000F89
+LATA0                             00000000
+LATA1                             00000001
+LATA2                             00000002
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+LATA3                             00000003
+LATA4                             00000004
+LATA5                             00000005
+LATA6                             00000006
+LATA7                             00000007
+LATB                              00000F8A
+LATB0                             00000000
+LATB1                             00000001
+LATB2                             00000002
+LATB3                             00000003
+LATB4                             00000004
+LATB5                             00000005
+LATB6                             00000006
+LATB7                             00000007
+LATC                              00000F8B
+LATC0                             00000000
+LATC1                             00000001
+LATC2                             00000002
+LATC3                             00000003
+LATC4                             00000004
+LATC5                             00000005
+LATC6                             00000006
+LATC7                             00000007
+LATD                              00000F8C
+LATD0                             00000000
+LATD1                             00000001
+LATD2                             00000002
+LATD3                             00000003
+LATD4                             00000004
+LATD5                             00000005
+LATD6                             00000006
+LATD7                             00000007
+LATE                              00000F8D
+LATE0                             00000000
+LATE1                             00000001
+LATE2                             00000002
+LATE3                             00000003
+LATE4                             00000004
+LATE5                             00000005
+LATE6                             00000006
+LATE7                             00000007
+LATF                              00000F8E
+LATF0                             00000000
+LATF1                             00000001
+LATF2                             00000002
+LATF3                             00000003
+LATF4                             00000004
+LATF5                             00000005
+LATF6                             00000006
+LATF7                             00000007
+LATG                              00000F8F
+LATG0                             00000000
+LATG1                             00000001
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+LATG2                             00000002
+LATG3                             00000003
+LATG4                             00000004
+LATG5                             00000005
+LATH                              00000F90
+LATH0                             00000000
+LATH1                             00000001
+LATH2                             00000002
+LATH3                             00000003
+LATH4                             00000004
+LATH5                             00000005
+LATH6                             00000006
+LATH7                             00000007
+LATJ                              00000F91
+LATJ0                             00000000
+LATJ1                             00000001
+LATJ2                             00000002
+LATJ3                             00000003
+LATJ4                             00000004
+LATJ5                             00000005
+LATJ6                             00000006
+LATJ7                             00000007
+LB                                00000006
+LVDCON                            00000FD2
+LVDEN                             00000004
+LVDIE                             00000002
+LVDIF                             00000002
+LVDIN                             00000005
+LVDIP                             00000002
+LVDL0                             00000000
+LVDL1                             00000001
+LVDL2                             00000002
+LVDL3                             00000003
+LVV0                              00000000
+LVV1                              00000001
+LVV2                              00000002
+LVV3                              00000003
+Lp1                               000000F6
+MAJOR_VERSION                     0x01
+MCLR                              00000005
+MEMCON                            00000F9C
+MINOR_VERSION                     0x04
+N                                 00000004
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BOR                           00000000
+NOT_CE                            00000005
+NOT_CS                            00000002
+NOT_DONE                          00000001
+NOT_LB                            00000006
+NOT_MCLR                          00000005
+NOT_OE                            00000001
+NOT_PD                            00000002
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 23
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RC8                           00000006
+NOT_RD                            00000000
+NOT_RI                            00000004
+NOT_SS1                           00000007
+NOT_SS2                           00000007
+NOT_T1SYNC                        00000002
+NOT_T3SYNC                        00000002
+NOT_TO                            00000003
+NOT_TX8                           00000006
+NOT_UB                            00000007
+NOT_W                             00000002
+NOT_WR                            00000001
+NOT_WRH                           00000003
+NOT_WRITE                         00000002
+NOT_WRL                           00000002
+NoDLE                             0000008A
+NoETX                             00000082
+NoSTX                             0000007C
+OBF                               00000006
+OE                                00000001
+OERR                              00000001
+OSCCON                            00000FD3
+OSCFIE                            00000007
+OSCFIF                            00000007
+OSCFIP                            00000007
+OSCTUNE                           00000F9B
+OSTS                              00000003
+OV                                00000003
+P                                 00000004
+P1A                               00000002
+P1B_PORTE                         00000006
+P1B_PORTH                         00000007
+P1C_PORTE                         00000005
+P1C_PORTH                         00000006
+P1D                               00000004
+P1DC0                             00000000
+P1DC1                             00000001
+P1DC2                             00000002
+P1DC3                             00000003
+P1DC4                             00000004
+P1DC5                             00000005
+P1DC6                             00000006
+P1M0                              00000006
+P1M1                              00000007
+P1RSEN                            00000007
+P2A_PORTB                         00000003
+P2A_PORTC                         00000001
+P2A_PORTE                         00000007
+P2B                               00000002
+P2C                               00000001
+P2D                               00000000
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 24
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+P2DC0                             00000000
+P2DC1                             00000001
+P2DC2                             00000002
+P2DC3                             00000003
+P2DC4                             00000004
+P2DC5                             00000005
+P2DC6                             00000006
+P2M0                              00000006
+P2M1                              00000007
+P2RSEN                            00000007
+P3A                               00000000
+P3B_PORTE                         00000004
+P3B_PORTH                         00000005
+P3C_PORTE                         00000003
+P3C_PORTH                         00000004
+P3D                               00000003
+P3DC0                             00000000
+P3DC1                             00000001
+P3DC2                             00000002
+P3DC3                             00000003
+P3DC4                             00000004
+P3DC5                             00000005
+P3DC6                             00000006
+P3M0                              00000006
+P3M1                              00000007
+P3RSEN                            00000007
+PACKET_DATA                       0000000D
+PC                                00000FF9
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCL                               00000FF9
+PCLATH                            00000FFA
+PCLATU                            00000FFB
+PD                                00000002
+PDC0                              00000000
+PDC1                              00000001
+PDC2                              00000002
+PDC3                              00000003
+PDC4                              00000004
+PDC5                              00000005
+PDC6                              00000006
+PEIE                              00000006
+PEN                               00000002
+PIE1                              00000F9D
+PIE2                              00000FA0
+PIE3                              00000FA3
+PIR1                              00000F9E
+PIR2                              00000FA1
+PIR3                              00000FA4
+PLLEN                             00000006
+PLUSW0                            00000FEB
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 25
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PLUSW1                            00000FE3
+PLUSW2                            00000FDB
+POR                               00000001
+PORTA                             00000F80
+PORTB                             00000F81
+PORTC                             00000F82
+PORTD                             00000F83
+PORTE                             00000F84
+PORTF                             00000F85
+PORTG                             00000F86
+PORTH                             00000F87
+PORTJ                             00000F88
+POSTDEC0                          00000FED
+POSTDEC1                          00000FE5
+POSTDEC2                          00000FDD
+POSTINC0                          00000FEE
+POSTINC1                          00000FE6
+POSTINC2                          00000FDE
+PR2                               00000FCB
+PR4                               00000F77
+PREINC0                           00000FEC
+PREINC1                           00000FE4
+PREINC2                           00000FDC
+PROD                              00000FF3
+PRODH                             00000FF4
+PRODL                             00000FF3
+PRSEN                             00000007
+PSA                               00000003
+PSP0                              00000000
+PSP1                              00000001
+PSP2                              00000002
+PSP3                              00000003
+PSP4                              00000004
+PSP5                              00000005
+PSP6                              00000006
+PSP7                              00000007
+PSPCON                            00000FB0
+PSPIE                             00000007
+PSPIF                             00000007
+PSPIP                             00000007
+PSPMODE                           00000004
+PSS1AC0                           00000002
+PSS1AC1                           00000003
+PSS1BD0                           00000000
+PSS1BD1                           00000001
+PSS2AC0                           00000002
+PSS2AC1                           00000003
+PSS2BD0                           00000000
+PSS2BD1                           00000001
+PSS3AC0                           00000002
+PSS3AC1                           00000003
+PSS3BD0                           00000000
+PSS3BD1                           00000001
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 26
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PSSAC0                            00000002
+PSSAC1                            00000003
+PSSBD0                            00000000
+PSSBD1                            00000001
+R                                 00000002
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RA6                               00000006
+RA7                               00000007
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RBIP                              00000000
+RBPU                              00000007
+RC0                               00000000
+RC1                               00000001
+RC1IE                             00000005
+RC1IF                             00000005
+RC1IP                             00000005
+RC2                               00000002
+RC2IE                             00000005
+RC2IF                             00000005
+RC2IP                             00000005
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RC8_9                             00000006
+RC9                               00000006
+RCD8                              00000000
+RCEN                              00000003
+RCIDL                             00000006
+RCIE                              00000005
+RCIF                              00000005
+RCIP                              00000005
+RCMT                              00000006
+RCON                              00000FD0
+RCREG                             00000FAE
+RCREG1                            00000FAE
+RCREG2                            00000F6E
+RCSTA                             00000FAB
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 27
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RCSTA1                            00000FAB
+RCSTA2                            00000F6B
+RC_DLE                            0x01
+RC_STX                            0x02
+RD                                00000000
+RD0                               00000000
+RD1                               00000001
+RD16                              00000007
+RD2                               00000002
+RD3                               00000003
+RD4                               00000004
+RD5                               00000005
+RD6                               00000006
+RD7                               00000007
+RE0                               00000000
+RE1                               00000001
+RE2                               00000002
+RE3                               00000003
+RE4                               00000004
+RE5                               00000005
+RE6                               00000006
+RE7                               00000007
+READ_WRITE                        00000002
+RF0                               00000000
+RF1                               00000001
+RF2                               00000002
+RF3                               00000003
+RF4                               00000004
+RF5                               00000005
+RF6                               00000006
+RF7                               00000007
+RG0                               00000000
+RG1                               00000001
+RG2                               00000002
+RG3                               00000003
+RG4                               00000004
+RG5                               00000005
+RH0                               00000000
+RH1                               00000001
+RH2                               00000002
+RH3                               00000003
+RH4                               00000004
+RH5                               00000005
+RH6                               00000006
+RH7                               00000007
+RI                                00000004
+RJ0                               00000000
+RJ1                               00000001
+RJ2                               00000002
+RJ3                               00000003
+RJ4                               00000004
+RJ5                               00000005
+RJ6                               00000006
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 28
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RJ7                               00000007
+RSEN                              00000001
+RVIntH                            00000208
+RVIntL                            00000218
+RVReset                           00000200
+RX                                00000007
+RX1                               00000007
+RX2                               00000002
+RX9                               00000006
+RX9D                              00000000
+RXDATA                            00000004
+R_W                               00000002
+RdRS232                           000001A6
+ReadEE                            00000126
+ReadProgMem                       000000E0
+ReadVersion                       000000D4
+S                                 00000003
+SBOREN                            00000006
+SCK                               00000003
+SCK1                              00000003
+SCK2                              00000006
+SCKP                              00000004
+SCL                               00000003
+SCL1                              00000003
+SCL2                              00000006
+SCS0                              00000000
+SCS1                              00000001
+SDA                               00000004
+SDA1                              00000004
+SDA2                              00000005
+SDI                               00000004
+SDI1                              00000004
+SDI2                              00000005
+SDO                               00000005
+SDO1                              00000005
+SDO2                              00000004
+SEN                               00000000
+SENDB                             00000003
+SMP                               00000007
+SP0                               00000000
+SP1                               00000001
+SP2                               00000002
+SP3                               00000003
+SP4                               00000004
+SPBRG                             00000FAF
+SPBRG1                            00000FAF
+SPBRG2                            00000F6F
+SPBRGH                            00000F7F
+SPBRGH1                           00000F7F
+SPBRGH2                           00000F7D
+SPEN                              00000007
+SREN                              00000005
+SS1                               00000007
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 29
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SS2                               00000007
+SSP1ADD                           00000FC8
+SSP1BUF                           00000FC9
+SSP1CON1                          00000FC6
+SSP1CON2                          00000FC5
+SSP1IE                            00000003
+SSP1IF                            00000003
+SSP1IP                            00000003
+SSP1STAT                          00000FC7
+SSP2ADD                           00000F65
+SSP2BUF                           00000F66
+SSP2CON1                          00000F63
+SSP2CON2                          00000F62
+SSP2IE                            00000007
+SSP2IF                            00000007
+SSP2IP                            00000007
+SSP2STAT                          00000F64
+SSPADD                            00000FC8
+SSPBUF                            00000FC9
+SSPCON1                           00000FC6
+SSPCON2                           00000FC5
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPIP                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPOV                             00000006
+SSPSTAT                           00000FC7
+STATUS                            00000FD8
+STKFUL                            00000007
+STKOVF                            00000007
+STKPTR                            00000FFC
+STKPTR0                           00000000
+STKPTR1                           00000001
+STKPTR2                           00000002
+STKPTR3                           00000003
+STKPTR4                           00000004
+STKUNF                            00000006
+STX                               0x0F
+SWDTE                             00000000
+SWDTEN                            00000000
+SYNC                              00000004
+SendAcknowledge                   0000015E
+SendNext                          0000016E
+Setup                             0000001A
+Setup1                            0000002E
+StartOfLine                       00000062
+StartWrite                        000001CC
+T08BIT                            00000006
+T0CKI                             00000004
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 30
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T0CON                             00000FD5
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0IP                              00000002
+T0PS0                             00000000
+T0PS1                             00000001
+T0PS2                             00000002
+T0PS3                             00000003
+T0SE                              00000004
+T13CKI                            00000000
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000FCD
+T1INSYNC                          00000002
+T1OSCEN                           00000003
+T1OSI                             00000001
+T1OSO                             00000000
+T1RUN                             00000006
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000FCA
+T2OUTPS0                          00000003
+T2OUTPS1                          00000004
+T2OUTPS2                          00000005
+T2OUTPS3                          00000006
+T3CCP1                            00000003
+T3CCP2                            00000006
+T3CKPS0                           00000004
+T3CKPS1                           00000005
+T3CON                             00000FB1
+T3INSYNC                          00000002
+T3SYNC                            00000002
+T4CKPS0                           00000000
+T4CKPS1                           00000001
+T4CON                             00000F76
+T4OUTPS0                          00000003
+T4OUTPS1                          00000004
+T4OUTPS2                          00000005
+T4OUTPS3                          00000006
+TABLAT                            00000FF5
+TBLPTR                            00000FF6
+TBLPTRH                           00000FF7
+TBLPTRL                           00000FF6
+TBLPTRU                           00000FF8
+TMR0H                             00000FD7
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0IP                            00000002
+TMR0L                             00000FD6
+TMR0ON                            00000007
+TMR1CS                            00000001
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 31
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR1H                             00000FCF
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1IP                            00000000
+TMR1L                             00000FCE
+TMR1ON                            00000000
+TMR2                              00000FCC
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2IP                            00000001
+TMR2ON                            00000002
+TMR3CS                            00000001
+TMR3H                             00000FB3
+TMR3IE                            00000001
+TMR3IF                            00000001
+TMR3IP                            00000001
+TMR3L                             00000FB2
+TMR3ON                            00000000
+TMR4                              00000F78
+TMR4IE                            00000003
+TMR4IF                            00000003
+TMR4IP                            00000003
+TMR4ON                            00000002
+TO                                00000003
+TOS                               00000FFD
+TOSH                              00000FFE
+TOSL                              00000FFD
+TOSU                              00000FFF
+TRISA                             00000F92
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISA6                            00000006
+TRISA7                            00000007
+TRISB                             00000F93
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRISC                             00000F94
+TRISC0                            00000000
+TRISC1                            00000001
+TRISC2                            00000002
+TRISC3                            00000003
+TRISC4                            00000004
+TRISC5                            00000005
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 32
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TRISC6                            00000006
+TRISC7                            00000007
+TRISD                             00000F95
+TRISD0                            00000000
+TRISD1                            00000001
+TRISD2                            00000002
+TRISD3                            00000003
+TRISD4                            00000004
+TRISD5                            00000005
+TRISD6                            00000006
+TRISD7                            00000007
+TRISE                             00000F96
+TRISE0                            00000000
+TRISE1                            00000001
+TRISE2                            00000002
+TRISE3                            00000003
+TRISE4                            00000004
+TRISE5                            00000005
+TRISE6                            00000006
+TRISE7                            00000007
+TRISF                             00000F97
+TRISF0                            00000000
+TRISF1                            00000001
+TRISF2                            00000002
+TRISF3                            00000003
+TRISF4                            00000004
+TRISF5                            00000005
+TRISF6                            00000006
+TRISF7                            00000007
+TRISG                             00000F98
+TRISG0                            00000000
+TRISG1                            00000001
+TRISG2                            00000002
+TRISG3                            00000003
+TRISG4                            00000004
+TRISH                             00000F99
+TRISH0                            00000000
+TRISH1                            00000001
+TRISH2                            00000002
+TRISH3                            00000003
+TRISH4                            00000004
+TRISH5                            00000005
+TRISH6                            00000006
+TRISH7                            00000007
+TRISJ                             00000F9A
+TRISJ0                            00000000
+TRISJ1                            00000001
+TRISJ2                            00000002
+TRISJ3                            00000003
+TRISJ4                            00000004
+TRISJ5                            00000005
+TRISJ6                            00000006
+TRISJ7                            00000007
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 33
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TRMT                              00000001
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TX                                00000006
+TX1                               00000006
+TX1IE                             00000004
+TX1IF                             00000004
+TX1IP                             00000004
+TX2                               00000001
+TX2IE                             00000004
+TX2IF                             00000004
+TX2IP                             00000004
+TX8_9                             00000006
+TX9                               00000006
+TX9D                              00000000
+TXD8                              00000000
+TXDATA                            00000005
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXIP                              00000004
+TXREG                             00000FAD
+TXREG1                            00000FAD
+TXREG2                            00000F6D
+TXSTA                             00000FAC
+TXSTA1                            00000FAC
+TXSTA2                            00000F6C
+UA                                00000001
+UB                                00000007
+VCFG0                             00000004
+VCFG1                             00000005
+VDIRMAG                           00000007
+VIntH                             00000008
+VIntL                             00000018
+VREFM                             00000002
+VREFP                             00000003
+W                                 00000000
+WAIT0                             00000004
+WAIT1                             00000005
+WCOL                              00000007
+WDTCON                            00000FD1
+WM0                               00000000
+WM1                               00000001
+WR                                00000001
+WREG                              00000FE8
+WREN                              00000002
+WRERR                             00000003
+WRH                               00000003
+WRL                               00000002
+WUE                               00000001
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 34
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+WaitForRise                       000001C0
+WrDLE                             00000196
+WrData                            00000184
+WrNext                            0000019A
+WrRS232                           0000019C
+WriteConfig                       0000014C
+WriteEE                           0000013C
+WritePacket                       00000160
+WriteProgMem                      000000F0
+WriteWaitEEData                   0000000A
+WtSR                              000001C6
+Z                                 00000002
+_ADDRBW_ADDR12BIT_3L              000000DF
+_ADDRBW_ADDR16BIT_3L              000000EF
+_ADDRBW_ADDR20BIT_3L              000000FF
+_ADDRBW_ADDR8BIT_3L               000000CF
+_BBSIZ_BB2K_4L                    000000CF
+_BBSIZ_BB4K_4L                    000000DF
+_BBSIZ_BB8K_4L                    000000FF
+_BOREN_NOSLP_2L                   000000FD
+_BOREN_OFF_2L                     000000F9
+_BOREN_ON_2L                      000000FB
+_BOREN_SBORDIS_2L                 000000FF
+_BORV_0_2L                        000000E7
+_BORV_1_2L                        000000EF
+_BORV_2_2L                        000000F7
+_BORV_3_2L                        000000FF
+_CCP2MX_PORTBE_3H                 000000FE
+_CCP2MX_PORTC_3H                  000000FF
+_CONFIG1H                         00300001
+_CONFIG2H                         00300003
+_CONFIG2L                         00300002
+_CONFIG3H                         00300005
+_CONFIG3L                         00300004
+_CONFIG4L                         00300006
+_CONFIG5H                         00300009
+_CONFIG5L                         00300008
+_CONFIG6H                         0030000B
+_CONFIG6L                         0030000A
+_CONFIG7H                         0030000D
+_CONFIG7L                         0030000C
+_CP0_OFF_5L                       000000FF
+_CP0_ON_5L                        000000FE
+_CP1_OFF_5L                       000000FF
+_CP1_ON_5L                        000000FD
+_CP2_OFF_5L                       000000FF
+_CP2_ON_5L                        000000FB
+_CP3_OFF_5L                       000000FF
+_CP3_ON_5L                        000000F7
+_CP4_OFF_5L                       000000FF
+_CP4_ON_5L                        000000EF
+_CP5_OFF_5L                       000000FF
+_CP5_ON_5L                        000000DF
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 35
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_CP6_OFF_5L                       000000FF
+_CP6_ON_5L                        000000BF
+_CP7_OFF_5L                       000000FF
+_CP7_ON_5L                        0000007F
+_CPB_OFF_5H                       000000FF
+_CPB_ON_5H                        000000BF
+_CPD_OFF_5H                       000000FF
+_CPD_ON_5H                        0000007F
+_DATABW_DATA16BIT_3L              000000FF
+_DATABW_DATA8BIT_3L               000000BF
+_DEBUG_OFF_4L                     000000FF
+_DEBUG_ON_4L                      0000007F
+_DEVID1                           003FFFFE
+_DEVID2                           003FFFFF
+_EBTR0_OFF_7L                     000000FF
+_EBTR0_ON_7L                      000000FE
+_EBTR1_OFF_7L                     000000FF
+_EBTR1_ON_7L                      000000FD
+_EBTR2_OFF_7L                     000000FF
+_EBTR2_ON_7L                      000000FB
+_EBTR3_OFF_7L                     000000FF
+_EBTR3_ON_7L                      000000F7
+_EBTR4_OFF_7L                     000000FF
+_EBTR4_ON_7L                      000000EF
+_EBTR5_OFF_7L                     000000FF
+_EBTR5_ON_7L                      000000DF
+_EBTR6_OFF_7L                     000000FF
+_EBTR6_ON_7L                      000000BF
+_EBTR7_OFF_7L                     000000FF
+_EBTR7_ON_7L                      0000007F
+_EBTRB_OFF_7H                     000000FF
+_EBTRB_ON_7H                      000000BF
+_ECCPMX_PORTE_3H                  000000FF
+_ECCPMX_PORTH_3H                  000000FD
+_FCMEN_OFF_1H                     000000BF
+_FCMEN_ON_1H                      000000FF
+_IDLOC0                           00200000
+_IDLOC1                           00200001
+_IDLOC2                           00200002
+_IDLOC3                           00200003
+_IDLOC4                           00200004
+_IDLOC5                           00200005
+_IDLOC6                           00200006
+_IDLOC7                           00200007
+_IESO_OFF_1H                      0000007F
+_IESO_ON_1H                       000000FF
+_LPT1OSC_OFF_3H                   000000FB
+_LPT1OSC_ON_3H                    000000FF
+_LVP_OFF_4L                       000000FB
+_LVP_ON_4L                        000000FF
+_MCLRE_OFF_3H                     0000007F
+_MCLRE_ON_3H                      000000FF
+_MODE_EM_3L                       000000FC
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 36
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_MODE_MC_3L                       000000FF
+_MODE_MPB_3L                      000000FD
+_MODE_MP_3L                       000000FE
+_OSC_ECIO6_1H                     000000F5
+_OSC_EC_1H                        000000F4
+_OSC_HSPLL_1H                     000000F6
+_OSC_HS_1H                        000000F2
+_OSC_INTIO67_1H                   000000F8
+_OSC_INTIO7_1H                    000000F9
+_OSC_LP_1H                        000000F0
+_OSC_RCIO6_1H                     000000F7
+_OSC_RC_1H                        000000F3
+_OSC_XT_1H                        000000F1
+_PWRT_OFF_2L                      000000FF
+_PWRT_ON_2L                       000000FE
+_STVREN_OFF_4L                    000000FE
+_STVREN_ON_4L                     000000FF
+_WAIT_OFF_3L                      000000FF
+_WAIT_ON_3L                       0000007F
+_WDTPS_1024_2H                    000000F5
+_WDTPS_128_2H                     000000EF
+_WDTPS_16384_2H                   000000FD
+_WDTPS_16_2H                      000000E9
+_WDTPS_1_2H                       000000E1
+_WDTPS_2048_2H                    000000F7
+_WDTPS_256_2H                     000000F1
+_WDTPS_2_2H                       000000E3
+_WDTPS_32768_2H                   000000FF
+_WDTPS_32_2H                      000000EB
+_WDTPS_4096_2H                    000000F9
+_WDTPS_4_2H                       000000E5
+_WDTPS_512_2H                     000000F3
+_WDTPS_64_2H                      000000ED
+_WDTPS_8192_2H                    000000FB
+_WDTPS_8_2H                       000000E7
+_WDT_OFF_2H                       000000FE
+_WDT_ON_2H                        000000FF
+_WRT0_OFF_6L                      000000FF
+_WRT0_ON_6L                       000000FE
+_WRT1_OFF_6L                      000000FF
+_WRT1_ON_6L                       000000FD
+_WRT2_OFF_6L                      000000FF
+_WRT2_ON_6L                       000000FB
+_WRT3_OFF_6L                      000000FF
+_WRT3_ON_6L                       000000F7
+_WRT4_OFF_6L                      000000FF
+_WRT4_ON_6L                       000000EF
+_WRT5_OFF_6L                      000000FF
+_WRT5_ON_6L                       000000DF
+_WRT6_OFF_6L                      000000FF
+_WRT6_ON_6L                       000000BF
+_WRT7_OFF_6L                      000000FF
+_WRT7_ON_6L                       0000007F
+MPASM  5.03                      BOOTLOAD.ASM   2-6-2010  4:54:59         PAGE 37
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WRTB_OFF_6H                      000000FF
+_WRTB_ON_6H                       000000BF
+_WRTC_OFF_6H                      000000FF
+_WRTC_ON_6H                       000000DF
+_WRTD_OFF_6H                      000000FF
+_WRTD_ON_6H                       0000007F
+_XINST_OFF_4L                     000000BF
+_XINST_ON_4L                      000000FF
+__18F8722                         00000001
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXX--XXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0080 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+00C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0100 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0140 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0180 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+01C0 : XXXXXXXXXXXXXXXX XXXXXXXXXXXX---- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Bytes Used:   474
+Program Memory Bytes Free: 2096678
+
+
+Errors   :     0
+Warnings :     0 reported,     2 suppressed
+Messages :     0 reported,     0 suppressed
+
+

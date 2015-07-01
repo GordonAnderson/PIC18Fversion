@@ -1,0 +1,638 @@
+Error[150]   ../ADC.asm 15 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 18 : Symbol not previously defined (LINE1)
+Error[152]   ../ADC.asm 18 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 19 : Symbol not previously defined (LCDsendCMD)
+Error[152]   ../ADC.asm 19 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 19 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 21 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 21 : Illegal opcode (BattAlarm)
+Error[113]   ../ADC.asm 22 : Symbol not previously defined (AXreg)
+Error[152]   ../ADC.asm 22 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 23 : Found label after column 1. (MOVEC)
+Error[122]   ../ADC.asm 23 : Illegal opcode (D)
+Error[113]   ../ADC.asm 24 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 24 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 24 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 25 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 25 : Illegal opcode (CEXreg)
+Error[151]   ../ADC.asm 27 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 27 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 27 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 28 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 28 : Illegal opcode (VmonG)
+Error[113]   ../ADC.asm 29 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 29 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 29 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 30 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 30 : Illegal opcode (CEXreg)
+Warning[207] ../ADC.asm 31 : Found label after column 1. (MOVPF)
+Error[122]   ../ADC.asm 31 : Illegal opcode (WREG)
+Warning[207] ../ADC.asm 32 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 32 : Illegal opcode (CEXreg)
+Warning[207] ../ADC.asm 33 : Found label after column 1. (MOVPF)
+Error[122]   ../ADC.asm 33 : Illegal opcode (WREG)
+Error[113]   ../ADC.asm 34 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 34 : Executable code and data must be defined in an appropriate section
+Warning[205] ../ADC.asm 38 : Found directive in column 1. (ifdef)
+Warning[207] ../ADC.asm 46 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 46 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 47 : Symbol not previously defined (LValarm)
+Error[152]   ../ADC.asm 47 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 48 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 48 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 48 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 49 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 49 : Illegal opcode (HIGH)
+Warning[207] ../ADC.asm 50 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 50 : Illegal opcode (CXreg)
+Error[113]   ../ADC.asm 51 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 51 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 52 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 52 : Illegal opcode (CXreg)
+Error[113]   ../ADC.asm 53 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 53 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 55 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 55 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 56 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 56 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 56 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 58 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 59 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 59 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 60 : Symbol not previously defined (BeepCyl)
+Error[152]   ../ADC.asm 60 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 61 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 62 : Symbol not previously defined (Beep)
+Error[152]   ../ADC.asm 62 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 62 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 64 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 64 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 65 : Symbol not previously defined (LValarm)
+Error[152]   ../ADC.asm 65 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 67 : Labels must be defined in a code or data section when making an object file
+Warning[207] ../ADC.asm 68 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 68 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 69 : Symbol not previously defined (Int2Str)
+Error[152]   ../ADC.asm 69 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 69 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 70 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 71 : Found label after column 1. (MOVPF)
+Error[122]   ../ADC.asm 71 : Illegal opcode (WREG)
+Error[152]   ../ADC.asm 72 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 73 : Symbol not previously defined (Buffer)
+Error[152]   ../ADC.asm 73 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 74 : Found label after column 1. (MOVPF)
+Error[122]   ../ADC.asm 74 : Illegal opcode (Areg)
+Warning[207] ../ADC.asm 75 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 75 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 76 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 76 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 76 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 77 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 77 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 78 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 78 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 78 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 79 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 80 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 80 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 80 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 81 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 81 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 82 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 82 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 82 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 83 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 93 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 95 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 95 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 95 : Symbol not previously defined (AXreg)
+Error[152]   ../ADC.asm 95 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 96 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 96 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 96 : Symbol not previously defined (AXreg)
+Error[152]   ../ADC.asm 96 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 97 : Found label after column 1. (MOVEC)
+Error[122]   ../ADC.asm 97 : Illegal opcode (FilterTC)
+Error[113]   ../ADC.asm 98 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 98 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 98 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 100 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 100 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 101 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 101 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 101 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 101 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 102 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 102 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 103 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 103 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 103 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 103 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 104 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 104 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 105 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 105 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 105 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 105 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 106 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 106 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 108 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 108 : Illegal opcode (Vbat)
+Warning[207] ../ADC.asm 109 : Found label after column 1. (MOVEC)
+Error[122]   ../ADC.asm 109 : Illegal opcode (FilterTC)
+Error[113]   ../ADC.asm 110 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 110 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 110 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 112 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 112 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 113 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 113 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 113 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 113 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 114 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 114 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 115 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 115 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 115 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 115 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 116 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 116 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 117 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 117 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 117 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 117 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 118 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 118 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 120 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 120 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 120 : Symbol not previously defined (AXreg)
+Error[152]   ../ADC.asm 120 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 121 : Symbol not previously defined (Vbat256)
+Error[152]   ../ADC.asm 121 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 121 : Symbol not previously defined (AXreg)
+Error[152]   ../ADC.asm 121 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 122 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 129 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 131 : Symbol not previously defined (ADCrec)
+Error[152]   ../ADC.asm 131 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 132 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 132 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 132 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 133 : Symbol not previously defined (ADCrec)
+Error[152]   ../ADC.asm 133 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 134 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 134 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 134 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 136 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 136 : Illegal opcode (Pos)
+Warning[207] ../ADC.asm 137 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 137 : Illegal opcode (VRmonG)
+Error[113]   ../ADC.asm 138 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 138 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 138 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 140 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 140 : Illegal opcode (HIGH)
+Warning[207] ../ADC.asm 141 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 141 : Illegal opcode (CEXreg)
+Error[113]   ../ADC.asm 142 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 142 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 143 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 143 : Illegal opcode (CEXreg)
+Error[113]   ../ADC.asm 144 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 144 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 145 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 145 : Illegal opcode (CEXreg)
+Error[113]   ../ADC.asm 146 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 146 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 147 : Symbol not previously defined (CEXreg)
+Error[152]   ../ADC.asm 147 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 149 : Symbol not previously defined (Int2Str)
+Error[152]   ../ADC.asm 149 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 149 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 152 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 152 : Illegal opcode (HIGH)
+Warning[207] ../ADC.asm 153 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 153 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 154 : Symbol not previously defined (Buffer)
+Error[152]   ../ADC.asm 154 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 155 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 156 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 156 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 156 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 157 : Symbol not previously defined (Z)
+Error[113]   ../ADC.asm 157 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 157 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 158 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 160 : Symbol not previously defined (LINE2)
+Error[152]   ../ADC.asm 160 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 161 : Symbol not previously defined (LCDsendCMD)
+Error[152]   ../ADC.asm 161 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 161 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 162 : Found label after column 1. (PrintMess)
+Error[122]   ../ADC.asm 162 : Illegal opcode (MES23)
+Error[113]   ../ADC.asm 163 : Symbol not previously defined (LINE2)
+Error[113]   ../ADC.asm 163 : Symbol not previously defined (RECVPOS)
+Error[152]   ../ADC.asm 163 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 164 : Symbol not previously defined (LCDsendCMD)
+Error[152]   ../ADC.asm 164 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 164 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 165 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 165 : Illegal opcode (HIGH)
+Warning[207] ../ADC.asm 166 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 166 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 167 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 167 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 167 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 168 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 168 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 169 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 169 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 169 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 170 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 171 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 171 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 171 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 172 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 172 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 173 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 173 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 173 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 174 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 174 : Illegal opcode (Buffer)
+Error[113]   ../ADC.asm 175 : Symbol not previously defined (LCDsendData)
+Error[152]   ../ADC.asm 175 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 175 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 177 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 177 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 177 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 178 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 182 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 183 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 183 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 184 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 184 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 184 : Symbol not previously defined (PIC18F8723)
+Error[152]   ../ADC.asm 184 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 185 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 186 : Symbol not previously defined (TBLPTRU)
+Error[113]   ../ADC.asm 186 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 186 : Executable code and data must be defined in an appropriate section
+Message[311] ../ADC.asm 187 : Operand of HIGH operator was larger than H'FFFF'.
+Error[152]   ../ADC.asm 187 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 188 : Symbol not previously defined (TBLPTRH)
+Error[113]   ../ADC.asm 188 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 188 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 189 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 190 : Symbol not previously defined (TBLPTRL)
+Error[113]   ../ADC.asm 190 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 190 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 192 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 193 : Symbol not previously defined (TABLAT)
+Error[113]   ../ADC.asm 193 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 193 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 194 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 195 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 196 : Symbol not previously defined (Z)
+Error[113]   ../ADC.asm 196 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 196 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 197 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 197 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 197 : Symbol not previously defined (PIC18F8723)
+Error[152]   ../ADC.asm 197 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 198 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 202 : Labels must be defined in a code or data section when making an object file
+Warning[207] ../ADC.asm 204 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 204 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 205 : Symbol not previously defined (ADCsum)
+Error[152]   ../ADC.asm 205 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 206 : Symbol not previously defined (ADCsum)
+Error[152]   ../ADC.asm 206 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 207 : Symbol not previously defined (ADCsum)
+Error[152]   ../ADC.asm 207 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 209 : Symbol not previously defined (Areg)
+Error[113]   ../ADC.asm 209 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 209 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 211 : Symbol not previously defined (Breg)
+Error[113]   ../ADC.asm 211 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 211 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 213 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 214 : Symbol not previously defined (Areg)
+Error[113]   ../ADC.asm 214 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 214 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 215 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 215 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 215 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 217 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 217 : Illegal opcode (HIGH)
+Warning[207] ../ADC.asm 218 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 218 : Illegal opcode (ADRESL)
+Error[113]   ../ADC.asm 219 : Symbol not previously defined (ADCsum)
+Error[152]   ../ADC.asm 219 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 220 : Found label after column 1. (MOVFP)
+Error[122]   ../ADC.asm 220 : Illegal opcode (ADRESH)
+Error[113]   ../ADC.asm 221 : Symbol not previously defined (ADCsum)
+Error[152]   ../ADC.asm 221 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 222 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 222 : Symbol not previously defined (ALUSTA)
+Error[113]   ../ADC.asm 222 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 222 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 223 : Symbol not previously defined (ADCsum)
+Error[152]   ../ADC.asm 223 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 225 : Symbol not previously defined (Breg)
+Error[152]   ../ADC.asm 225 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 226 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 226 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 226 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 227 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 238 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 240 : Symbol not previously defined (Areg)
+Error[113]   ../ADC.asm 240 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 240 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 242 : Symbol not previously defined (ADClookup)
+Error[152]   ../ADC.asm 242 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 242 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 244 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 244 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 245 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 245 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 245 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 247 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 247 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 247 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 248 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 248 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 248 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 249 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 249 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 249 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 250 : Symbol not previously defined (Areg)
+Error[152]   ../ADC.asm 250 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 250 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 250 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 251 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 253 : Labels must be defined in a code or data section when making an object file
+Error[151]   ../ADC.asm 254 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 254 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 254 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 256 : Symbol not previously defined (Areg)
+Error[152]   ../ADC.asm 256 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 256 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 256 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 257 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 273 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 275 : Symbol not previously defined (ADCON1)
+Error[113]   ../ADC.asm 275 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 275 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 277 : Symbol not previously defined (WREG)
+Error[113]   ../ADC.asm 277 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 277 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 278 : Symbol not previously defined (VCFG0)
+Error[113]   ../ADC.asm 278 : Symbol not previously defined (ADCON1)
+Error[113]   ../ADC.asm 278 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 278 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 279 : Symbol not previously defined (WREG)
+Error[113]   ../ADC.asm 279 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 279 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 295 : Symbol not previously defined (WREG)
+Error[113]   ../ADC.asm 295 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 295 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 296 : Symbol not previously defined (WREG)
+Error[113]   ../ADC.asm 296 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 296 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 297 : Symbol not previously defined (ADCON0)
+Error[113]   ../ADC.asm 297 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 297 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 299 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 300 : Symbol not previously defined (ADCON2)
+Error[113]   ../ADC.asm 300 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 300 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 302 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 303 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 303 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 303 : Symbol not previously defined (Creg)
+Error[152]   ../ADC.asm 303 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 304 : Found label after column 1. (MOVEC)
+Error[108]   ../ADC.asm 304 : Illegal character (0)
+Error[150]   ../ADC.asm 306 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 307 : Symbol not previously defined (ADON)
+Error[113]   ../ADC.asm 307 : Symbol not previously defined (ADCON0)
+Error[113]   ../ADC.asm 307 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 307 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 308 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 309 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 310 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 311 : Symbol not previously defined (GO)
+Error[113]   ../ADC.asm 311 : Symbol not previously defined (ADCON0)
+Error[113]   ../ADC.asm 311 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 311 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 313 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 314 : Symbol not previously defined (DONE)
+Error[113]   ../ADC.asm 314 : Symbol not previously defined (ADCON0)
+Error[113]   ../ADC.asm 314 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 314 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 315 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 315 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 315 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 317 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 317 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 318 : Symbol not previously defined (ADRESL)
+Error[113]   ../ADC.asm 318 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 318 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 319 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 319 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 320 : Symbol not previously defined (ADRESH)
+Error[113]   ../ADC.asm 320 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 320 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 321 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 321 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 323 : Found label after column 1. (MOVLR)
+Error[122]   ../ADC.asm 323 : Illegal opcode (HIGH)
+Error[113]   ../ADC.asm 324 : Symbol not previously defined (Creg)
+Error[152]   ../ADC.asm 324 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 325 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 325 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 327 : Symbol not previously defined (PIC18F8723)
+Error[152]   ../ADC.asm 327 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 327 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 327 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 328 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 328 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 329 : Symbol not previously defined (WREG)
+Error[113]   ../ADC.asm 329 : Symbol not previously defined (A)
+Error[152]   ../ADC.asm 329 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 330 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 330 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 330 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 332 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 332 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 332 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 333 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 333 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 334 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 334 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 335 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 335 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 335 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 336 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 336 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 337 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 337 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 338 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 340 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 340 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 340 : Symbol not previously defined (ADRESL)
+Error[152]   ../ADC.asm 340 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 341 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 341 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 341 : Symbol not previously defined (ADRESH)
+Error[152]   ../ADC.asm 341 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 342 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 359 : Labels must be defined in a code or data section when making an object file
+Warning[207] ../ADC.asm 361 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 361 : Illegal opcode (AXreg)
+Warning[207] ../ADC.asm 362 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 362 : Illegal opcode (BXreg)
+Warning[207] ../ADC.asm 363 : Found label after column 1. (MOVE32)
+Error[122]   ../ADC.asm 363 : Illegal opcode (CEXreg)
+Error[113]   ../ADC.asm 365 : Symbol not previously defined (ADCref)
+Error[152]   ../ADC.asm 365 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 366 : Symbol not previously defined (ADClookup)
+Error[152]   ../ADC.asm 366 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 366 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 367 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 367 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 367 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 368 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 368 : Illegal opcode (Pos)
+Error[113]   ../ADC.asm 370 : Symbol not previously defined (Areg)
+Error[152]   ../ADC.asm 370 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 370 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 370 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 371 : Symbol not previously defined (ADClookup)
+Error[152]   ../ADC.asm 371 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 371 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 372 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 372 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 373 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 373 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 373 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 374 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 374 : Illegal opcode (Pos)
+Error[113]   ../ADC.asm 376 : Symbol not previously defined (ADCref)
+Error[152]   ../ADC.asm 376 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 377 : Symbol not previously defined (ADClookup)
+Error[152]   ../ADC.asm 377 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 377 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 378 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 378 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 378 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 381 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 381 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 382 : Symbol not previously defined (DEXreg)
+Error[152]   ../ADC.asm 382 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 382 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 382 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 383 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 383 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 384 : Symbol not previously defined (DEXreg)
+Error[152]   ../ADC.asm 384 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 384 : Symbol not previously defined (WREG)
+Error[152]   ../ADC.asm 384 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 385 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 385 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 387 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 387 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 388 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 388 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 388 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 390 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 390 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 391 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 391 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 392 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 392 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 393 : Symbol not previously defined (Z)
+Error[113]   ../ADC.asm 393 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 393 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 394 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 394 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 396 : Labels must be defined in a code or data section when making an object file
+Error[113]   ../ADC.asm 397 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 397 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 398 : Symbol not previously defined (Z)
+Error[113]   ../ADC.asm 398 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 398 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 399 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 399 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 399 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 400 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 400 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 401 : Symbol not previously defined (ADCfixThres)
+Error[152]   ../ADC.asm 401 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 402 : Symbol not previously defined (ADCfixThres)
+Error[152]   ../ADC.asm 402 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 403 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 403 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 403 : Executable code and data must be defined in an appropriate section
+Error[151]   ../ADC.asm 404 : Operand contains unresolvable labels or is too complex
+Error[152]   ../ADC.asm 404 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 404 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 406 : Found label after column 1. (MOVEC)
+Error[122]   ../ADC.asm 406 : Illegal opcode (NOMINALBAT)
+Error[113]   ../ADC.asm 407 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 407 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 407 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 408 : Symbol not previously defined (Divide2416)
+Error[152]   ../ADC.asm 408 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 408 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 409 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 409 : Illegal opcode (CEXreg)
+Error[113]   ../ADC.asm 411 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 411 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 411 : Symbol not previously defined (ADRESL)
+Error[152]   ../ADC.asm 411 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 412 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 412 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 412 : Symbol not previously defined (ADRESH)
+Error[152]   ../ADC.asm 412 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 414 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 414 : Illegal opcode (AXregSave)
+Warning[207] ../ADC.asm 415 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 415 : Illegal opcode (BXregSave)
+Warning[207] ../ADC.asm 416 : Found label after column 1. (MOVE32)
+Error[122]   ../ADC.asm 416 : Illegal opcode (CEXregSave)
+Error[113]   ../ADC.asm 417 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 417 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 417 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 418 : Executable code and data must be defined in an appropriate section
+Error[150]   ../ADC.asm 420 : Labels must be defined in a code or data section when making an object file
+Warning[207] ../ADC.asm 421 : Found label after column 1. (MOVEC)
+Error[122]   ../ADC.asm 421 : Illegal opcode (NOMINALBAT)
+Error[113]   ../ADC.asm 422 : Symbol not previously defined (Mult1616)
+Error[152]   ../ADC.asm 422 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 422 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 423 : Symbol not previously defined (Divide2416)
+Error[152]   ../ADC.asm 423 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 423 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 424 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 424 : Illegal opcode (CEXreg)
+Error[113]   ../ADC.asm 426 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 426 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 426 : Symbol not previously defined (ADRESL)
+Error[152]   ../ADC.asm 426 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 427 : Symbol not previously defined (Pos)
+Error[152]   ../ADC.asm 427 : Executable code and data must be defined in an appropriate section
+Error[113]   ../ADC.asm 427 : Symbol not previously defined (ADRESH)
+Error[152]   ../ADC.asm 427 : Executable code and data must be defined in an appropriate section
+Warning[207] ../ADC.asm 429 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 429 : Illegal opcode (AXregSave)
+Warning[207] ../ADC.asm 430 : Found label after column 1. (MOVE)
+Error[122]   ../ADC.asm 430 : Illegal opcode (BXregSave)
+Warning[207] ../ADC.asm 431 : Found label after column 1. (MOVE32)
+Error[122]   ../ADC.asm 431 : Illegal opcode (CEXregSave)
+Error[113]   ../ADC.asm 432 : Symbol not previously defined (C)
+Error[113]   ../ADC.asm 432 : Symbol not previously defined (ALUSTA)
+Error[152]   ../ADC.asm 432 : Executable code and data must be defined in an appropriate section
+Error[152]   ../ADC.asm 433 : Executable code and data must be defined in an appropriate section
+Error[129]   ../ADC.asm 435 : Expected (END)

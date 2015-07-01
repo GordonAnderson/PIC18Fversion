@@ -1,0 +1,134 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\Package
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=Yes
+Xbase=No
+Excel=No
+Text=No
+Jet 2.x=No
+Lotus=No
+Paradox=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=Yes
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+C:\WINNT\system32\COMDLG32.OCX=
+C:\WINNT\system32\MSCOMCTL.OCX=
+
+[Package|Standard Setup Package 1|Files Added]
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.INI=
+
+[Package|Standard Setup Package 1|Files Removed]
+
+[Package|Standard Setup Package 1|Files In Project]
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.exe=Yes
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\oleaut32.dll=Yes
+C:\WINNT\system32\olepro32.dll=Yes
+C:\WINNT\system32\asycfilt.dll=Yes
+C:\WINNT\system32\stdole2.tlb=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\PICBOOT.dll=Yes
+C:\WINNT\system32\MSCOMCTL.OCX=Yes
+C:\WINNT\system32\COMDLG32.OCX=Yes
+C:\Program Files\Common Files\Microsoft Shared\DAO\DAO350.DLL=Yes
+C:\WINNT\system32\MSJET35.DLL=Yes
+C:\WINNT\system32\MSJTER35.DLL=Yes
+C:\WINNT\system32\MSJINT35.DLL=Yes
+C:\WINNT\system32\vbajet32.dll=Yes
+C:\WINNT\system32\expsrv.dll=Yes
+C:\WINNT\system32\MSRD2X35.DLL=Yes
+C:\WINNT\system32\MSREPL35.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT40.DLL=Yes
+C:\WINNT\system32\VB5DB.DLL=Yes
+C:\WINNT\system32\MSRDO20.DLL=Yes
+C:\WINNT\system32\RDOCURS.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINNT\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.INI=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.exe=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\PICBOOT.dll=$(AppPath)
+C:\WINNT\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\WINNT\system32\COMDLG32.OCX=$(WinSysPath)
+C:\Program Files\Common Files\Microsoft Shared\DAO\DAO350.DLL=$(MSDAOPath)
+C:\WINNT\system32\MSJET35.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\MSJTER35.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\MSJINT35.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\vbajet32.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\expsrv.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\MSRD2X35.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\MSREPL35.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT40.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\VB5DB.DLL=$(WinSysPath)
+C:\WINNT\system32\MSRDO20.DLL=$(WinSysPath)
+C:\WINNT\system32\RDOCURS.DLL=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINNT\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.INI=$(AppPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.exe=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\PICBOOT.dll=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\P1618QP.INI=No
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=P1618QP
+
+[Package|Standard Setup Package 1|IconGroups]
+Group0=P1618QP
+PrivateGroup0=True
+Parent0=$(Programs)
+
+[Package|Standard Setup Package 1|P1618QP]
+Icon1=P1618QP.exe
+Title1=P1618QP
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\Package
+ProjectFolder=D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w
+ServerSideCab=
+File1=D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\Package\setup.exe
+File2=D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\Package\Setup.Lst
+File3=D:\HDMD\PIC18FxxxBOOT\Software\VB\v17w\Package\P1618QP.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

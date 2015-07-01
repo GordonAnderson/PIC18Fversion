@@ -1,0 +1,28 @@
+Line 18: Class MSComctlLib.ImageList of control ImageList2 was not a loaded control class.
+Line 72: Class MSComctlLib.Toolbar of control Toolbar1 was not a loaded control class.
+Line 154: Class MSComctlLib.StatusBar of control StatusBar1 was not a loaded control class.
+Line 210: Class MSCommLib.MSComm of control MSComm1 was not a loaded control class.
+Line 21: The property name _ExtentX in ImageList2 is invalid.
+Line 22: The property name _ExtentY in ImageList2 is invalid.
+Line 24: The property name ImageWidth in ImageList2 is invalid.
+Line 25: The property name ImageHeight in ImageList2 is invalid.
+Line 26: The property name MaskColor in ImageList2 is invalid.
+Line 27: The property name _Version in ImageList2 is invalid.
+Line 70: The property name Images in ImageList2 is invalid.
+Line 79: The property name _ExtentX in Toolbar1 is invalid.
+Line 80: The property name _ExtentY in Toolbar1 is invalid.
+Line 81: The property name ButtonWidth in Toolbar1 is invalid.
+Line 82: The property name ButtonHeight in Toolbar1 is invalid.
+Line 83: The property name AllowCustomize in Toolbar1 is invalid.
+Line 85: The property name Style in Toolbar1 is invalid.
+Line 86: The property name ImageList in Toolbar1 is invalid.
+Line 87: The property name _Version in Toolbar1 is invalid.
+Line 152: The property name Buttons in Toolbar1 is invalid.
+Line 161: The property name _ExtentX in StatusBar1 is invalid.
+Line 162: The property name _ExtentY in StatusBar1 is invalid.
+Line 163: The property name _Version in StatusBar1 is invalid.
+Line 202: The property name Panels in StatusBar1 is invalid.
+Line 213: The property name _ExtentX in MSComm1 is invalid.
+Line 214: The property name _ExtentY in MSComm1 is invalid.
+Line 215: The property name _Version in MSComm1 is invalid.
+Line 216: The property name DTREnable in MSComm1 is invalid.

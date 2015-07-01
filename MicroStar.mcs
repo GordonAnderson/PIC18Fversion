@@ -1,0 +1,84 @@
+[Header]
+MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
+Version=1.0
+[File000]
+Location=Y:\Desktop\PIC18Fversion Version 2.0s\mstar.o
+Folder=Intermediary
+DeviceName=PIC18F8722
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={49D3CA3F-D9A3-4518-9943-226A347E8CC7}
+LanguageToolLocation=C:\Program Files\Microchip\MPASM Suite\MPASMWIN.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|mstar.asm||<obj>||<lib>|p18f8722.lib||<lkr>|Y:\Mstar\MicroStar\PIC18Fversion\18f8722_g.lkr||
+SuiteArgsString=generate-relocatable-code
+ToolArgsString=/l
+TraceCmdString=
+DebugOptions=
+[File001]
+Location=Y:\Desktop\PIC18Fversion Version 2.0s\mstar.err
+Folder=Intermediary
+DeviceName=PIC18F8722
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={49D3CA3F-D9A3-4518-9943-226A347E8CC7}
+LanguageToolLocation=C:\Program Files\Microchip\MPASM Suite\MPASMWIN.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|mstar.asm||<obj>||<lib>|p18f8722.lib||<lkr>|Y:\Mstar\MicroStar\PIC18Fversion\18f8722_g.lkr||
+SuiteArgsString=generate-relocatable-code
+ToolArgsString=/l
+TraceCmdString=
+DebugOptions=
+[File002]
+Location=Y:\Desktop\PIC18Fversion Version 2.0s\mstar.lst
+Folder=Output
+DeviceName=PIC18F8722
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={49D3CA3F-D9A3-4518-9943-226A347E8CC7}
+LanguageToolLocation=C:\Program Files\Microchip\MPASM Suite\MPASMWIN.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|mstar.asm||<obj>||<lib>|p18f8722.lib||<lkr>|Y:\Mstar\MicroStar\PIC18Fversion\18f8722_g.lkr||
+SuiteArgsString=generate-relocatable-code
+ToolArgsString=/l
+TraceCmdString=
+DebugOptions=
+[File003]
+Location=Y:\Desktop\PIC18Fversion Version 2.0s\MicroStar.cof
+Folder=Output
+DeviceName=PIC18F8722
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\Program Files\Microchip\MPASM Suite\mplink.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|mstar.asm||<obj>||<lib>|p18f8722.lib||<lkr>|Y:\Mstar\MicroStar\PIC18Fversion\18f8722_g.lkr||
+SuiteArgsString=generate-relocatable-code
+ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(BINDIR_)$(TARGETBASE).cof"
+TraceCmdString=
+DebugOptions=
+[File004]
+Location=Y:\Desktop\PIC18Fversion Version 2.0s\MicroStar.hex
+Folder=Output
+DeviceName=PIC18F8722
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\Program Files\Microchip\MPASM Suite\mplink.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|mstar.asm||<obj>||<lib>|p18f8722.lib||<lkr>|Y:\Mstar\MicroStar\PIC18Fversion\18f8722_g.lkr||
+SuiteArgsString=generate-relocatable-code
+ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(BINDIR_)$(TARGETBASE).cof"
+TraceCmdString=
+DebugOptions=
+[File005]
+Location=Y:\Desktop\PIC18Fversion Version 2.0s\MicroStar.map
+Folder=Output
+DeviceName=PIC18F8722
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\Program Files\Microchip\MPASM Suite\mplink.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|mstar.asm||<obj>||<lib>|p18f8722.lib||<lkr>|Y:\Mstar\MicroStar\PIC18Fversion\18f8722_g.lkr||
+SuiteArgsString=generate-relocatable-code
+ToolArgsString=/m"$(BINDIR_)$(TARGETBASE).map" /w /o"$(BINDIR_)$(TARGETBASE).cof"
+TraceCmdString=
+DebugOptions=
+[TOOL_LOC_STAMPS]
+tool_loc{49D3CA3F-D9A3-4518-9943-226A347E8CC7}=C:\Program Files\Microchip\MPASM Suite\MPASMWIN.exe
+tool_loc{96C98149-AA1B-4CF9-B967-FAE79CAB663C}=C:\Program Files\Microchip\MPASM Suite\mplink.exe

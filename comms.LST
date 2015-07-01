@@ -1,0 +1,1305 @@
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;
+                      00002 ; RS232 function. 
+                      00003 ;       USART1 is used by a host computer to configure the transmitter
+                      00004 ;       USART2 is used by the buddy box system
+                      00005 ;
+                      00006 
+0000                  00007 ProcessCommand
+                      00008         ; Test the command flag and process any requests
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00009                 MOVLB   HIGH Cmd
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (3)
+                      00010                 MOVLW   31              ; Read general reg
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (Cmd)
+                      00011                 CPFSEQ  Cmd
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (Not31)
+                      00012                 GOTO    Not31
+                      00013                 ; Here if its a read general command
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (LoadGeneral)
+                      00014                 CALL    LoadGeneral
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (CmdEnd)
+                      00015                 GOTO    CmdEnd
+0000                  00016 Not31
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (3)
+0000                  00017                 MOVLW   32
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (Cmd)
+0000                  00018                 CPFSEQ  Cmd
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (Not32)
+0000                  00019                 GOTO    Not32
+                      00020                 ; Here if its a read aircraft data command
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (Aircraft)
+                      00021                 MOVFF   Aircraft,WREG
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (LoadAircraft)
+                      00022                 CALL    LoadAircraft
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (CmdEnd)
+                      00023                 GOTO    CmdEnd
+0000                  00024 Not32
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (3)
+0000                  00025                 MOVLW   33              ; Write general reg
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (Cmd)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000                  00026                 CPFSEQ  Cmd
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (Not33)
+0000                  00027                 GOTO    Not33
+                      00028                 ; Here if its a write general command
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (SaveGeneral)
+                      00029                 CALL    SaveGeneral     
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (CmdEnd)
+                      00030                 GOTO    CmdEnd
+0000                  00031 Not33   
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (3)
+0000                  00032                 MOVLW   34              ; Write aircraft data
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (Cmd)
+0000                  00033                 CPFSEQ  Cmd
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (Not34)
+0000                  00034                 GOTO    Not34
+                      00035                 ; Here if its a write aircraft data command
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (Aircraft)
+                      00036                 MOVFF   Aircraft,WREG
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (SaveAircraft)
+                      00037                 CALL    SaveAircraft
+0000                  00038 Not34
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (3)
+0000                  00039                 MOVLW   35              ; Reset the boot flag in EEPROM, this
+                      00040                                         ; will enable the boot loader on reset
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (Cmd)
+                      00041                 CPFSEQ  Cmd
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (CmdEnd)
+                      00042                 GOTO    CmdEnd
+                      00043                 ; Here if its reset the boot flag command, set location 1023 in
+                      00044                 ; EEprom to FF hex.
+Warning[207]: Found label after column 1. (MOVEC)
+Error[122]  : Illegal opcode (D)
+                      00045                 MOVEC   D'1023',AXreg
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00046                 MOVFF   WREG,AXreg+1
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00047                 MOVLW   0xFF
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (EEPROMwriteByte)
+                      00048                 CALL    EEPROMwriteByte
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (CmdEnd)
+                      00049                 GOTO    CmdEnd
+0000                  00050 CmdEnd
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (Cmd)
+0000                  00051                 CLRF    Cmd
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00052                 RETURN
+                      00053 
+                      00054 ; The following USART reset functions test the status bits and if
+                      00055 ; an overrun error is detected the USART is reset
+0000                  00056 USART1reset
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+0000                  00057                 MOVLB   HIGH RCSTA1
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (RCSTA1)
+0000                  00058                 BTFSS   RCSTA1,OERR
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00059                 RETURN
+                      00060                 ; Here with an overrun
+Warning[207]: Found label after column 1. (BCF)
+Error[122]  : Illegal opcode (RCSTA1)
+                      00061                 BCF     RCSTA1,CREN
+Warning[207]: Found label after column 1. (BSF)
+Error[122]  : Illegal opcode (RCSTA1)
+                      00062                 BSF     RCSTA1,CREN
+                      00063                 ; Empty the receive buffer
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00064                 MOVLB   HIGH RCREG1
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00065                 MOVF    RCREG1,W
+                      00066                 ; Clear the message state
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00067                 MOVLB   HIGH MessState
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (MessState)
+                      00068                 CLRF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00069                 RETURN
+                      00070 
+0000                  00071 USART2reset
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+0000                  00072                 MOVLB   HIGH RCSTA2
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (RCSTA2)
+0000                  00073                 BTFSS   RCSTA2,OERR
+Warning[207]: Found label after column 1. (RETURN)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000                  00074                 RETURN
+                      00075                 ; Here with an overrun
+Warning[207]: Found label after column 1. (BCF)
+Error[122]  : Illegal opcode (RCSTA2)
+                      00076                 BCF     RCSTA2,CREN
+Warning[207]: Found label after column 1. (BSF)
+Error[122]  : Illegal opcode (RCSTA2)
+                      00077                 BSF     RCSTA2,CREN
+                      00078                 ; Empty the receive buffer
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00079                 MOVLB   HIGH RCREG2
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (RCREG2)
+                      00080                 MOVF    RCREG2,W
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00081                 RETURN
+                      00082 
+                      00083 ; This function configures USATRT1. The baud rate is set to 9600 and
+                      00084 ; the receiver interrupts are enabled. UART 1 is used to communicate with
+                      00085 ; The PC application.
+0000                  00086 USART1init
+                      00087         ; Baudrate generator
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (D)
+                      00088                 MOVLW   D'12'           ; 9600 baud
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00089                 MOVFF   WREG,SPBRG1
+                      00090         ; Enable transmitter
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (2)
+                      00091                 MOVLW   22
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00092                 MOVFF   WREG,TXSTA1
+                      00093         ; Receiver
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (9)
+                      00094                 MOVLW   90
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00095                 MOVFF   WREG,RCSTA1
+                      00096         ; Message receive variables
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00097                 MOVLB   HIGH MessState
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (MessState)
+                      00098                 CLRF    MessState
+                      00099         ; Set interrupt priority to low and enable
+Warning[207]: Found label after column 1. (BCF)
+Error[122]  : Illegal opcode (IPR1)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00100                 BCF     IPR1,RC1IP,A            ; Low priority
+Warning[207]: Found label after column 1. (BSF)
+Error[122]  : Illegal opcode (PIE1)
+                      00101                 BSF     PIE1,RC1IE,A            ; Enable the interrupt
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00102                 RETURN
+                      00103 
+0000                  00104 USART1sendChar
+                      00105         ; Wait for xmit ready...
+0000                  00106 USC1
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (TXSTA1)
+0000                  00107                 BTFSS   TXSTA1,TRMT,A
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (USC1)
+0000                  00108                 GOTO    USC1
+                      00109         ; Send it
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00110                 MOVFF   WREG,TXREG1
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00111                 RETURN
+                      00112 
+                      00113 ; This function configures USATRT2. The baud rate is set to 115200 and
+                      00114 ; the receiver interrupts are enabled. UART 2 is used for the buddy box opweation.
+0000                  00115 USART2init
+                      00116         ; Baudrate generator
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (D)
+                      00117                 MOVLW   D'0'                    ; 115200 baud, 8% error
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00118                 MOVFF   WREG,SPBRG2
+                      00119         ; Enable transmitter
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (2)
+                      00120                 MOVLW   22
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00121                 MOVFF   WREG,TXSTA2
+                      00122         ; Receiver
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (9)
+                      00123                 MOVLW   90
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00124                 MOVFF   WREG,RCSTA2
+                      00125         ; Set interrupt priority to low and enable
+Warning[207]: Found label after column 1. (BCF)
+Error[122]  : Illegal opcode (IPR3)
+                      00126                 BCF     IPR3,RC2IP,A            ; Low priority
+Warning[207]: Found label after column 1. (BSF)
+Error[122]  : Illegal opcode (PIE3)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00127                 BSF     PIE3,RC2IE,A            ; Enable the interrupt
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00128                 RETURN
+                      00129 
+0000                  00130 USART2sendChar
+                      00131         ; Wait for xmit ready...
+0000                  00132 USC2
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (TXSTA2)
+0000                  00133                 BTFSS   TXSTA2,TRMT,A
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (USC2)
+0000                  00134                 GOTO    USC2
+                      00135         ; Send it
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00136                 MOVFF   WREG,TXREG2
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00137                 RETURN
+                      00138 
+                      00139 ;
+                      00140 ; This function will send data out UART channel 1. The data will be
+                      00141 ; read at the address in indirect register FSR1. FSR1 will be setup 
+                      00142 ; by this call. The following registers are assumed defined
+                      00143 ; when this call is made:
+                      00144 ;
+                      00145 ;       MessBank  = Bank for source
+                      00146 ;       MessLoc   = Address of source data
+                      00147 ;       MessLen   = Number of bytes to send
+                      00148 ;
+0000                  00149 USART1send
+                      00150     ; Save the FSR1 register data
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1L)
+                      00151                 MOVFF   FSR1L, FSR1Lsave
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1H)
+                      00152                 MOVFF   FSR1H, FSR1Hsave
+                      00153         ; Setup FSR1
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00154                 MOVLB   HIGH MessLoc
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (MessLoc)
+                      00155                 MOVFF   MessLoc,FSR1L
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00156                 MOVLB   HIGH MessBank
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (MessBank)
+                      00157                 MOVFF   MessBank,FSR1H
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (CheckSum)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00158                 CLRF    CheckSum
+                      00159         ; Wait for Xmitter buffer to empty
+0000                  00160 US1
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (TXSTA1)
+0000                  00161                 BTFSS   TXSTA1,TRMT
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (US1)
+0000                  00162                 GOTO    US1
+                      00163         ; Now read the char from the buffer and send it
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (POSTINC1)
+                      00164                 MOVFF   POSTINC1,WREG
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00165                 MOVLB   HIGH CheckSum
+Warning[207]: Found label after column 1. (ADDWF)
+Error[122]  : Illegal opcode (CheckSum)
+                      00166                 ADDWF   CheckSum
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00167                 MOVFF   WREG,TXREG1
+                      00168         ; Check the loop counter...
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00169                 MOVLB   HIGH MessLen
+Warning[207]: Found label after column 1. (DECFSZ)
+Error[122]  : Illegal opcode (MessLen)
+                      00170                 DECFSZ  MessLen
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (US1)
+                      00171                 GOTO    US1
+                      00172         ; Restore regs...
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1Lsave)
+                      00173                 MOVFF   FSR1Lsave, FSR1L
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1Hsave)
+                      00174                 MOVFF   FSR1Hsave, FSR1H
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00175                 RETURN
+                      00176 
+                      00177 ;
+                      00178 ; This function will receive data from UART channel 1. The data will be
+                      00179 ; saved at the address in indirect register FSR1. FSR1 will be setup 
+                      00180 ; by this call. The following registers are assumed defined
+                      00181 ; when this call is made:
+                      00182 ;
+                      00183 ;       MessBank  = Bank for destination
+                      00184 ;       MessLoc   = Address of destanation data
+                      00185 ;       MessLen   = Number of bytes to receive
+                      00186 ;
+0000                  00187 USART1in
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00188     ; Save the FSR1 register data
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1L)
+                      00189                 MOVFF   FSR1L, FSR1Lsave
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1H)
+                      00190                 MOVFF   FSR1H, FSR1Hsave
+                      00191         ; Setup FSR1
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00192                 MOVLB   HIGH MessLoc
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (MessLoc)
+                      00193                 MOVFF   MessLoc,FSR1L
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00194                 MOVLB   HIGH MessBank
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (MessBank)
+                      00195                 MOVFF   MessBank,FSR1H
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (CheckSum)
+                      00196                 CLRF    CheckSum
+                      00197 ;               MOVLW   0
+                      00198 ;               CPFSGT  MessLen
+                      00199 ;               RETURN
+                      00200         ; Wait for Receiver buffer to fill, or a timeout
+0000                  00201 UI1
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+0000                  00202                 MOVLB   HIGH TimeOut
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (d)
+0000                  00203                 MOVLW   d'5'
+Warning[207]: Found label after column 1. (MOVWF)
+Error[122]  : Illegal opcode (TimeOut)
+0000                  00204                 MOVWF   TimeOut
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (WREG)
+0000                  00205                 CLRF    WREG
+0000                  00206 UI1a
+Warning[207]: Found label after column 1. (CPFSGT)
+Error[122]  : Illegal opcode (TimeOut)
+0000                  00207                 CPFSGT  TimeOut
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UI2)
+0000                  00208                 GOTO    UI2
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (PIR1)
+0000                  00209                 BTFSS   PIR1,RC1IF
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UI1a)
+0000                  00210                 GOTO    UI1a
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00211         ; Now read the char from the UART and save it
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00212                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00213                 MOVFF   WREG,POSTINC1
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00214                 MOVLB   HIGH CheckSum
+Warning[207]: Found label after column 1. (ADDWF)
+Error[122]  : Illegal opcode (CheckSum)
+                      00215                 ADDWF   CheckSum
+                      00216         ; Check the loop counter...
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00217                 MOVLB   HIGH MessLen
+Warning[207]: Found label after column 1. (DECFSZ)
+Error[122]  : Illegal opcode (MessLen)
+                      00218                 DECFSZ  MessLen
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UI1)
+                      00219                 GOTO    UI1
+                      00220         ; Restore regs...
+0000                  00221 UI2
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1Lsave)
+0000                  00222                 MOVFF   FSR1Lsave, FSR1L
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (FSR1Hsave)
+0000                  00223                 MOVFF   FSR1Hsave, FSR1H
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00224                 RETURN
+                      00225 
+                      00226 ;Cmd            RES     1       ; This flag is set by a host PC to
+                      00227 ;                               ; request an action.
+                      00228 ;
+                      00229 ; The following variables are used by USART1 serial receiver. Receive messages
+                      00230 ; are in the following format:
+                      00231 ;               1 byte, start of message = 0x55
+                      00232 ;               1 byte, message type
+                      00233 ;               1 byte, Bank address
+                      00234 ;               1 byte, location
+                      00235 ;               1 byte, data length
+                      00236 ;               (optional data block if its a receive message)
+                      00237 ;               1 byte, mod 256 checksum
+                      00238 ; Valid message types are:
+                      00239 ;       1 = Reveive message, from host
+                      00240 ;       2 = Send message, to host
+                      00241 ; Valid commands are:
+                      00242 ;       31 = Read general data from flash
+                      00243 ;       32 = Read selected aircraft data from flash
+                      00244 ;       33 = Write general data to flash
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00245 ;       34 = Write selected aircraft data to flash
+                      00246 ;
+                      00247 ;RECMESS        EQU     1
+                      00248 ;SENDMESS       EQU     2
+                      00249 ;ACK            EQU     D'12'
+                      00250 ;NAK            EQU     D'13'
+                      00251 ;
+0000                  00252 USART1rec
+                      00253         ; Look for a character in the input buffer
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (PIR1)
+                      00254                 BTFSS   PIR1,RC1IF
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00255                 RETURN
+                      00256         ; Here with a character, test state and jump to correct 
+                      00257         ; entry point
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00258                 MOVLB   HIGH MessState
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00259                 MOVLW   0
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+                      00260                 CPFSEQ  MessState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR1)
+                      00261                 GOTO    UR1
+                      00262         ; Here if state is 0, looking for a start of message byte
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00263                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00264                 MOVFF   WREG,MessStart
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (5)
+                      00265                 MOVLW   55
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessStart)
+                      00266                 CPFSEQ  MessStart
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00267                 RETURN
+                      00268                 ; Advance the state... and set the message timeout value
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (D)
+                      00269                 MOVLW   D'40'
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00270                 MOVFF   WREG,TimeOut1
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MessState)
+                      00271                 INCF    MessState
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00272                 RETURN
+0000                  00273 UR1
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (1)
+0000                  00274                 MOVLW   1
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+0000                  00275                 CPFSEQ  MessState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR2)
+0000                  00276                 GOTO    UR2
+                      00277         ; Here if state is 1, looking for a message command
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00278                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00279                 MOVFF   WREG,MessType
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MessState)
+                      00280                 INCF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00281                 RETURN
+0000                  00282 UR2
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (2)
+0000                  00283                 MOVLW   2
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+0000                  00284                 CPFSEQ  MessState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR3)
+0000                  00285                 GOTO    UR3
+                      00286         ; Here if state is 2, looking for a bank address
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00287                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00288                 MOVFF   WREG,MessBank
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MessState)
+                      00289                 INCF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00290                 RETURN
+0000                  00291 UR3
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (3)
+0000                  00292                 MOVLW   3
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+0000                  00293                 CPFSEQ  MessState
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR4)
+0000                  00294                 GOTO    UR4
+                      00295         ; Here if state is 3, looking for a location byte
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00296                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00297                 MOVFF   WREG,MessLoc
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MessState)
+                      00298                 INCF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00299                 RETURN
+                      00300 
+0000                  00301 UR4
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (4)
+0000                  00302                 MOVLW   4
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+0000                  00303                 CPFSEQ  MessState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR5)
+0000                  00304                 GOTO    UR5
+                      00305         ; Here if state is 4, looking for number of bytes in message
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00306                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00307                 MOVFF   WREG,MessLen
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MessState)
+                      00308                 INCF    MessState
+                      00309         ; Fall into state 5, no character input is needed for this state transistion
+0000                  00310 UR5
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (5)
+0000                  00311                 MOVLW   5
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+0000                  00312                 CPFSEQ  MessState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR6)
+0000                  00313                 GOTO    UR6
+                      00314         ; Here if state is 5, Now we send or receive the message
+                      00315                 ; If message type is receive then call the message block
+                      00316                 ; receive function here... else advance to the next state
+                      00317                 ; and get the checksum...
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (RECMESS)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00318                 MOVLW   RECMESS
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessType)
+                      00319                 CPFSEQ  MessType
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR5a)
+                      00320                 GOTO    UR5a
+                      00321                 ; Here if its a rec message type so call the rec mess function
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART1in)
+                      00322                 CALL    USART1in
+0000                  00323 UR5a
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MessState)
+0000                  00324                 INCF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00325                 RETURN
+0000                  00326 UR6
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (6)
+0000                  00327                 MOVLW   6
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessState)
+0000                  00328                 CPFSEQ  MessState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR7)
+0000                  00329                 GOTO    UR7
+                      00330         ; Here if state is 6, Read the checksum
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG1)
+                      00331                 MOVFF   RCREG1,WREG
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (WREG)
+                      00332                 MOVFF   WREG,MessCHK
+                      00333         ; Validate message and send the response:
+                      00334         ;   If we just received a message compare the checksums and send
+                      00335         ;   ACK or NAK.
+                      00336         ;   If this is a send message then igore the checksum and send the data
+                      00337         ;   followed by a checksum.
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (SENDMESS)
+                      00338                 MOVLW   SENDMESS
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessType)
+                      00339                 CPFSEQ  MessType
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR6a)
+                      00340                 GOTO    UR6a
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART1send)
+                      00341                 CALL    USART1send
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (CheckSum)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00342                 MOVFF   CheckSum,WREG
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART1sendChar)
+                      00343                 CALL    USART1sendChar
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (MessState)
+                      00344                 CLRF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00345                 RETURN
+                      00346         ; Compare the checksums on receive messages
+0000                  00347 UR6a
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (CheckSum)
+0000                  00348                 MOVFF   CheckSum,WREG
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MessCHK)
+0000                  00349                 CPFSEQ  MessCHK
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (UR6b)
+0000                  00350                 GOTO    UR6b
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (ACK)
+0000                  00351                 MOVLW   ACK
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART1sendChar)
+0000                  00352                 CALL    USART1sendChar
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (MessState)
+0000                  00353                 CLRF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00354                 RETURN
+0000                  00355 UR6b
+Warning[207]: Found label after column 1. (MOVLW)
+Error[122]  : Illegal opcode (NAK)
+0000                  00356                 MOVLW   NAK
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART1sendChar)
+0000                  00357                 CALL    USART1sendChar
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (MessState)
+0000                  00358                 CLRF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00359                 RETURN
+                      00360         ; Exit and clear the state variable
+0000                  00361 UR7
+Warning[207]: Found label after column 1. (CLRF)
+Error[122]  : Illegal opcode (MessState)
+0000                  00362                 CLRF    MessState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00363                 RETURN
+                      00364 
+                      00365 ; This function is used in the buddy box system. If this transmitter
+                      00366 ; is in the student mode then channels 1 through 4 are sent out serial
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00367 ; port 2. The normalized servo positions are sent, without the trims.
+                      00368 ; This is only done in the RUN mode.
+                      00369 ; This function is also called in master mode with a received char.
+0000                  00370 SendStudent
+                      00371         ; Look for a character in the input buffer
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (PIR3)
+                      00372                 BTFSS   PIR3,RC2IF
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00373                 RETURN
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (RCREG2)
+0000                  00374                 MOVFF   RCREG2,WREG
+                      00375         ; If We are in the master mode then jump to its routine
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00376                 MOVLB   HIGH Master
+Warning[207]: Found label after column 1. (BTFSC)
+Error[122]  : Illegal opcode (Master)
+                      00377                 BTFSC   Master,0
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MasterISR)
+                      00378                 GOTO    MasterISR
+                      00379         ; Test for send position command
+Warning[207]: Found label after column 1. (XORLW)
+Error[108]  : Illegal character (')
+                      00380                 XORLW   'S'
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (ALUSTA)
+                      00381                 BTFSS   ALUSTA,Z
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00382                 RETURN
+                      00383         ; Test if we are in student mode
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00384                 MOVLB   HIGH Student
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (Student)
+                      00385                 BTFSS   Student,0
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00386                 RETURN
+                      00387         ; Here if in student mode.....
+                      00388                 ; Aileron
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00389                 MOVLB   HIGH Apos
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00390                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (Apos)
+                      00391                 ANDWF   Apos+1,W
+Warning[207]: Found label after column 1. (IORLW)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[108]  : Illegal character (1)
+                      00392                 IORLW   10
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00393                 CALL    USART2sendChar
+Warning[207]: Found label after column 1. (MOVFF)
+Error[122]  : Illegal opcode (Apos)
+                      00394                 MOVFF   Apos,WREG
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00395                 CALL    USART2sendChar
+                      00396                 ; Elevator
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00397                 MOVLB   HIGH Epos
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00398                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (Epos)
+                      00399                 ANDWF   Epos+1,W
+Warning[207]: Found label after column 1. (IORLW)
+Error[108]  : Illegal character (2)
+                      00400                 IORLW   20
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00401                 CALL    USART2sendChar
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (Epos)
+                      00402                 MOVF    Epos,W
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00403                 CALL    USART2sendChar
+                      00404                 ; Rudder
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00405                 MOVLB   HIGH Rpos
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00406                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (Rpos)
+                      00407                 ANDWF   Rpos+1,W
+Warning[207]: Found label after column 1. (IORLW)
+Error[108]  : Illegal character (3)
+                      00408                 IORLW   30
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00409                 CALL    USART2sendChar
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (Rpos)
+                      00410                 MOVF    Rpos,W
+Warning[207]: Found label after column 1. (CALL)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00411                 CALL    USART2sendChar
+                      00412                 ; Throttle
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00413                 MOVLB   HIGH Tpos
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00414                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (Tpos)
+                      00415                 ANDWF   Tpos+1,W
+Warning[207]: Found label after column 1. (IORLW)
+Error[108]  : Illegal character (4)
+                      00416                 IORLW   40
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00417                 CALL    USART2sendChar
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (Tpos)
+                      00418                 MOVF    Tpos,W
+Warning[207]: Found label after column 1. (CALL)
+Error[122]  : Illegal opcode (USART2sendChar)
+                      00419                 CALL    USART2sendChar
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00420                 RETURN
+                      00421 
+0000                  00422 MasterISR
+                      00423         ; Test State variable, if LSB is zero then save this value
+                      00424         ; and exit
+Warning[207]: Found label after column 1. (MOVLB)
+Error[122]  : Illegal opcode (HIGH)
+                      00425                 MOVLB   HIGH MasterState
+Warning[207]: Found label after column 1. (BTFSC)
+Error[122]  : Illegal opcode (MasterState)
+                      00426                 BTFSC   MasterState,0
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MasterState1)
+                      00427                 GOTO    MasterState1
+                      00428                 ; Here with high byte of message
+Warning[207]: Found label after column 1. (MOVWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00429                 MOVWF   MasterPos+1
+Warning[207]: Found label after column 1. (INCF)
+Error[122]  : Illegal opcode (MasterState)
+                      00430                 INCF    MasterState
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00431                 RETURN
+0000                  00432 MasterState1
+Warning[207]: Found label after column 1. (MOVWF)
+Error[122]  : Illegal opcode (MasterPos)
+0000                  00433                 MOVWF   MasterPos
+Warning[207]: Found label after column 1. (INCF)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[122]  : Illegal opcode (MasterState)
+0000                  00434                 INCF    MasterState
+                      00435         ; Test the state a process message
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (2)
+                      00436                 MOVLW   2
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MasterState)
+                      00437                 CPFSEQ  MasterState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS2)
+                      00438                 GOTO    MS2
+                      00439         ; Here if Aileron
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00440                 MOVF    MasterPos+1,W
+Warning[207]: Found label after column 1. (ANDLW)
+Error[108]  : Illegal character (0)
+                      00441                 ANDLW   0F0
+Warning[207]: Found label after column 1. (XORLW)
+Error[108]  : Illegal character (0)
+                      00442                 XORLW   010
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (ALUSTA)
+                      00443                 BTFSS   ALUSTA,Z
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+                      00444                 GOTO    MS5
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00445                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00446                 ANDWF   MasterPos+1,F
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (MasterPos)
+                      00447                 BTFSS   MasterPos+1,3
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS1a)
+                      00448                 GOTO    MS1a
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00449                 MOVLW   0F0
+Warning[207]: Found label after column 1. (IORWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00450                 IORWF   MasterPos+1
+0000                  00451 MS1a
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (MasterPos)
+0000                  00452                 MOVE    MasterPos,MApos
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+0000                  00453                 GOTO    MS5
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0000                  00454 MS2
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (4)
+0000                  00455                 MOVLW   4
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MasterState)
+0000                  00456                 CPFSEQ  MasterState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS3)
+0000                  00457                 GOTO    MS3
+                      00458         ; Here if Elevator
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00459                 MOVF    MasterPos+1,W
+Warning[207]: Found label after column 1. (ANDLW)
+Error[108]  : Illegal character (0)
+                      00460                 ANDLW   0F0
+Warning[207]: Found label after column 1. (XORLW)
+Error[108]  : Illegal character (0)
+                      00461                 XORLW   020
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (ALUSTA)
+                      00462                 BTFSS   ALUSTA,Z
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+                      00463                 GOTO    MS5
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00464                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00465                 ANDWF   MasterPos+1,F
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (MasterPos)
+                      00466                 BTFSS   MasterPos+1,3
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS2a)
+                      00467                 GOTO    MS2a
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00468                 MOVLW   0F0
+Warning[207]: Found label after column 1. (IORWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00469                 IORWF   MasterPos+1
+0000                  00470 MS2a
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (MasterPos)
+0000                  00471                 MOVE    MasterPos,MEpos
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+0000                  00472                 GOTO    MS5
+0000                  00473 MS3
+Warning[207]: Found label after column 1. (MOVLW)
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Error[108]  : Illegal character (6)
+0000                  00474                 MOVLW   6
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MasterState)
+0000                  00475                 CPFSEQ  MasterState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS4)
+0000                  00476                 GOTO    MS4
+                      00477         ; Here if Rudder
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00478                 MOVF    MasterPos+1,W
+Warning[207]: Found label after column 1. (ANDLW)
+Error[108]  : Illegal character (0)
+                      00479                 ANDLW   0F0
+Warning[207]: Found label after column 1. (XORLW)
+Error[108]  : Illegal character (0)
+                      00480                 XORLW   030
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (ALUSTA)
+                      00481                 BTFSS   ALUSTA,Z
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+                      00482                 GOTO    MS5
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00483                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00484                 ANDWF   MasterPos+1,F
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (MasterPos)
+                      00485                 BTFSS   MasterPos+1,3
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS3a)
+                      00486                 GOTO    MS3a
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00487                 MOVLW   0F0
+Warning[207]: Found label after column 1. (IORWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00488                 IORWF   MasterPos+1
+0000                  00489 MS3a
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (MasterPos)
+0000                  00490                 MOVE    MasterPos,MRpos
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+0000                  00491                 GOTO    MS5
+0000                  00492 MS4
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (8)
+0000                  00493                 MOVLW   8
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[207]: Found label after column 1. (CPFSEQ)
+Error[122]  : Illegal opcode (MasterState)
+0000                  00494                 CPFSEQ  MasterState
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+0000                  00495                 GOTO    MS5
+                      00496         ; Here if Throttle
+Warning[207]: Found label after column 1. (MOVF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00497                 MOVF    MasterPos+1,W
+Warning[207]: Found label after column 1. (ANDLW)
+Error[108]  : Illegal character (0)
+                      00498                 ANDLW   0F0
+Warning[207]: Found label after column 1. (XORLW)
+Error[108]  : Illegal character (0)
+                      00499                 XORLW   040
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (ALUSTA)
+                      00500                 BTFSS   ALUSTA,Z
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+                      00501                 GOTO    MS5
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00502                 MOVLW   0F
+Warning[207]: Found label after column 1. (ANDWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00503                 ANDWF   MasterPos+1,F
+Warning[207]: Found label after column 1. (BTFSS)
+Error[122]  : Illegal opcode (MasterPos)
+                      00504                 BTFSS   MasterPos+1,3
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS4a)
+                      00505                 GOTO    MS4a
+Warning[207]: Found label after column 1. (MOVLW)
+Error[108]  : Illegal character (0)
+                      00506                 MOVLW   0F0
+Warning[207]: Found label after column 1. (IORWF)
+Error[122]  : Illegal opcode (MasterPos)
+                      00507                 IORWF   MasterPos+1
+0000                  00508 MS4a
+Warning[207]: Found label after column 1. (MOVE)
+Error[122]  : Illegal opcode (MasterPos)
+0000                  00509                 MOVE    MasterPos,MTpos
+Warning[207]: Found label after column 1. (GOTO)
+Error[122]  : Illegal opcode (MS5)
+0000                  00510                 GOTO    MS5
+0000                  00511 MS5
+Warning[207]: Found label after column 1. (RETURN)
+0000                  00512                 RETURN
+Error[129]  : Expected (END)
+Error[131]  : Processor type is undefined
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CmdEnd                            00000000
+MS1a                              00000000
+MS2                               00000000
+MS2a                              00000000
+MS3                               00000000
+MS3a                              00000000
+MS4                               00000000
+MS4a                              00000000
+MS5                               00000000
+MasterISR                         00000000
+MasterState1                      00000000
+Not31                             00000000
+Not32                             00000000
+Not33                             00000000
+Not34                             00000000
+ProcessCommand                    00000000
+RETURN                            00000000
+SendStudent                       00000000
+UI1                               00000000
+UI1a                              00000000
+UI2                               00000000
+UR1                               00000000
+UR2                               00000000
+UR3                               00000000
+UR4                               00000000
+UR5                               00000000
+UR5a                              00000000
+UR6                               00000000
+UR6a                              00000000
+UR6b                              00000000
+UR7                               00000000
+US1                               00000000
+USART1in                          00000000
+USART1init                        00000000
+USART1rec                         00000000
+USART1reset                       00000000
+USART1send                        00000000
+USART1sendChar                    00000000
+USART2init                        00000000
+USART2reset                       00000000
+USART2sendChar                    00000000
+USC1                              00000000
+USC2                              00000000
+MPASM  5.03                         COMMS.ASM   7-20-2008  7:47:17         PAGE 23
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+
+All other memory blocks unused.
+
+Program Memory Words Used:     0
+Program Memory Words Free:     1
+
+
+Errors   :   287
+Warnings :   313 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+

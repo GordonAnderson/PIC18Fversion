@@ -1,0 +1,185 @@
+/****************************************************************************
+
+    FUNCTION:	WritePIC
+
+    PURPOSE: 
+
+****************************************************************************/
+DWORD APIENTRY WritePIC(HANDLE hComPort, PIC *pic, BYTE BtData[])
+{
+	BYTE *OutData;
+	DWORD TotalBytes;
+	DWORD CBootAddr;
+	WORD BytesFromStart;
+	WORD BytesFromEnd;
+	WORD PacketCount;
+	DWORD TotalBlocks;
+	INT RecCount;
+
+	//Block read commands
+	switch (pic->BootCmd){
+		case COMMAND_READVER:
+		case COMMAND_READPM:
+		case COMMAND_READEE:
+		case COMMAND_READCFG:
+			return ERROR_INVALID_COMMAND;
+	}
+
+	//return pic->MaxPktLen;
+	if(pic->MinBytPBlk < 1) return ERROR_BLOCK_TOO_SMALL;
+
+	//Limit the max packet size
+	if((pic->MaxPktLen) > MAX_PACKET) return ERROR_MAX_PACKET_SIZE;
+
+	//Get some memory
+	OutData = malloc(pic->MaxPktLen);
+	if(OutData == NULL) return ERROR_LOW_MEMORY;			//Abort if low mem
+
+	//Get some block allignment info
+	BytesFromStart = (WORD)(pic->BootAddr % pic->MinBytPBlk);
+    TotalBytes = BytesFromStart + pic->BootDatLen;
+    BytesFromEnd = (WORD)(pic->MinBytPBlk - (TotalBytes % pic->MinBytPBlk));
+	if(BytesFromEnd == pic->MinBytPBlk) BytesFromEnd = 0;
+    TotalBytes = TotalBytes + BytesFromEnd;
+
+	TotalBlocks = TotalBytes / pic->MinBytPBlk;
+	CBootAddr = pic->BootAddr - BytesFromStart;
+
+
+	while (TotalBlocks > 0){
+
+		//Build header
+		OutData[0] = pic->BootCmd;
+		OutData[2] = (BYTE)(CBootAddr & 0xFF);
+		OutData[3] = (BYTE)((CBootAddr & 0xFF00) / 0x100);
+		OutData[4] = (BYTE)((CBootAddr & 0xFF0000) / 0x10000);
+
+		PacketCount = 5;
+
+
+		//Pad the starting packet
+		while (BytesFromStart > 0){
+			OutData[PacketCount] = 255;
+			PacketCount++;
+			CBootAddr++;
+			BytesFromStart--;
+		}
+
+		//Fill with data
+		while (TotalBlocks > 0){
+			OutData[PacketCount] = BtData[CBootAddr - pic->BootAddr];
+			PacketCount++;
+			CBootAddr++;
+
+			if(!(CBootAddr % pic->MinBytPBlk)) {
+				TotalBlocks--;
+				if((pic->MaxPktLen - PacketCount) < pic->MinBytPBlk) break;
+			}
+
+			if((CBootAddr - pic->BootAddr) == pic->BootDatLen) break;
+		}
+
+		//Pad the end 
+		while ((TotalBlocks == 1) && (BytesFromEnd > 0)){
+			OutData[PacketCount] = 255;
+			PacketCount++;
+			CBootAddr++;
+			BytesFromEnd--;
+
+			if(!BytesFromEnd) TotalBlocks--;
+		}
+
+
+		OutData[1] = (PacketCount - 5) / pic->MinBytPBlk;
+
+		RecCount = SendGetPacket(hComPort, OutData, PacketCount, pic->MaxPktLen, pic->NumOfRetrys);
+		if(RecCount < 0) {
+			free( OutData );
+			return RecCount;
+		}
+	}
+
+	free(OutData);
+
+	return CBootAddr - pic->BootAddr; 
+}
+
+
+
+/****************************************************************************
+
+    FUNCTION:	ReadPIC
+
+    PURPOSE:	This function is for reading the microcontroller. The read
+				request is serviced over one or multiple packets. 
+
+****************************************************************************/
+DWORD APIENTRY ReadPIC(HANDLE hComPort, PIC *pic, BYTE BtData[])
+{
+	BYTE *InData;
+	BYTE PacketBlockCount;
+	DWORD RecByteCount = 0;
+	DWORD CBootDatLen;
+	DWORD CBootAddr;
+	WORD RecCount;
+	WORD LoadCounter;
+
+	//Check the command
+	switch (pic->BootCmd){
+		case COMMAND_WRITEPM:
+		case COMMAND_ERASEPM:
+		case COMMAND_WRITEEE:
+		case COMMAND_WRITECFG:
+			return ERROR_INVALID_COMMAND;
+	}
+	
+	//return pic->MaxPktLen;
+	if(pic->MinBytPBlk < 1) return ERROR_BLOCK_TOO_SMALL;
+
+	//Limit the max packet size
+	if((pic->MaxPktLen) > MAX_PACKET) return ERROR_MAX_PACKET_SIZE;
+
+	//Get some memory
+	InData = malloc(pic->MaxPktLen);
+	if(InData == NULL) return ERROR_LOW_MEMORY;			//Abort if low mem
+
+
+	CBootDatLen = pic->BootDatLen;
+	CBootAddr = pic->BootAddr;
+
+	while (CBootDatLen > 0){
+
+		//Build packet header
+		if(CBootDatLen > ((DWORD)(pic->MaxPktLen - 6)/(DWORD)pic->MinBytPBlk)){
+			PacketBlockCount = (BYTE)((pic->MaxPktLen - 6) / (WORD)pic->MinBytPBlk);
+		}
+		else{
+			PacketBlockCount = (BYTE)(CBootDatLen);
+		}
+
+		InData[0] = pic->BootCmd;
+		InData[1] = PacketBlockCount;
+		InData[2] = (BYTE)(CBootAddr & 0xFF);
+		InData[3] = (BYTE)((CBootAddr & 0xFF00) / 0x100);
+		InData[4] = (BYTE)((CBootAddr & 0xFF0000) / 0x10000);
+
+		RecCount = SendGetPacket(hComPort, InData, 5, pic->MaxPktLen, pic->NumOfRetrys);
+		if(RecCount < 0) {
+			free( InData );
+			return RecCount;
+		}
+
+		for(LoadCounter = 5; LoadCounter < RecCount - 1; LoadCounter++){
+			BtData[RecByteCount] = InData[LoadCounter];
+			RecByteCount++;
+			CBootAddr++;
+		}
+
+		CBootDatLen = CBootDatLen - (DWORD)(RecCount - 6);
+	}
+
+	free( InData );
+
+	return RecByteCount;  
+}
+

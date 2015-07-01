@@ -1,0 +1,82 @@
+Port mapping for processor adapter:
+Pic17C	Pic18F	Proto board 	Function
+				Connection
+RA0	RB0			NC
+RA1	RA4	J3,14		Buzzer, output, this port pin is open drain
+RA2	RC3			LED 1, output
+RA3	RC4			SPROM data input
+RA4	RC7			RX1
+RA5	RC6			TX1
+
+RB0	RB1			Tachin, input
+RB1	RB2			LED 2, output
+RB2	RB5	J4,12		LCD control, RS, output
+RB3	RB3	J4,15		LCD control, ENA, output
+RB4	RB4	J4,14		LCD control, RW, output
+RB5	RB6	J4,13		RF deck, reset, output, Used by ICD2
+RB6	RC5			SPROM CLK, output
+RB7	RB7			SPROM data output, Used by ICD2
+
+RC0	RD0			Ail DR, SWA, input
+RC1	RD1			Ele DR, SWB, input
+RC2	RD2			Rud DR, SWC, input
+RC3	RD3	J5,7		Preset, SWD, input
+RC4	RD4			MIX 1, SWE, input
+RC5	RD5			MIX 2, SWF, input
+RC6	RD6			MIX 3, SWG, input
+RC7	RD7			CH5, SWH, input
+
+RD0	RE0	J2,4		RUN/CAL, input
+RD1	RE1	J2,3		Auto trim, SWI, input
+RD2	RE2	J5,18		OPTION, input
+RD3	RE3			CH8 A, SWJ-A, input
+RD4	RE4			CH8 C, SWJ-C, input
+RD5	RE5			ALT AKFT, SWK, input
+RD6	RE6			SNAP R, SWL, input
+RD7	RE7			SNAL L, SWM, input
+
+RE0	RG0			SPROM 1, CS, output
+RE1	RC2			SPROM 2, CS, output
+RE2	RF7	J2,13		Modulation signal, output
+RE3	RG3			RF deck, CS, output
+
+RF0	RA5	J3,13	ADC 4	AIL, analog input
+RF1	RF0	J3,14	ADC 5	ELE, analog input
+RF2	RF1		ADC 6	RUD, analog input
+RF3	RF2		ADC 7	THR, analog input
+RF4	RF3		ADC 8	AIL trim, analog input
+RF5	RF4		ADC 9	ELE trim, analog input
+RF6	RF5		ADC 10	RUD trim, analog input
+RF7	RF6		ADC 11	THR trim, analog input
+
+RG0	RA0		ADC 0	CH6, analog input
+RG1	RA1		ADC 1	CH7, analog input
+RG2	RA2	J3,8	ADC 2	Ground
+RG3	RA3	J3,7	ADC 3	battery supply, ref +
+RG4	RC0			JM1, 1-2, input
+RG5	RC1			JM1, 3-4, input
+RG6	RG2			RX2
+RG7	RG1			TX2
+
+RH0	RH0			AUXOUT, output
+RH1	RH1	J5,20		TACHENA, input
+RH2	RH2			RECCOMM, I/O
+RH3	RH3			NC
+RH4	RH4		ADC 12	5 volt reg supply
+RH5	RH5		ADC 13	Rec volts, analog input
+RH6	RH6		ADC 14	NC
+RH7	RH7		ADC 15	NC
+
+RJ0	RJ4	J3,19		LCD data port bit 0, I/o
+RJ1	RJ5	J3,20
+RJ2	RJ6	J4,1
+RJ3	RJ7	J4,2
+RJ4	RJ3	J4,19
+RJ5	RJ2	J4,20
+RJ6	RJ1	J5,1
+RJ7	RJ0	J5,2		LCD data port bit 7, I/O
+
+MCLR	MCLR
+TEST	RG4
+OSC2	RA6
+OSC1	OSC1

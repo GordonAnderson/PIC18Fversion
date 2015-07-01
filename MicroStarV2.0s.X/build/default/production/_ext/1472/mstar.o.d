@@ -1,0 +1,32 @@
+build/default/production/_ext/1472/mstar.o:  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/mstar.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/P18F8722.INC  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Constants.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/RAM.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Macros.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/TestIO.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/ADC.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/EEPROM.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Flash.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/lcd52.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Display.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/COMMS.ASM  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/FMS.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/math.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/div2416.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/div3232u.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/monitor.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/helicopter.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/tach.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/ui.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/SelAft.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/AftName.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Servo.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Mixers.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Options.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/System.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/SelFreq.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/Advanced.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/DigitalTrims.asm  \
+	/Users/GAA/Mstar/MicroStar/PIC18Fversion/PIC18Fversion\ Version\ 2.0s/data.asm  \
+

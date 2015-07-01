@@ -1,0 +1,139 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=D:\HDMD\PIC18FxxxBOOT\Software\VB\Package
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+C:\WINNT\system32\MSCOMCTL.OCX=
+
+[Package|Standard Setup Package 1|Files Added]
+d:\hdmd\pic18fxxxboot\software\vb\v010\config.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\device.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\eedata.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\pic18f252.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\pic18f452.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\pic18f458.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\pic18f8720.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\progmem.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\unknown.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\userid.dat=
+d:\hdmd\pic18fxxxboot\software\vb\v010\pic18f4320.dat=
+
+[Package|Standard Setup Package 1|Files Removed]
+
+[Package|Standard Setup Package 1|Files In Project]
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\oleaut32.dll=Yes
+C:\WINNT\system32\olepro32.dll=Yes
+C:\WINNT\system32\asycfilt.dll=Yes
+C:\WINNT\system32\stdole2.tlb=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINNT\system32\MSCOMCTL.OCX=Yes
+C:\WINNT\system32\MSCOMM32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINNT\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\CONFIG.DAT=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\device.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\EEDATA.DAT=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F252.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F452.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F458.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F8720.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PROGMEM.DAT=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\UNKNOWN.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\USERID.DAT=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F4320.dat=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\P18FQP.exe=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\P18FQB.exe=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\oleaut32.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\olepro32.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\asycfilt.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\stdole2.tlb=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\WINNT\system32\MSCOMM32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINNT\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\CONFIG.DAT=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\device.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\EEDATA.DAT=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F252.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F452.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F458.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F8720.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PROGMEM.DAT=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\UNKNOWN.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\USERID.DAT=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F4320.dat=$(AppPath)
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\P18FQP.exe=$(AppPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\P18FQB.exe=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\CONFIG.DAT=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\device.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\EEDATA.DAT=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F252.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F452.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F458.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F8720.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PROGMEM.DAT=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\UNKNOWN.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\USERID.DAT=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\PIC18F4320.dat=No
+D:\HDMD\PIC18FxxxBOOT\Software\VB\v010\P18FQP.exe=No
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=P18F Quick Programmer
+
+[Package|Standard Setup Package 1|IconGroups]
+Group0=P18FQB
+PrivateGroup0=True
+Parent0=$(Programs)
+
+[Package|Standard Setup Package 1|P18FQB]
+Icon1=P18FQB.exe
+Title1=P18F Quick Programmer
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=D:\HDMD\PIC18FxxxBOOT\Software\VB\Package
+ProjectFolder=D:\HDMD\PIC18FxxxBOOT\Software\VB\v010
+ServerSideCab=
+File1=D:\HDMD\PIC18FxxxBOOT\Software\VB\Package\setup.exe
+File2=D:\HDMD\PIC18FxxxBOOT\Software\VB\Package\Setup.Lst
+File3=D:\HDMD\PIC18FxxxBOOT\Software\VB\Package\P18FQP.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

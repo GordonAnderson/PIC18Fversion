@@ -1,0 +1,13 @@
+LIBRARY   Select
+
+EXPORTS
+	GetPacket			@3
+	SendPacket			@4
+	SendGetPacket		@5
+	OpenPIC				@6
+	ClosePIC			@7
+	WritePIC			@8
+	ReadPIC				@9
+	VerifyPIC			@10
+	ErasePIC			@11
+

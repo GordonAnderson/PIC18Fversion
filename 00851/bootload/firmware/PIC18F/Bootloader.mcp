@@ -1,0 +1,24 @@
+[HEADER]
+magic_cookie={66E99B07-E706-4689-9E80-9B2582898A13}
+file_version=0.9
+[PATH_INFO]
+dir_src=
+dir_out=
+dir_inc=
+dir_lib=
+dir_lkr=
+[CAT_FILTERS]
+filter_src=*.asm;*.c
+filter_inc=*.h;*.inc
+filter_obj=*.o
+filter_lib=*.lib
+filter_lkr=*.lkr
+[FILE_INFO]
+file_000=bootload.asm
+[SUITE_INFO]
+suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+suite_state=
+[TOOL_SETTINGS]
+TS{DD2213A8-6310-47B1-8376-9430CDFC013F}=/w0 /t8 /e+
+TS{BFD27FBA-4A02-4C0E-A5E5-B812F3E7707C}=/d /n66
+TS{C2AF05E7-1416-4625-923D-E114DB6E2B96}=-o- -w2 -Oi- -ms -Ol- -Oa-

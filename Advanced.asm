@@ -57,6 +57,7 @@ PostRef
    	ANDWF	CEXreg,F
    ; Move the counter data into the regs
    	MOVFF	CEXreg,WREG
+    MOVLB	HIGH Rreg50
    	IORWF	Rreg50
    	IORWF	Rreg53
    	MOVFF	CEXreg+1,WREG
